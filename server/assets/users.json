@@ -1,0 +1,19 @@
+[
+  {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "roles": [
+      "Member",
+      "Admin"
+    ],
+    "admin": true
+  },
+  {
+    "name": "Tom Lee",
+    "email": "tom.lee@example.com",
+    "roles": [
+      "Member"
+    ],
+    "admin": false
+  }
+]
