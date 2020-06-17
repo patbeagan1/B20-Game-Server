@@ -1,4 +1,3 @@
-import com.google.gson.internal.GsonBuildConfig
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CORS
@@ -26,6 +25,7 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     // comment this next line out if not testing
+    val logger by lazy { loggerGen() }
     enableCors()
     install(DefaultHeaders)
     install(CallLogging)
@@ -36,10 +36,14 @@ fun Application.module() {
         }
     }
     install(Koin) {
-        val logger = loggerGen()
-        logger.info("Test")
+        logger.run {
+            info("test")
+            warn("test")
+            error("test")
+        }
         modules(Injection.helloAppModule)
     }
+
     install(Routing) { routes() }
 }
 

@@ -1,6 +1,6 @@
 package services.yaml
 
-import User
+import services.yaml.data.User
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.yaml.snakeyaml.Yaml

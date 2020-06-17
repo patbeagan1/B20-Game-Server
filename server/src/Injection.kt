@@ -10,7 +10,7 @@ import services.yaml.YamlServiceImpl
 object Injection {
     val helloAppModule = module {
         single<HelloService> { HelloServiceImpl(get()) } // get() Will resolve services.hello.HelloRepository
-        single { HelloRepository() }
+        factory { HelloRepository() }
         single<CounterService> { CounterServiceImpl() }
         single<YamlService> { YamlServiceImpl() }
     }

@@ -18,7 +18,13 @@ fun Routing.routes() {
     val serviceYaml: YamlService by inject()
     val counterService: CounterService by inject()
 
-    get("/", controller.root())
+
+    static("/") {
+        resources("client/build/")
+        default("resources/client/build/index.html")
+    }
+
+    get("/r", controller.root())
     get("/user/{username}/") {
         controller.user(
             call.request.queryParameters.flattenEntries().also { println(it) },
@@ -29,9 +35,6 @@ fun Routing.routes() {
     get("/counter", controller.counter(counterService))
     get("/services/hello", controller.hello(service))
 
-    static("static") {
-        resources("client/build/")
-        default("resources/client/build/index.html")
-    }
+
 }
 

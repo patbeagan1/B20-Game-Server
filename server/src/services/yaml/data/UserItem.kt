@@ -1,3 +1,5 @@
+package services.yaml.data
+
 data class UserItem(
     val admin: Boolean,
     val email: String,
