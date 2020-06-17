@@ -1,3 +1,4 @@
+import com.google.gson.internal.GsonBuildConfig
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CORS
@@ -24,13 +25,10 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    // comment this next line out if not testing
+    enableCors()
     install(DefaultHeaders)
     install(CallLogging)
-    install(CORS) {
-        anyHost()
-        header(HttpHeaders.AccessControlAllowOrigin)
-        allowCredentials = true
-    }
     install(ContentNegotiation) {
         gson {
             setDateFormat(DateFormat.LONG)
@@ -43,4 +41,11 @@ fun Application.module() {
         modules(Injection.helloAppModule)
     }
     install(Routing) { routes() }
+}
+
+private fun Application.enableCors() {
+    install(CORS) {
+        anyHost()
+        header(HttpHeaders.AccessControlAllowOrigin)
+    }
 }
