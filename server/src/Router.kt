@@ -1,5 +1,8 @@
 import controllers.MainController
 import io.ktor.application.call
+import io.ktor.http.content.default
+import io.ktor.http.content.resources
+import io.ktor.http.content.static
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.util.flattenEntries
@@ -25,5 +28,10 @@ fun Routing.routes() {
     get("/demo", controller.tryYaml(serviceYaml))
     get("/counter", controller.counter(counterService))
     get("/services/hello", controller.hello(service))
+
+    static("static") {
+        resources("client/build/")
+        default("resources/client/build/index.html")
+    }
 }
 
