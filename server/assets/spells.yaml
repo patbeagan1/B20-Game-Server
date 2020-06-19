@@ -1,0 +1,991 @@
+---
+-
+  name: enhance wooden item
+  mana:
+  type: magical
+  time: 20
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: dissolve
+  mana: dark
+  type: magical
+  time: 5
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'applies to inanimate objects that are reasonably susceptible to acid damage. affects Shields. roll intelligence vs durability. if int beats durability by 5 or more, the object is broken and it''s item ability is disabled.'
+-
+  name: electric bones
+  mana: dark electric
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: arcana contract
+  mana: dual
+  type: magical
+  time: 160
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'creates a brand new spell. the dm must set limits on the spell before any time is spent on this task. the table must agree on it''s strengths, cost, and weaknesses before it is created.'
+-
+  name: small flame
+  mana: fire
+  type: magical
+  time: 3
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: creates a small flame that increases the amount of light in a 10 square radius. can also be used to set flammable materials on fire. can be continued indefinitely for 2 seconds per round, while paying the Mana cost.
+-
+  name: fireball
+  mana: fire
+  type: magical
+  time: 4
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: force push
+  mana: force
+  type: magical
+  time: 4
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: minor levitation
+  mana: force
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'applies an upward force to an object. that force cannot be greater than the caster''s own weight'
+-
+  name: lesser levitation
+  mana: force
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'applies an upward force to an object. that force cannot be greater than twice the caster''s own weight'
+-
+  name: greater levitation
+  mana: force
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'applies an upward force to an object. that force cannot be greater than 4 times the caster''s own weight'
+-
+  name: major levitation
+  mana: force
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'applies an upward force to an object. that force cannot be greater than eight times the caster''s own weight'
+-
+  name: cold snap
+  mana: frost
+  type: magical
+  time: 2
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: applies 1d4+1 cold damage to the opponent
+-
+  name: cooling mist
+  mana: frost
+  type: magical
+  time: 3
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: a fine mist of cold water emanates from your hands. useful for putting out small fires.
+-
+  name: condense
+  mana: frost
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: gathers water from the air. yields 1 quaff of water
+-
+  name: reflective Ice
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: mirror shield
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: refrigeration
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: Shatter prep
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: frost painting
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: clarity
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: emanation of cold
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: negate explosion
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: prep explosive
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: caltrops
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: numb
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: mist
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: flurry
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: shrink metal
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: cooling touch
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: negate flame
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: dehydrate
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: ice prison
+  mana: frost
+  type: magical
+  time:
+  unlearnedPenalty: 15
+  learned:
+  alwaysAvailable:
+  description:
+-
+  name: Ward ally
+  mana: light
+  type: magical
+  time: 5
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: werelight"
+  mana: light
+  type: magical
+  time: 8
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: summons a friendly light spirit that follows just behind you and increases the amount of light in a 10 square radius. it remains lit until the end of the encounter, or until 10 minutes pass, whichever is greater.
+-
+  name: spark contact
+  mana: lightning
+  type: magical
+  time: 2
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: deals 1d4+1 electric damage to an enemy within 1 square
+-
+  name: greater blink
+  mana: space
+  type: magical
+  time: 2
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'move twice as many squares as your character''s speed. you only physically pass through half of the squares that you move.'
+-
+  name: lesser blink
+  mana: space
+  type: magical
+  time: 2
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'move twice as many squares as your character''s speed. you only physically pass through every other square'
+-
+  name: "summon: minor creature"
+  mana: space
+  type: magical
+  time: 10
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'summon an undead minion. no stat may be greater than 8, and it''s total level must be 60 or below'
+-
+  name: "summon: minor spirit"
+  mana: space
+  type: magical
+  time: 10
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'summon an undead minion. no stat may be greater than 8, and it''s total level must be 60 or below'
+-
+  name: "summon: minor undead"
+  mana: space
+  type: magical
+  time: 10
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: 'summon an undead minion. no stat may be greater than 8, and it''s total level must be 60 or below'
+-
+  name: "summon: lesser creature"
+  mana: space
+  type: magical
+  time: 20
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: lesser spirit"
+  mana: space
+  type: magical
+  time: 20
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: lesser undead"
+  mana: space
+  type: magical
+  time: 20
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon greater creature"
+  mana: space
+  type: magical
+  time: 40
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon greater spirit"
+  mana: space
+  type: magical
+  time: 40
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon greater undead"
+  mana: space
+  type: magical
+  time: 40
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: greater teleport
+  mana: space
+  type: magical
+  time: 60
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: move up to 40 squares, to a location that the character has already moved through
+-
+  name: lesser teleport
+  mana: space
+  type: magical
+  time: 60
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: move up to 20 squares, to a location that the character has already moved through
+-
+  name: "summon: major creature"
+  mana: space
+  type: magical
+  time: 80
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: major spirit"
+  mana: space
+  type: magical
+  time: 80
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: major undead"
+  mana: space
+  type: magical
+  time: 80
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: champion creature"
+  mana: space
+  type: magical
+  time: 160
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: champion spirit"
+  mana: space
+  type: magical
+  time: 160
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: "summon: champion undead"
+  mana: space
+  type: magical
+  time: 160
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: echo
+  mana: time
+  type: magical
+  time: 2
+  unlearnedPenalty: 15
+  learned: n
+  alwaysAvailable: n
+  description: perform the most recent action again as if it only took 2 seconds to complete. all other costs remain the same. this cannot be used more than once in a row.
+-
+  name: bide time
+  mana:
+  type: mental
+  time: 0
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: save your seconds for a later turn. seconds saved this way are all consumed by the next non-sidle action
+-
+  name: combat tempo
+  mana:
+  type: mental
+  time: 0
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: if you land a hit on the 3rd second of your turn multiple turns in a row, get +1 strength +1 precision until you fail to meet this condition
+-
+  name: reassess
+  mana:
+  type: mental
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: swap a move on your top of mind list for another one
+-
+  name: look
+  mana:
+  type: mental
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: get information about an object which is clearly visible
+-
+  name: locate <objects>
+  mana:
+  type: mental
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: 'shows you where all the "objects" are in your inventory and the room you are in (e.g. "locate swords"), whether you are holding or wearing them, and whether you are keeping them. It also gives each a number, which you can use to refer to them (e.g. ''drop sword 2'').'
+-
+  name: advance
+  mana:
+  type: mental
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: socialize
+  mana:
+  type: mental
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: attract attention
+  mana:
+  type: mental
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: perform a charisma vs wit check on an opponent. if you win, they must Target you at some point in their next turn
+-
+  name: command summoned Ally
+  mana:
+  type: mental
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: boost morale
+  mana:
+  type: mental
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: daze
+  mana:
+  type: mental
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: perform a charisma vs fortitude check on an opponent. if you win, the opponent cannot intentionally cause damage in their next turn.
+-
+  name: frighten
+  mana:
+  type: mental
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: perform a charisma vs fortitude check on an opponent. if you win, the opponent must move away from you at some point in their next turn.
+-
+  name: intimidate
+  mana:
+  type: mental
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: predict
+  mana:
+  type: mental
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: the dm rolls 1d4 in secret. the dm will tell you what a Target creature is intending to do next - on a 4 they will give the wrong information.
+-
+  name: observe
+  mana:
+  type: mental
+  time: 6
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: gain some relevant information about the nature of the situation that your character is in
+-
+  name: intense concentration
+  mana:
+  type: mental
+  time: 8
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: guarantee that the next magical action used will not fail
+-
+  name: loud noises
+  mana:
+  type: mental
+  time: 2
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: you make a loud noise using what you have available. make a charisma check against dc10. if you succeed, actions which are reasonably dependent on sound will fail until your next turn.
+-
+  name: mental block
+  mana:
+  type: mental
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: mental actions cast between now and your next turn do not apply to you.
+-
+  name: charm creature
+  mana:
+  type: mental
+  time: 30
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: perform a charisma vs wit check on a neutral creature. on success, the creature becomes an ally. if the creature is harmed, it will become neutral and attempt to flee.
+-
+  name: sidle
+  mana:
+  type: physical
+  time: 0
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: always available. only usable once per round. move one square
+-
+  name: "Attack: Enhanced Crit"
+  mana:
+  type: physical
+  time: 0
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: if a weapon gives crit, it does 2.5x damage instead of 2x.
+-
+  name: block
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: gain +2 agility until your next turn
+-
+  name: hold <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: hold something
+-
+  name: unhold <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: stop holding something
+-
+  name: wear <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: wear an item of clothing
+-
+  name: remove <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: remove an item of clothing
+-
+  name: equip
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: wear/hold all your stuff
+-
+  name: get <object> [from <object>]
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: get something
+-
+  name: put <object> in <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: put something in something else
+-
+  name: drop <object>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: drop something
+-
+  name: give <object> to <person>
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: give an item to someone else (a player, NPC, or animal)
+-
+  name: Backstab
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: when attacking from behind, guaranteed crit
+-
+  name: distract
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: feint
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: add 2 to your precision mod until the end of the turn. cannot be used on 2 consecutive turns
+-
+  name: overpower
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: roll a strength vs strength check against the opponent. if you win, the opponent gets -5 agility until their next turn.
+-
+  name: Parry
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: Powerful Jab
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: when attacking with a jab weapon, roll for strength with dc10. if you succeed, add 2 to the attack.
+-
+  name: Powerful slash
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: Riposte
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: shield bash
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: Sweeping hit
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: shoot
+  mana:
+  type: physical
+  time: 1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: move
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: 'move a number of squares equal to the character''s speed'
+-
+  name: Disarm
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: endure
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: punt
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: retreat
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: safely disengage from combat
+-
+  name: Weapon toss
+  mana:
+  type: physical
+  time: 2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: reload ammo
+  mana:
+  type: physical
+  time: 3
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description:
+-
+  name: switch weapons
+  mana:
+  type: physical
+  time: 3
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description:
+-
+  name: Grapple
+  mana:
+  type: physical
+  time: 3
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description:
+-
+  name: sneak
+  mana:
+  type: physical
+  time: 4
+  unlearnedPenalty: 0
+  learned: y
+  alwaysAvailable: y
+  description: 'move a number of squares equal to your speed. perform an agility vs awareness check on an opponent who would reasonably be anaware of your character''s prescence. if you succeed, the opponent is still unaware of you. '
+-
+  name: damage weapon
+  mana:
+  type: physical
+  time: x+1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: 'upon landing a hit on an opponent, you can choose to Target the opponent''s weapon instead of the opponent''s health. roll strength vs item durability. if you succeed by 5 or more, the item is broken, and its item ability is disabled'
+-
+  name: knockout blow
+  mana:
+  type: physical
+  time: x+1
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: upon landing an attack with a blunt weapon, if damage resolution would bring an opponent down to less than a full heart, hearts, the player can choose to render that opponent unconscious.
+-
+  name: Follow through
+  mana:
+  type: physical
+  time: x+2
+  unlearnedPenalty: 10
+  learned: n
+  alwaysAvailable: n
+  description: upon landing a hit on an opponent, if there is a creature 1 square behind the currently targeted creature, the same attack can be made against that creature. the newly targeted creature is able to defend itself separately from the first creature.

@@ -1,5 +1,6 @@
 import io.ktor.application.Application
 import io.ktor.application.install
+import io.ktor.application.log
 import io.ktor.features.CORS
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
@@ -24,9 +25,10 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+
     // comment this next line out if not testing
-    val logger by lazy { loggerGen() }
     enableCors()
+
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {
@@ -35,16 +37,21 @@ fun Application.module() {
             setPrettyPrinting()
         }
     }
-    install(Koin) {
-        logger.run {
-            info("test")
-            warn("test")
-            error("test")
-        }
-        modules(Injection.helloAppModule)
-    }
-
+    install(Koin) { modules(Injection.helloAppModule) }
     install(Routing) { routes() }
+    loggerExample()
+}
+
+private fun Application.loggerExample() {
+    // apparently there is already a logger baked in
+    this.log.warn("From App")
+    // TODO: get this working with Koin parameter injection
+    val logger by lazy { loggerGen(this::class.java) }
+    logger.run {
+        info("test")
+        warn("test")
+        error("test")
+    }
 }
 
 private fun Application.enableCors() {

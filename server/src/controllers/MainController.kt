@@ -31,7 +31,7 @@ class MainController {
 
     fun tryYaml(service: YamlService): suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit = {
         call.respondText(model.players.joinToString(separator = ",") { it.show() })
-        service.tryYaml()
+        service.getConversation()
     }
 
     fun user(

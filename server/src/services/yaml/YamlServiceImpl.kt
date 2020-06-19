@@ -1,37 +1,70 @@
 package services.yaml
 
-import services.yaml.data.User
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import Injection
 import org.yaml.snakeyaml.Yaml
-import java.io.Reader
+import services.yaml.data.Spell
 import java.nio.file.Files
 import java.nio.file.Paths
 
 class YamlServiceImpl : YamlService {
-    override fun tryYaml() {
-        try {
-            val reader: Reader = Files.newBufferedReader(Paths.get("assets/users.json"))
-            val users: User =
-                Gson().fromJson(reader, object : TypeToken<User?>() {}.type)
+    val parser = Injection.provideYamlParser()
 
-            // print users
-            users.forEach { println(it) }
-
-            // close reader
-            reader.close()
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
-        val yaml = Yaml()
-        val document = """
-- Hesperiidae
-- Papilionidae
-- Apatelodidae
-- Epiplemidae" 
-- 1
-    """.trimIndent()
-        val list = yaml.load<Any>(document) as List<*>
-        println(list)
+    override fun getSpells(): List<Spell>? = parser.parseYamlList("assets/spells.yaml") {
+        println(it)
+        Spell(
+            "name" from it,
+            "mana" from it,
+            "type" from it,
+            "time" from it,
+            ("unlearnedPenalty" from it)?.toInt(),
+            "learned" from it,
+            "alwaysAvailable" from it,
+            "description" from it
+        )
     }
+
+    override fun getConversation() = parser.parseYamlList("assets/conversation1.yaml") { top ->
+        getConversation2()
+
+        Conversation(
+            ("id" from top)?.toInt(),
+            "firstsay" from top,
+            "say" from top,
+            top["options"].let { it as? ArrayList<HashMap<String, Any>> }?.map {
+                Conversation.Option(
+                    ("id" from it)?.toInt(),
+                    "say" from it,
+                    ("next" from it)?.toInt()
+                )
+            },
+            ("next" from top)?.toInt()
+        )
+    }
+
+    fun getConversation2() {
+        val loadAs = Yaml()
+            .loadAs(
+                Files.newBufferedReader(
+                    Paths.get("assets/conversation1.yaml")
+                ), ConversationList::class.java
+            )
+        println(loadAs)
+    }
+
+    private infix fun String.from(map: HashMap<String, Any>): String? = map[this]?.toString()
+}
+
+class ConversationList : ArrayList<Conversation>()
+data class Conversation(
+    val id: Int?,
+    val firstsay: String?,
+    val say: String?,
+    val options: List<Option>?,
+    val next: Int?
+) {
+    data class Option(
+        val id: Int?,
+        val say: String?,
+        val next: Int?
+    )
 }

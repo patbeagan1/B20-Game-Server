@@ -1,0 +1,27 @@
+﻿- id: 0
+  firstsay: |
+    Hello! How can I help you today?
+  say: |
+    How can I help you today?
+  options: &ref_0
+    - next: 1
+      say: |
+        What is the time?
+    - next: 2
+      say: |
+        How far is the train station?
+- id: 1
+  say: |
+    The time is 10:30. Anything else?
+  options: *ref_0
+- id: 2
+  say: >
+    The train station is just on the other side of town. Want me to guide you
+    over there? 
+  options:
+    - next: 0
+      say: |
+        Yes
+    - next: -1
+      say: |
+        No
