@@ -1,0 +1,16 @@
+<discussion>
+    <conversation id="1" next="2">
+        <firstsay>Test first</firstsay>
+        <say>Say again</say>
+        <options id="2" next="2">
+            <say>Response</say>
+        </options>
+    </conversation>
+    <conversation id="3" next="3">
+        <firstsay>Test first second</firstsay>
+        <say>Say again</say>
+        <options id="4" next="4">
+            <say>Response</say>
+        </options>
+    </conversation>
+</discussion>

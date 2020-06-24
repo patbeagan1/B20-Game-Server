@@ -25,4 +25,10 @@ internal class YamlServiceImplTest {
         val spells = yamlServiceImpl.getConversation()
         println(spells)
     }
+
+    @Test
+    fun getDiscussion() {
+        val spells = yamlServiceImpl.getDiscussion()
+        println(spells)
+    }
 }
