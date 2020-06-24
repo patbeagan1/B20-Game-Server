@@ -1,16 +1,18 @@
 <discussion>
-    <conversation id="1" next="2">
-        <firstsay>Test first</firstsay>
-        <say>Say again</say>
-        <options id="2" next="2">
+    <conversation id="greeting">
+        <firstsay>Hello! My name is Tom. Welcome to town. How can I help you?</firstsay>
+        <say>Is there anything else I can help you with?</say>
+        <option id="1" next="2">
             <say>Response</say>
-        </options>
+        </option>
+        <option id="1" next="2">
+            <say>Response</say>
+        </option>
     </conversation>
     <conversation id="3" next="3">
-        <firstsay>Test first second</firstsay>
         <say>Say again</say>
-        <options id="4" next="4">
+        <option id="4" next="greeting">
             <say>Response</say>
-        </options>
+        </option>
     </conversation>
 </discussion>

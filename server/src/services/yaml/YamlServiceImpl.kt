@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import data.Player
 import data.WorldState
@@ -36,13 +37,13 @@ class YamlServiceImpl : YamlService {
         getConversation2()
 
         Conversation(
-            ("id" from top)?.toInt(),
-            ("next" from top)?.toInt(),
+            ("id" from top)!!,
+            ("next" from top)!!,
             "firstsay" from top,
             "say" from top,
             top["options"].let { it as? ArrayList<HashMap<String, Any>> }?.map {
                 Conversation.Option(
-                    ("id" from it),
+                    ("id" from it)!!,
                     ("next" from it),
                     "say" from it
                 )
@@ -89,14 +90,14 @@ class YamlServiceImpl : YamlService {
             ConversationList(
                 listOf(
                     Conversation(
-                        1,
-                        1, "Test first", "Say again", listOf(
+                        "1",
+                        "1", "Test first", "Say again", listOf(
                             Conversation.Option("1", "1", "Response")
                         )
                     ),
                     Conversation(
-                        1,
-                        1, "Test first second", "Say again", listOf(
+                        "1",
+                        "1", "Test first second", "Say again", listOf(
                             Conversation.Option("1", "1", "Response")
                         )
                     )
@@ -134,15 +135,14 @@ data class ConversationList(
 )
 
 data class Conversation constructor(
-    @JacksonXmlProperty(isAttribute = true) val id: Int?,
-    @JacksonXmlProperty(isAttribute = true) val next: Int?,
+    @JacksonXmlProperty(isAttribute = true) val id: String,
+    @JacksonXmlProperty(isAttribute = true) val next: String?,
     val firstsay: String?,
     val say: String?,
-    @JacksonXmlElementWrapper(useWrapping = false)
-    val options: List<Option>?
+    @JacksonXmlElementWrapper(useWrapping = false) val option: List<Option>?
 ) {
     data class Option(
-        @JacksonXmlProperty(isAttribute = true) val id: String?,
+        @JacksonXmlProperty(isAttribute = true) val id: String,
         @JacksonXmlProperty(isAttribute = true) val next: String?,
         val say: String?
     )
