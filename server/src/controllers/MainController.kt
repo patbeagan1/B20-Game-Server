@@ -1,8 +1,8 @@
 package controllers
 
+import com.pbeagan.models.data.Player
+import com.pbeagan.models.data.WorldState
 import com.pbeagan.services.hello.HelloService
-import data.Player
-import data.WorldState
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.response.respond

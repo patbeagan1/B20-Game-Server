@@ -1,4 +1,4 @@
-package data
+package com.pbeagan.models.data
 
 data class Wieldable(
     val armor: Int,

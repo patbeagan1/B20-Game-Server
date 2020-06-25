@@ -1,15 +1,8 @@
 package services.yaml
 
 import Injection
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
-import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import data.Player
-import data.WorldState
+import com.pbeagan.models.Conversation
+import com.pbeagan.models.ConversationList
 import org.yaml.snakeyaml.Yaml
 import services.yaml.data.Spell
 import java.nio.file.Files
@@ -72,22 +65,3 @@ class YamlServiceImpl : YamlService {
 
 
 
-@JacksonXmlRootElement(localName = "discussion")
-data class ConversationList(
-    @JacksonXmlElementWrapper(useWrapping = false)
-    val conversation: List<Conversation>
-)
-
-data class Conversation constructor(
-    @JacksonXmlProperty(isAttribute = true) val id: String,
-    @JacksonXmlProperty(isAttribute = true) val next: String?,
-    val firstsay: String?,
-    val say: String?,
-    @JacksonXmlElementWrapper(useWrapping = false) val option: List<Option>?
-) {
-    data class Option(
-        @JacksonXmlProperty(isAttribute = true) val id: String,
-        @JacksonXmlProperty(isAttribute = true) val next: String?,
-        val say: String?
-    )
-}

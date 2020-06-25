@@ -52,6 +52,7 @@ dependencies {
     testCompile group: 'org.mockito', name: 'mockito-core', version: '3.3.3'
 
     implementation project(":hello")
+    implementation project(":models")
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.26'
     testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     testImplementation "io.ktor:ktor-server-tests:$ktor_version"

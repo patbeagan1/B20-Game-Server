@@ -1,0 +1,25 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'com.pbeagan'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.10.1"
+    implementation "com.fasterxml.woodstox:woodstox-core:5.1.0"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.11.+"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}

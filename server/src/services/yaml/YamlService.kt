@@ -1,5 +1,6 @@
 package services.yaml
 
+import com.pbeagan.models.Conversation
 import services.yaml.data.Spell
 
 interface YamlService {

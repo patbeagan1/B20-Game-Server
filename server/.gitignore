@@ -1,9 +1,12 @@
 /.gradle
 /.idea
 /out
-*/build
+/build
+/server/build
+*/build*
 *.iml
 *.ipr
 *.iws
 *.DS_Store
 .DS_Store
+server/local.properties

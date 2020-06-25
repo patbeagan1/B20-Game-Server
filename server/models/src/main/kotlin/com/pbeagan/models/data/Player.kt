@@ -1,4 +1,4 @@
-package data
+package com.pbeagan.models.data
 
 import kotlin.math.ceil
 import kotlin.math.max
@@ -46,14 +46,15 @@ data class Player(
 
 
     companion object {
-        fun random(): Player = Player(
-            listOf("Ken", "Ryu", "Cloud", "John").random(),
-            Attributes.random(),
-            listOf(object : Item {
-                override val encumbrance = 0
-            }),
-            Location.random()
-        )
+        fun random(): Player =
+            Player(
+                listOf("Ken", "Ryu", "Cloud", "John").random(),
+                Attributes.random(),
+                listOf(object : Item {
+                    override val encumbrance = 0
+                }),
+                Location.random()
+            )
 
     }
 

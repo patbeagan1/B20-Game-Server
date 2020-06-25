@@ -3,6 +3,8 @@ package services.yaml
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import com.pbeagan.models.Conversation
+import com.pbeagan.models.ConversationList
 import data.Player
 import data.WorldState
 import org.junit.Test
