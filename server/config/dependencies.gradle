@@ -1,0 +1,7 @@
+def deps = [
+        ktor: [
+                gson : "io.ktor:ktor-gson:$ktor_version",
+                netty: "io.ktor:ktor-server-netty:$ktor_version"
+        ]
+]
+println("Hello from deps")

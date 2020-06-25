@@ -1,6 +1,6 @@
+import com.pbeagan.services.hello.HelloService
 import controllers.MainController
 import io.ktor.application.call
-import io.ktor.http.Parameters
 import io.ktor.http.content.default
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
@@ -9,7 +9,6 @@ import io.ktor.routing.get
 import io.ktor.util.flattenEntries
 import org.koin.ktor.ext.inject
 import services.counter.CounterService
-import services.hello.HelloService
 import services.yaml.YamlService
 import util.loggerGen
 

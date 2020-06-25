@@ -1,11 +1,10 @@
 package controllers
 
+import com.pbeagan.services.hello.HelloService
 import data.Player
 import data.WorldState
-import services.hello.HelloService
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
-import io.ktor.http.ContentType
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.util.pipeline.PipelineContext

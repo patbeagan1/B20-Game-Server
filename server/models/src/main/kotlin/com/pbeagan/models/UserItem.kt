@@ -1,4 +1,4 @@
-package services.yaml.data
+package com.pbeagan.models
 
 data class UserItem(
     val admin: Boolean,

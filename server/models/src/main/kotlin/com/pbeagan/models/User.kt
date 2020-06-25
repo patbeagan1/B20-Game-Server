@@ -1,3 +1,3 @@
-package services.yaml.data
+package com.pbeagan.models
 
 class User : ArrayList<UserItem>()

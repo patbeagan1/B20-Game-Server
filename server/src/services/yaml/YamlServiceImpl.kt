@@ -62,70 +62,14 @@ class YamlServiceImpl : YamlService {
     }
 
     override fun getDiscussion() {
-        val mapper = XmlMapper.xmlBuilder()
-            .enable(SerializationFeature.INDENT_OUTPUT)
-            .defaultUseWrapper(false)
-            .build()
-
-        val value: Simple = mapper.readValue(
-            """
-<Simple>
-<x>1</x>
-<y>2</y>
-</Simple>""".trimIndent(), Simple::class.java
-        )
-
-        mapper.writeValueAsString(listOf("hello", "2")).also { println(it) }
-        mapper.writeValueAsString(
-            WorldState(
-                listOf(Player.random(), Player.random(), Player.random()),
-                listOf(),
-                listOf(),
-                listOf()
-            )
-        ).also { println(it) }
 
 
-        mapper.writeValueAsString(
-            ConversationList(
-                listOf(
-                    Conversation(
-                        "1",
-                        "1", "Test first", "Say again", listOf(
-                            Conversation.Option("1", "1", "Response")
-                        )
-                    ),
-                    Conversation(
-                        "1",
-                        "1", "Test first second", "Say again", listOf(
-                            Conversation.Option("1", "1", "Response")
-                        )
-                    )
-                )
-            )
-        ).also { println(it) }
-
-        // https://proandroiddev.com/parsing-optional-values-with-jackson-and-kotlin-36f6f63868ef
-        val omapper = XmlMapper().registerKotlinModule()
-
-        val value2 = omapper.readValue(
-            Files.newBufferedReader(
-                Paths.get("assets/conversation.xml")
-            ), ConversationList::class.java
-        )
-
-        println(value)
-        println(value2)
 
     }
 
     private infix fun String.from(map: HashMap<String, Any>): String? = map[this]?.toString()
 }
 
-data class Simple(
-    var x: Int = 3,
-    var y: Int = 4
-)
 
 
 @JacksonXmlRootElement(localName = "discussion")

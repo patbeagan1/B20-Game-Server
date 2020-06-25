@@ -1,8 +1,8 @@
-package services.hello
+package com.pbeagan.services.hello
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import services.yaml.data.User
+import com.pbeagan.models.User
 import java.nio.file.Files
 import java.nio.file.Paths
 
