@@ -5,8 +5,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import com.pbeagan.models.Conversation
 import com.pbeagan.models.ConversationList
-import data.Player
-import data.WorldState
+import com.pbeagan.models.data.Player
+import com.pbeagan.models.data.WorldState
 import org.junit.Test
 import java.nio.file.Files
 import java.nio.file.Paths
