@@ -1,5 +1,5 @@
 <discussion>
-    <conversation id="greeting">
+    <com.pbeagan.models.conversation id="greeting">
         <firstsay>Hello! My name is Tom. Welcome to town. How can I help you?</firstsay>
         <say>Is there anything else I can help you with?</say>
         <option id="1" next="2">
@@ -8,11 +8,11 @@
         <option id="1" next="2">
             <say>Response</say>
         </option>
-    </conversation>
-    <conversation id="3" next="3">
+    </com.pbeagan.models.conversation>
+    <com.pbeagan.models.conversation id="3" next="3">
         <say>Say again</say>
         <option id="4" next="greeting">
             <say>Response</say>
         </option>
-    </conversation>
+    </com.pbeagan.models.conversation>
 </discussion>

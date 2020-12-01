@@ -1,0 +1,37 @@
+{
+  "room": {
+    "entrance": {
+      "direction": "west"
+    },
+    "exit": [
+      {
+        "direction": "east",
+        "to": "Haunted House"
+      },
+      {
+        "direction": "west",
+        "to": "Palace on the Marsh"
+      },
+      {
+        "direction": "north",
+        "to": "Sand Dunes"
+      },
+      {
+        "direction": "south",
+        "to": "Altar of the Gods"
+      }
+    ],
+    "name": "The Front Porch",
+    "description": "Two paces out of the house. There is a long way to go!",
+    "items": [
+      {
+        "name": "baseball"
+      }
+    ],
+    "mobs": [
+      {
+        "name": "Fido"
+      }
+    ]
+  }
+}

@@ -3,9 +3,8 @@ package services.yaml
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.pbeagan.models.Conversation
-import com.pbeagan.models.ConversationList
-import com.pbeagan.models.data.Player
+import com.pbeagan.models.conversation.Conversation
+import com.pbeagan.models.conversation.ConversationList
 import com.pbeagan.models.data.WorldState
 import org.junit.Test
 import java.nio.file.Files
@@ -72,7 +71,7 @@ internal class XMLRepositoryTest {
 
         val value2 = omapper.readValue(
             Files.newBufferedReader(
-                Paths.get("assets/conversation.xml")
+                Paths.get("assets/com.pbeagan.models.conversation.xml")
             ), ConversationList::class.java
         )
     }

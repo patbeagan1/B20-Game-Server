@@ -1,0 +1,111 @@
+{
+  "WorldState": {
+    "players": [
+      {
+        "name": "Cloud",
+        "attr": {
+          "awareness": "4",
+          "spirit": "0",
+          "strength": "10",
+          "precision": "10",
+          "agility": "10",
+          "durability": "6",
+          "endurance": "10",
+          "presence": "3",
+          "persuasion": "11",
+          "cunning": "7",
+          "fortitude": "14",
+          "tenacity": "11"
+        },
+        "items": {
+          "items": {
+            "encumbrance": "0"
+          }
+        },
+        "location": {
+          "x": "98.0",
+          "y": "34.0"
+        },
+        "wieldedItems": "",
+        "hearts": "3",
+        "dodge": "5",
+        "armor": "0",
+        "speed": "4",
+        "baseAtkMelee": "1",
+        "baseAtkThrow": "0",
+        "baseAtkRanged": "0"
+      },
+      {
+        "name": "Ken",
+        "attr": {
+          "awareness": "0",
+          "spirit": "5",
+          "strength": "11",
+          "precision": "17",
+          "agility": "8",
+          "durability": "6",
+          "endurance": "13",
+          "presence": "4",
+          "persuasion": "9",
+          "cunning": "16",
+          "fortitude": "13",
+          "tenacity": "12"
+        },
+        "items": {
+          "items": {
+            "encumbrance": "0"
+          }
+        },
+        "location": {
+          "x": "3.0",
+          "y": "55.0"
+        },
+        "wieldedItems": "",
+        "hearts": "4",
+        "dodge": "4",
+        "armor": "0",
+        "speed": "3",
+        "baseAtkMelee": "1",
+        "baseAtkThrow": "1",
+        "baseAtkRanged": "2"
+      },
+      {
+        "name": "Ken",
+        "attr": {
+          "awareness": "4",
+          "spirit": "2",
+          "strength": "5",
+          "precision": "7",
+          "agility": "10",
+          "durability": "10",
+          "endurance": "12",
+          "presence": "12",
+          "persuasion": "11",
+          "cunning": "8",
+          "fortitude": "15",
+          "tenacity": "17"
+        },
+        "items": {
+          "items": {
+            "encumbrance": "0"
+          }
+        },
+        "location": {
+          "x": "60.0",
+          "y": "18.0"
+        },
+        "wieldedItems": "",
+        "hearts": "4",
+        "dodge": "5",
+        "armor": "0",
+        "speed": "3",
+        "baseAtkMelee": "-1",
+        "baseAtkThrow": "-1",
+        "baseAtkRanged": "-1"
+      }
+    ],
+    "npcs": "",
+    "dungeons": "",
+    "treasures": ""
+  }
+}

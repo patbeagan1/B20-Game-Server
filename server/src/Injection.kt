@@ -1,26 +1,70 @@
-import com.pbeagan.services.hello.HelloRepository
-import com.pbeagan.services.hello.HelloService
-import com.pbeagan.services.hello.HelloServiceImpl
-import controllers.MainController
+import com.pbeagan.models.room.Entrance
+import com.pbeagan.models.room.Exit
+import com.pbeagan.models.room.Room
+import com.pbeagan.models.room.RoomX
+import com.pbeagan.models.worldstate.*
+import com.pbeagan.models.worldstate.Mob
+import site.controllers.CounterService
+import site.controllers.CounterServiceImpl
 import org.koin.dsl.module
-import services.counter.CounterService
-import services.counter.CounterServiceImpl
-import services.yaml.YamlParser
-import services.yaml.YamlService
-import services.yaml.YamlServiceImpl
-import util.loggerGen
+
+import loggerGen
 
 object Injection {
 
-    // Todo: Remove this once we can inject anywhere with `by inject`.
-    fun provideYamlParser(): YamlParser = YamlParser()
-
     val helloAppModule = module {
-        single<HelloService> { HelloServiceImpl(get()) } // get() Will resolve services.hello.HelloRepository
-        factory { HelloRepository() }
         single<CounterService> { CounterServiceImpl() }
-        single<YamlService> { YamlServiceImpl() }
+        single {
+            WorldState(
+                WorldStateX(
+                    mapOf(
+                        "The Front Porch" to Room(
+                            RoomX(
+                                "There is still a long way to go.",
+                                Entrance("west"),
+                                listOf(Exit("east", "The Wide World")),
+                                listOf(),
+                                listOf()
+                            )
+                        )
+                    ),
+                    listOf(
+                        getSamplePlayer(), getSamplePlayer()
+                    )
+                )
+            )
+        }
         factory { loggerGen(this::class.java) }
-        factory { MainController() }
+    }
+
+    private fun getSamplePlayer(): Mob {
+        return Mob(
+            "Cloud",
+            3,
+            Attr(
+                3,
+                4,
+                4,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10,
+                10
+            ),
+            3,
+            4,
+            5,
+            6,
+            3,
+            4,
+            Location(x = 1.0, y = 2.0),
+            Items(ItemsX(2.0)),
+            Items(ItemsX(2.0))
+        )
     }
 }
