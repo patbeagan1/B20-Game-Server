@@ -1,4 +1,11 @@
-import com.pbeagan.models.*
+import com.pbeagan.models.Direction
+import com.pbeagan.models.ItemData
+import com.pbeagan.models.ItemFlags
+import com.pbeagan.models.MobBehavior
+import com.pbeagan.models.RoomData
+import com.pbeagan.models.RoomDirectionData
+import com.pbeagan.models.RoomFlags
+import com.pbeagan.models.flagSet
 import mob.Mob
 
 object SampleData {
@@ -25,7 +32,11 @@ object SampleData {
                     0,
                     listOf("Rusty Sword", "sword"),
                     "It's got a few notches in it.",
-                    "A rusty sword is lying on the ground."
+                    "A rusty sword is lying on the ground.",
+                    itemFlags = flagSet(
+                        ItemFlags.TAKEABLE,
+                        ItemFlags.WIELDABLE
+                    )
                 )
             )
         ),

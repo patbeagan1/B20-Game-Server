@@ -31,19 +31,24 @@ internal class XMLRepositoryTest {
     @Test
     fun `conversations can be represented as XML`() {
 
-
         mapper.writeValueAsString(
             ConversationList(
                 listOf(
                     Conversation(
                         "1",
-                        "1", "Test first", "Say again", listOf(
+                        "1",
+                        "Test first",
+                        "Say again",
+                        listOf(
                             Conversation.Option("1", "1", "Response")
                         )
                     ),
                     Conversation(
                         "1",
-                        "1", "Test first second", "Say again", listOf(
+                        "1",
+                        "Test first second",
+                        "Say again",
+                        listOf(
                             Conversation.Option("1", "1", "Response")
                         )
                     )
@@ -72,7 +77,8 @@ internal class XMLRepositoryTest {
         val value2 = omapper.readValue(
             Files.newBufferedReader(
                 Paths.get("assets/com.pbeagan.models.conversation.xml")
-            ), ConversationList::class.java
+            ),
+            ConversationList::class.java
         )
     }
 
@@ -82,7 +88,8 @@ internal class XMLRepositoryTest {
     )
 
     companion object {
-        const val simpleXML = """
+        const val simpleXML =
+            """
 <Simple>
 <x>1</x>
 <y>2</y>

@@ -2,13 +2,16 @@ import com.pbeagan.models.room.Entrance
 import com.pbeagan.models.room.Exit
 import com.pbeagan.models.room.Room
 import com.pbeagan.models.room.RoomX
-import com.pbeagan.models.worldstate.*
+import com.pbeagan.models.worldstate.Attr
+import com.pbeagan.models.worldstate.Items
+import com.pbeagan.models.worldstate.ItemsX
+import com.pbeagan.models.worldstate.Location
 import com.pbeagan.models.worldstate.Mob
+import com.pbeagan.models.worldstate.WorldState
+import com.pbeagan.models.worldstate.WorldStateX
+import org.koin.dsl.module
 import site.controllers.CounterService
 import site.controllers.CounterServiceImpl
-import org.koin.dsl.module
-
-import loggerGen
 
 object Injection {
 
@@ -29,7 +32,8 @@ object Injection {
                         )
                     ),
                     listOf(
-                        getSamplePlayer(), getSamplePlayer()
+                        getSamplePlayer(),
+                        getSamplePlayer()
                     )
                 )
             )

@@ -1,21 +1,36 @@
-import actions.*
-import com.pbeagan.models.Direction.*
-import com.pbeagan.models.MobBehavior.*
+import actions.Action
+import actions.AttackMelee
+import actions.Doors
+import actions.Examine
+import actions.Inventory
+import actions.Look
+import actions.Move
+import actions.Pass
+import actions.Retry
+import actions.Take
+import com.pbeagan.models.Direction.DOWN
+import com.pbeagan.models.Direction.EAST
+import com.pbeagan.models.Direction.NORTH
+import com.pbeagan.models.Direction.SOUTH
+import com.pbeagan.models.Direction.UP
+import com.pbeagan.models.Direction.WEST
+import com.pbeagan.models.MobBehavior.AGGRESSIVE
+import com.pbeagan.models.MobBehavior.FEARFUL
+import com.pbeagan.models.MobBehavior.HELPFUL
+import com.pbeagan.models.MobBehavior.IMMOBILE
+import com.pbeagan.models.MobBehavior.LOOTER
+import com.pbeagan.models.MobBehavior.PLAYER
+import com.pbeagan.models.MobBehavior.WANDERER
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
 import io.ktor.network.sockets.openWriteChannel
 import io.ktor.util.KtorExperimentalAPI
-import io.ktor.util.cio.write
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.readUTF8Line
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mob.Mob
 import mob.attackFirstVisible
-import mob.currentRoom
-import mob.currentRoomOtherMobs
 import writer.Reader
 import writer.Writer
 import java.net.InetSocketAddress
@@ -37,22 +52,18 @@ fun main(args: Array<String>) {
             launch {
                 println("Socket accepted: ${socket.remoteAddress}")
 
-
                 val input = socket.openReadChannel()
                 val output = socket.openWriteChannel(autoFlush = true)
                 val writer = Writer(output)
-                val reader = Reader(input)
+                val reader = Reader(input, writer)
                 try {
-                    val player = signIn(input, writer)
+                    val player = signIn(reader, writer)
                     writer.horirule()
                     writer.room("Welcome, ${player.name}!")
                     writer.horirule()
-
                     while (true) {
                         gameLoop(writer, reader)
                     }
-                } catch (e: IllegalStateException) {
-                    output.write("Invalid char detected! To quit, type '^]'")
                 } catch (e: Throwable) {
                     e.printStackTrace()
                     socket.close()
@@ -63,7 +74,7 @@ fun main(args: Array<String>) {
 }
 
 private suspend fun signIn(
-    input: ByteReadChannel,
+    input: Reader,
     writer: Writer
 ): Mob {
     while (true) {
@@ -72,7 +83,7 @@ private suspend fun signIn(
                |What is your name?
                |""".trimMargin()
         )
-        val line = input.readUTF8Line()
+        val line = input.read()
 
         mobs.firstOrNull {
             it.behavior == PLAYER && it.name.toLowerCase() == line?.toLowerCase()
@@ -87,7 +98,7 @@ private suspend fun gameLoop(writer: Writer, reader: Reader) {
         var action: Action? = null
         while (action == null || action is Retry) {
             action = mob.getAction(reader)
-            if(action is Retry){
+            if (action is Retry) {
                 writer.error(action.errorMsg)
             }
         }
@@ -112,16 +123,18 @@ private suspend fun Mob.getAction(reader: Reader): Action? = when (behavior) {
 }
 
 private suspend fun interpretPlayerAction(reader: Reader, mob: Mob): Action? {
-    val input = reader.input.readUTF8Line()?.toLowerCase() ?: return Retry("Unknown Command")
+    val input = reader.read()?.toLowerCase() ?: return Retry("Unknown Command")
     val arg = " *([^\\s]*)?"
-    val list = listOf<Pair<String, ((List<String>) -> Action)>>(
+    return listOf<Pair<String, ((List<String>) -> Action)>>(
         // Util
         "(\\.|\\n|again)" to { i -> mob.action },
         "debug$arg" to { i ->
             Pass.also { pass ->
-                pass.writer.info(mobs.firstOrNull {
-                    it.name.toLowerCase() == i.getOrNull(1)?.toLowerCase()
-                }.toString())
+                pass.writer.info(
+                    mobs.firstOrNull {
+                        it.name.toLowerCase() == i.getOrNull(1)?.toLowerCase()
+                    }.toString()
+                )
             }
         },
 
@@ -129,11 +142,11 @@ private suspend fun interpretPlayerAction(reader: Reader, mob: Mob): Action? {
         "l(s|ook)?" to { i -> Look() },
         "do(or(s)?)?" to { i -> Doors() },
         "exit(s)?" to { i -> Doors() },
-        "ex(amine)?$arg" to { i -> examineOrRetry(i) },
+        "ex(amine)?$arg" to { i -> Examine.getOrRetry(i) },
 
         // Items
         "i(nventory)?" to { i -> Inventory() },
-        "take$arg" to { i -> takeOrRetry(i, mob) },
+        "take$arg" to { i -> Take.getOrRetry(i, mob) },
 
         // Movement
         "n(orth)?" to { i -> Move(NORTH) },
@@ -144,9 +157,8 @@ private suspend fun interpretPlayerAction(reader: Reader, mob: Mob): Action? {
         "d(own)?" to { i -> Move(DOWN) },
 
         // Combat
-        "(atk|attack)$arg" to { i -> attackOrRetry(i, mob) }
-    )
-    return list.map { it.first.toRegex() to it.second }
+        "(atk|attack)$arg" to { i -> AttackMelee.attackOrRetry(i, mob) }
+    ).map { it.first.toRegex() to it.second }
         .firstOrNull { it.first.matches(input) }
         ?.let { pair ->
             pair.first.find(input)
@@ -154,38 +166,4 @@ private suspend fun interpretPlayerAction(reader: Reader, mob: Mob): Action? {
                 ?.also { println("Matches: $it") }
                 ?.let { pair.second.invoke(it) }
         } ?: Retry("Unknown Command")
-}
-
-private fun examineOrRetry(i: List<String>): Action = i
-    .getOrNull(2)
-    ?.let { Examine(it) }
-    ?: Retry("What should I examine?")
-
-private fun takeOrRetry(i: List<String>, mob: Mob): Action {
-    val item = i.getOrNull(1)
-    val firstOrNull = mob.currentRoom()
-        ?.items
-        ?.firstOrNull { itemData ->
-            itemData.names.any { name ->
-                item?.let { name.earlyMatches(it) } ?: false
-            }
-        }
-
-    return safeLet(item, firstOrNull) { _, safeItem ->
-        Take(safeItem)
-    } ?: run {
-        if (item == null) Retry("What would you like to take?") else null
-    } ?: run {
-        if (firstOrNull == null) Retry("That item isn't here...") else null
-    } ?: Pass
-}
-
-private fun attackOrRetry(i: List<String>, mob: Mob): Action {
-    val target = i[2]
-    return when {
-        target.isEmpty() -> mob.attackFirstVisible(mobs)
-        else -> mob.currentRoomOtherMobs(mobs)
-            .firstOrNull { it.name.toLowerCase() == target }
-            ?.let { AttackMelee(it) }
-    } ?: Retry("Looks like that mob isn't here...")
 }

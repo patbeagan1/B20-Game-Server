@@ -3,6 +3,7 @@ package writer
 import io.ktor.util.cio.write
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.readUTF8Line
 import kotlinx.coroutines.runBlocking
 
 class Writer(private val output: ByteWriteChannel) {
@@ -20,4 +21,13 @@ class Writer(private val output: ByteWriteChannel) {
     private fun write(s: String) = runBlocking { output.write("$s\n") }
 }
 
-class Reader(val input: ByteReadChannel)
+class Reader(private val input: ByteReadChannel, private val writer: Writer) {
+    suspend fun read(): String? {
+        return try {
+            input.readUTF8Line()
+        } catch (e: IllegalStateException) {
+            writer.error("Invalid char detected! To quit, type '^]'")
+            read()
+        }
+    }
+}

@@ -38,9 +38,7 @@ class LookDelegateProvider : ActionDelegateProvider<LookDelegate>() {
                 }
 
                 Doors().also { it.writer = writer }.invoke(self)
-
             } ?: writer.error("No room found - how do you exist?")
-
         }
     }
 }

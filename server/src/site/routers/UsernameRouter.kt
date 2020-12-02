@@ -1,15 +1,15 @@
 package site.routers
 
-import site.controllers.UserCommand
 import io.ktor.application.call
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import io.ktor.util.flattenEntries
 import org.slf4j.Logger
 import site.Router
+import site.controllers.UserCommand
 
 class UsernameRouter(val logger: Logger) : Router() {
-   override fun get() =  fun Routing.() {
+    override fun get() = fun Routing.() {
 
         get("/user/{username}/") {
             val request = call.request

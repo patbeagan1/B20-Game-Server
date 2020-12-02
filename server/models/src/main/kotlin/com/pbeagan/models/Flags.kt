@@ -21,10 +21,6 @@ enum class FlagImpl : Flag {
     A, B, C;
 }
 
-enum class FlagImpl2 : Flag {
-    A, B, C
-}
-
 fun main() {
     val g = flagSet(FlagImpl.A, FlagImpl.A, FlagImpl.C)
     println("${g} ${g.contains(FlagImpl.B)}")
