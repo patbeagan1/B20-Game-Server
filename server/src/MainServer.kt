@@ -1,3 +1,8 @@
+import com.pbeagan.Injection
+import com.pbeagan.loggerGen
+import com.pbeagan.site.routers.DemoRouter
+import com.pbeagan.site.routers.ReadDataRouter
+import com.pbeagan.site.routers.UsernameRouter
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.application.log
@@ -14,10 +19,9 @@ import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.koin.ktor.ext.Koin
-import site.routers.DemoRouter
-import site.routers.ReadDataRouter
-import site.routers.UsernameRouter
 import java.text.DateFormat
+
+val debug = true
 
 fun main(args: Array<String>) {
     embeddedServer(
@@ -25,36 +29,21 @@ fun main(args: Array<String>) {
         8080,
         host = "127.0.0.1",
         watchPaths = listOf("BlogAppKt"),
-        module = {
-            enableCors()
-            install(DefaultHeaders)
-            install(CallLogging)
-            install(ContentNegotiation) {
-                gson {
-                    setDateFormat(DateFormat.LONG)
-                    setPrettyPrinting()
-                }
-            }
-            install(Koin) { modules(Injection.helloAppModule) }
-            install(Routing) {
-                val logger by lazy { loggerGen(this::class.java) }
-                static("/") {
-                    resources("client/build/")
-                    default("resources/client/build/index.html")
-                }
-                ReadDataRouter().executeWith(this)
-                UsernameRouter(logger).executeWith(this)
-                DemoRouter().executeWith(this)
-            }
-            loggerExample()
-        }
+        module = Application::module
     ).start()
 }
 
-private fun Application.loggerExample() {
-    // apparently there is already a logger baked in
-    this.log.warn("From App")
-    // TODO: get this working with Koin parameter injection
+fun Application.module() {
+    if (debug == true) ({ loadDebug() })() else null
+    performSetup()
+}
+
+private fun Application.loadDebug() {
+    install(CORS) {
+        anyHost()
+        header(HttpHeaders.AccessControlAllowOrigin)
+    }
+    log.warn("From App")
     val logger by lazy { loggerGen(this::class.java) }
     logger.run {
         info("test")
@@ -63,9 +52,24 @@ private fun Application.loggerExample() {
     }
 }
 
-private fun Application.enableCors() {
-    install(CORS) {
-        anyHost()
-        header(HttpHeaders.AccessControlAllowOrigin)
+private fun Application.performSetup() {
+    install(DefaultHeaders)
+    install(CallLogging)
+    install(ContentNegotiation) {
+        gson {
+            setDateFormat(DateFormat.LONG)
+            setPrettyPrinting()
+        }
+    }
+    install(Koin) { modules(Injection.helloAppModule) }
+    install(Routing) {
+        val logger by lazy { loggerGen(this::class.java) }
+        static("/") {
+            resources("client/build/")
+            default("resources/client/build/index.html")
+        }
+        ReadDataRouter().executeWith(this)
+        UsernameRouter(logger).executeWith(this)
+        DemoRouter().executeWith(this)
     }
 }

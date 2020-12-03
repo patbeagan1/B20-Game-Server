@@ -1,4 +1,4 @@
-package site
+package com.pbeagan.site
 
 import io.ktor.routing.Routing
 

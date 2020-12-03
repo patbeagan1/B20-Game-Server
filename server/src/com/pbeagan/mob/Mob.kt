@@ -1,16 +1,16 @@
-package mob
+package com.pbeagan.mob
 
-import actions.Action
-import actions.AttackMelee
-import actions.Look
-import actions.Pass
+import com.pbeagan.BoundedValue
+import com.pbeagan.ItemData
+import com.pbeagan.MobBehavior
+import com.pbeagan.VisibleBy
+import com.pbeagan.actions.Action
+import com.pbeagan.actions.Pass
 import com.pbeagan.models.FlagCombined
-import com.pbeagan.models.ItemData
-import com.pbeagan.models.MobBehavior
-import com.pbeagan.models.VisibleBy
 import com.pbeagan.models.worldstate.Attr
+import com.pbeagan.writer.IDforIOGenerator
+import mobs
 import rooms
-import writer.Writer
 
 data class Mob constructor(
     val name: String,
@@ -33,10 +33,12 @@ data class Mob constructor(
 
     var armor: Int = 0,
     var dodge: Int = 0,
-    var hearts: Int = 0,
+    var totalHearts: Int = 4,
 
     var items: MutableList<ItemData> = mutableListOf()
 ) {
+    val idForIO: Int = IDforIOGenerator.get()
+    var hearts by BoundedValue(totalHearts, 0..totalHearts)
 
     val description get() = descriptionProvider.describe(behavior, action)
 
@@ -45,11 +47,13 @@ data class Mob constructor(
     }
 }
 
-fun Mob.look(writer: Writer) = Look().also { it.writer = writer }(this)
 fun Mob.currentRoom() = rooms[location]
 fun Mob.currentRoomOtherMobs(list: List<Mob>) = list
     .filter { it.location == location && it != this }
 
-fun Mob.attackFirstVisible(list: List<Mob>): Action? = list
+fun Mob.getFirstVisibleMob(): Mob? = mobs
     .firstOrNull { it.location == location && it != this }
-    ?.let { AttackMelee(it) }
+
+fun Mob.getRandomVisibleItem(): ItemData? =
+    currentRoom()?.items?.takeIf { it.isNotEmpty() }?.random()
+

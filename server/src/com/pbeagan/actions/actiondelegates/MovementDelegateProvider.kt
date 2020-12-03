@@ -1,10 +1,11 @@
-package actions.actiondelegates
+package com.pbeagan.actions.actiondelegates
 
-import actions.actiondelegates.MovementDelegateProvider.MovementDelegate
-import com.pbeagan.models.Direction
-import mob.Mob
-import mob.currentRoom
-import mob.look
+import com.pbeagan.Direction
+import com.pbeagan.MobBehavior
+import com.pbeagan.actions.Look
+import com.pbeagan.actions.actiondelegates.MovementDelegateProvider.MovementDelegate
+import com.pbeagan.mob.Mob
+import com.pbeagan.mob.currentRoom
 
 class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
     interface MovementDelegate {
@@ -25,12 +26,15 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                     if (!visited.contains(self.location)) {
                         visited.add(self.location)
                     }
+                }?.run {
+                    writer.sayToAll().move("${self.name} moved ${direction.name}")
+                    if (self.behavior == MobBehavior.PLAYER) {
+                        Look().also { it.writer = writer }(self)
+                    }
                 }
-                ?.run {
-                    writer.info("${self.name} moved ${direction.name}")
-                    self.look(writer)
+                ?: if (self.behavior == MobBehavior.PLAYER) {
+                    writer.sayTo(self).error("Sorry, can't go that way.")
                 }
-                ?: writer.error("Sorry, can't go that way.")
         }
 
         override fun doors(self: Mob) {
@@ -38,7 +42,7 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                 ?.directions
                 ?.joinToString("\n") {
                     "${it.direction}: ${it.preview}"
-                }?.also { writer.info(it) }
+                }?.also { writer.sayTo(self).info(it) }
         }
     }
 }

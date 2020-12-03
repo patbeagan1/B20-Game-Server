@@ -1,4 +1,9 @@
-package com.pbeagan.models
+package com.pbeagan
+
+import com.pbeagan.mob.Mob
+import com.pbeagan.models.Flag
+import com.pbeagan.models.FlagCombined
+import com.pbeagan.models.createFlagSet
 
 enum class MessageReceiver {
     INITIATOR,
@@ -58,10 +63,14 @@ enum class ItemFlags : Flag {
     LOCKED,
     KEY,
     WIELDABLE,
+    CONSUMABLE,
     BLESSED;
 
     companion object {
-        val default get() = flagSet(TAKEABLE)
+        val default
+            get() = createFlagSet(
+                TAKEABLE
+            )
     }
 }
 
@@ -107,24 +116,30 @@ data class ItemData(
     val id: Int,
     val names: List<String>,
     val descriptionOnExamination: String,
-    val descriptionInRoom: String,
-    val handlerActivation: HandlerActivation? = null,
-    val handlerDestruction: HandlerDestructible? = null,
-    val itemFlags: FlagCombined<ItemFlags> = ItemFlags.default,
-    val visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultItem,
-    val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem,
-    val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = flagSet(),
-    val contains: ItemData? = null
+    val descriptionInRoom: String
 ) {
-    interface HandlerActivation {
-        fun activate()
-        val descriptionWhileActive: String
-        val descriptionOnActivation: String
+    val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
+    val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = createFlagSet()
+    val containsInnerItem: ItemData? = null
+    val itemFlags: FlagCombined<ItemFlags> = ItemFlags.default
+    val visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultItem
+    val flagHandlers = mutableMapOf<ItemFlags, FlagHandler?>()
+
+    fun setItemFlags(flags: ItemFlags, handler: FlagHandler? = null) {
+        itemFlags.add(flags)
+        if (handler != null) {
+            flagHandlers[flags] = handler
+        }
     }
 
-    interface HandlerDestructible {
-        fun destroy()
-        val descriptionOnDestruction: String
+    fun nameMatches(item: String) =
+        names.any { item.earlyMatches(it) }
+
+    interface FlagHandler {
+        fun invoke(self: Mob) = Unit
+        val descriptionOnActivation: String? get() = null
+        val descriptionOnDuration: String? get() = null
+        val descriptionOnCompletion: String? get() = null
     }
 }
 
@@ -174,7 +189,7 @@ data class RoomDirectionData(
     val direction: Direction,
     val destinationID: Int,
     val preview: String,
-    val exitConditions: FlagCombined<ExitCondition> = flagSet()
+    val exitConditions: FlagCombined<ExitCondition> = createFlagSet()
 )
 
 
@@ -183,7 +198,7 @@ data class RoomData(
     val name: String,
     override val descriptionLook: String,
     val directions: List<RoomDirectionData>,
-    val roomFlags: FlagCombined<RoomFlags> = flagSet(),
+    val roomFlags: FlagCombined<RoomFlags> = createFlagSet(),
     val weather: Weather = Weather.CLEAR,
     val items: MutableCollection<ItemData> = mutableListOf()
 ) : Lookable
@@ -198,7 +213,10 @@ enum class AffectedByMagic : Flag {
     PARALYSIS;
 
     companion object {
-        val defaultItem get() = flagSet(INVISIBLE)
+        val defaultItem
+            get() = createFlagSet(
+                INVISIBLE
+            )
     }
 }
 
@@ -231,13 +249,13 @@ enum class VisibleBy : Flag {
 
     companion object {
         val defaultMob: FlagCombined<VisibleBy>
-            get() = flagSet(
+            get() = createFlagSet(
                 SIGHT,
                 SOUND,
                 SENSE_LIFE
             )
         val defaultItem: FlagCombined<VisibleBy>
-            get() = flagSet(SIGHT)
+            get() = createFlagSet(SIGHT)
     }
 }
 

@@ -1,9 +1,9 @@
-package site.controllers
+package com.pbeagan.site.controllers
 
 import io.ktor.application.call
 import io.ktor.response.respondText
-import site.Command
-import site.Pipeline
+import com.pbeagan.site.Command
+import com.pbeagan.site.Pipeline
 
 class CounterCommand(private val service: CounterService) : Command() {
     override fun execute(): Pipeline = {

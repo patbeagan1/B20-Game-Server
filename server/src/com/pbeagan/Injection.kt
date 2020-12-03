@@ -1,3 +1,5 @@
+package com.pbeagan
+
 import com.pbeagan.models.room.Entrance
 import com.pbeagan.models.room.Exit
 import com.pbeagan.models.room.Room
@@ -10,8 +12,8 @@ import com.pbeagan.models.worldstate.Mob
 import com.pbeagan.models.worldstate.WorldState
 import com.pbeagan.models.worldstate.WorldStateX
 import org.koin.dsl.module
-import site.controllers.CounterService
-import site.controllers.CounterServiceImpl
+import com.pbeagan.site.controllers.CounterService
+import com.pbeagan.site.controllers.CounterServiceImpl
 
 object Injection {
 

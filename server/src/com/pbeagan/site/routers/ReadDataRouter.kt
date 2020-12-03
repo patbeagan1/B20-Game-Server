@@ -1,11 +1,11 @@
-package site.routers
+package com.pbeagan.site.routers
 
 import com.pbeagan.models.worldstate.WorldState
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import org.koin.java.KoinJavaComponent.inject
-import site.Router
-import site.controllers.ShowWorldStateCommand
+import com.pbeagan.site.Router
+import com.pbeagan.site.controllers.ShowWorldStateCommand
 
 class ReadDataRouter : Router() {
     override fun get(): Routing.() -> Unit = {

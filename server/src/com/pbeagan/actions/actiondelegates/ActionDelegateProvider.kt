@@ -1,6 +1,6 @@
-package actions.actiondelegates
+package com.pbeagan.actions.actiondelegates
 
-import writer.Writer
+import com.pbeagan.writer.Writer
 
 abstract class ActionDelegateProvider<T> {
     lateinit var writer: Writer

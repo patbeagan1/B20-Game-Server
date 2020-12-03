@@ -1,3 +1,5 @@
+package com.pbeagan
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
@@ -28,12 +30,16 @@ inline fun <T : Any> ifLet(vararg elements: T?, closure: (List<T>) -> Unit) {
     }
 }
 
+inline fun <T1 : Any, R : Any> safeLet(
+    p1: T1?,
+    block: (T1) -> R?
+): R? = if (p1 != null) block(p1) else null
+
 inline fun <T1 : Any, T2 : Any, R : Any> safeLet(
     p1: T1?,
     p2: T2?,
     block: (T1, T2) -> R?
-): R? =
-    if (p1 != null && p2 != null) block(p1, p2) else null
+): R? = if (p1 != null && p2 != null) block(p1, p2) else null
 
 inline fun <T1 : Any, T2 : Any, T3 : Any, R : Any> safeLet(
     p1: T1?,

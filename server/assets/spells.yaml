@@ -646,7 +646,7 @@
   unlearnedPenalty: 0
   learned: y
   alwaysAvailable: y
-  description: you make a loud noise using what you have available. make a charisma check against dc10. if you succeed, actions which are reasonably dependent on sound will fail until your next turn.
+  description: you make a loud noise using what you have available. make a charisma check against dc10. if you succeed, com.pbeagan.actions which are reasonably dependent on sound will fail until your next turn.
 -
   name: mental block
   mana:
@@ -655,7 +655,7 @@
   unlearnedPenalty: 10
   learned: n
   alwaysAvailable: n
-  description: mental actions cast between now and your next turn do not apply to you.
+  description: mental com.pbeagan.actions cast between now and your next turn do not apply to you.
 -
   name: charm creature
   mana:
