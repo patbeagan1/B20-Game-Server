@@ -17,7 +17,10 @@ class Writer {
         outputs[m.idForIO] = channel
     }
 
-    fun sayTo(vararg m: Mob): WriteTarget = WriteTarget(m)
+    fun sayTo(vararg m: Mob): WriteTarget {
+        require(m.isNotEmpty())
+        return WriteTarget(m)
+    }
     fun sayToRoomOf(m: Mob): WriteTarget = WriteTarget(m.currentRoomOtherMobs(mobs).toTypedArray())
     fun sayToAll(): WriteTarget = WriteTarget(mobs.toTypedArray())
 
@@ -28,37 +31,46 @@ class Writer {
     ) {
 
         private val horizontalRule = (0..20).joinToString("") { "-" }
-        fun room(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("ROOM: ", shouldIndent))
-        fun info(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("INFO: ", shouldIndent))
-        fun dead(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("DEAD: ", shouldIndent))
-        fun combat(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("CMBT: ", shouldIndent))
-        fun error(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("ERR : ", shouldIndent))
-        fun move(s: String, shouldIndent: Boolean = false) = write(s.formatChannel("MOVE: ", shouldIndent))
+        fun system(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("GAME: ", shouldIndent) }
+        fun info(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("INFO: ", shouldIndent) }
+        fun dead(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("DEAD: ", shouldIndent) }
+        fun combat(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("CMBT: ", shouldIndent) }
+        fun error(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("ERR : ", shouldIndent) }
+        fun move(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("MOVE: ", shouldIndent) }
+        fun join(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("JOIN: ", shouldIndent) }
 
-        fun horizontalRule() = write(horizontalRule)
+        fun horizontalRule() = write { horizontalRule }
 
-        private fun String.formatChannel(n: String, indent: Boolean) =
-            "\n${this.trim()}"
-                .replace("\n", "\n${if (indent) "\t" else ""}$n")
+        private fun String.formatChannel(prefix: String, indent: Boolean) =
+            "\n${this}"
+                .replace("\n", "\n$prefix${if (indent) "\t" else ""}")
                 .trim()
 
-        private fun write(s: String, m: WriteTarget = WriteTarget(mobs.toTypedArray())) {
+        private fun write(m: WriteTarget = WriteTarget(mobs.toTypedArray()), s: (Mob) -> String) {
             debug("Output channels: " + outputs.map { t ->
                 t.key to mobs.firstOrNull { it.idForIO == t.key }?.name
             }.toString())
             m.target.forEach { mob ->
-                runBlocking { outputs[mob.idForIO]?.write("$s\n") }
+                val byteWriteChannel = outputs[mob.idForIO]
+                if (byteWriteChannel == null || byteWriteChannel.isClosedForWrite) {
+                    outputs.remove(mob.idForIO)
+                } else {
+
+                    debug("Writing: ${mob.name} // $byteWriteChannel")
+
+                    runBlocking { byteWriteChannel.write("${s(mob)}\n") }
+                }
             }
         }
 
         fun turnStart(name: String) {
-            write(
+            write { target ->
                 """
               $horizontalRule
-              Turn Start: $name
-              $horizontalRule
+              Turn Start: ${if (target.name == name) "$name (you)" else name}
+
           """.trimIndent()
-            )
+            }
         }
     }
 }
@@ -76,20 +88,27 @@ class Reader(private val writer: Writer) {
         inputs[m.idForIO] = channel
     }
 
-    fun read(player: Mob): String? = try {
-        writer.debug("Input channels: " + inputs.map { t ->
-            t.key to mobs.firstOrNull { it.idForIO == t.key }?.name
-        }.toString())
-        val byteReadChannel = inputs[player.idForIO]
-        writer.debug(byteReadChannel.toString())
-        writer.debug("Reading: ${player.name} // $byteReadChannel")
-        if (byteReadChannel?.isClosedForRead == true) {
-            null
-        } else {
-            runBlocking { byteReadChannel?.readUTF8Line() }
-        }
-    } catch (e: IllegalStateException) {
-        writer.sayToAll().error("Invalid char detected! To quit, type '^]'")
-        null
+    fun read(player: Mob): String? {
+//        try {
+            writer.debug("Input channels: " + inputs.map { t ->
+                t.key to mobs.firstOrNull { it.idForIO == t.key }?.name
+            }.toString())
+
+            val byteReadChannel = inputs[player.idForIO]
+            if (byteReadChannel == null || byteReadChannel.isClosedForRead) {
+                inputs.remove(player.idForIO)
+                writer.debug("Removed ${player.name}")
+                return null
+            }
+
+            writer.debug("Reading: ${player.name} // $byteReadChannel")
+
+            return runBlocking { byteReadChannel.readUTF8Line() }
+
+//        }
+//        catch (e: IllegalStateException) {
+//            writer.sayTo(player).error("Invalid char detected! To quit, type '^]'\n$e")
+//            return null
+//        }
     }
 }

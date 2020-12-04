@@ -1,4 +1,5 @@
 import com.pbeagan.Account
+import com.pbeagan.ApplyOnce
 import com.pbeagan.Game
 import com.pbeagan.SampleData
 import com.pbeagan.writer.Reader
@@ -27,7 +28,7 @@ fun main(args: Array<String>) {
         val writer = Writer()
         val reader = Reader(writer)
         val game = Game()
-        val startGame = ApplyOnce(Unit) {
+        val startGame = ApplyOnce {
             launch { startGameLoop(game, writer, reader) }
         }
 
@@ -37,50 +38,38 @@ fun main(args: Array<String>) {
             launch {
                 println("Socket accepted: ${socket.remoteAddress}")
 
-                try {
-                    val account = Account()
-                    val writeChannel = socket.openWriteChannel(autoFlush = true)
-                    val readChannel = socket.openReadChannel()
-                    val player = account.signIn(readChannel, writeChannel)
-                    writer.register(player, writeChannel)
-                    reader.register(player, readChannel)
+                val account = Account()
+                val writeChannel = socket.openWriteChannel(autoFlush = true)
+                val readChannel = socket.openReadChannel()
 
-                    startGame()
+                val player = account.signIn(readChannel, writeChannel)
 
-                    writer.sayTo().run {
-                        horizontalRule()
-                        room("Welcome, ${player.name}!")
-                        horizontalRule()
-                    }
+                writer.register(player, writeChannel)
+                reader.register(player, readChannel)
 
-                } catch (e: Throwable) {
-                    e.printStackTrace()
-                    socket.close()
+                startGame(Unit)
+
+                writer.sayTo(player).run {
+                    horizontalRule()
+                    system("Welcome, ${player.name}!")
+                    horizontalRule()
                 }
             }
         }
     }
 }
 
-class ApplyOnce<T, R>(private val t: T, private val action: T.() -> R) {
-    var hasInvoked = false
-    operator fun invoke(): R {
-        hasInvoked = true
-        return t.action()
-    }
-}
-
-private suspend fun startGameLoop(
+private fun startGameLoop(
     game: Game,
     writer: Writer,
     reader: Reader
 ) {
     var turnCount = 0
     while (true) {
-        game.gameLoop(writer, reader)
         writer.sayToAll().run {
             horizontalRule()
-            room("Turn ${turnCount++}")
+            system("Turn ${turnCount++}")
         }
+        game.gameLoop(writer, reader)
     }
 }

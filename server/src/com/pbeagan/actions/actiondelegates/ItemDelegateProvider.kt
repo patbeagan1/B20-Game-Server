@@ -20,7 +20,7 @@ class ItemDelegateProvider : ActionDelegateProvider<ItemDelegate>() {
     private inner class ItemDelegateImpl : ItemDelegate {
         override fun inventory(self: Mob) {
             writer.sayTo(self).info("Items in inventory:")
-            writer.sayTo(self).info(self.items.joinToString("\n\t") { it.names[0] }, true)
+            writer.sayTo(self).info(self.items.joinToString("\n") { it.names[0] }, true)
         }
 
         override fun examine(self: Mob, item: String) {

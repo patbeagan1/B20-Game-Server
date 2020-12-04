@@ -26,12 +26,15 @@ import mobs
 class Game {
     fun gameLoop(writer: Writer, reader: Reader) {
         mobs.sortedByDescending { roll20() + it.attr.awareness }.forEach { mob ->
-            if (mob.behavior == MobBehavior.PLAYER) {
+
+            if (mob.behavior == MobBehavior.PLAYER && mob.action != Inactive) {
                 writer.sayToAll().turnStart(mob.name)
             }
+
             var action: Action? = null
             while (checkIfTurnContinues(action)) {
-                action = mob.getAction(reader)
+
+                action = mob.getAction(reader, writer)
                 if (action != null) {
                     mob.action = action
                 }
@@ -46,8 +49,8 @@ class Game {
     private fun checkIfTurnContinues(action: Action?) =
         action == null || action is FreeAction || action is Repeat && action.isFreeAction
 
-    private fun Mob.getAction(reader: Reader): Action? = when (behavior) {
-        MobBehavior.PLAYER -> interpretPlayerAction(reader, this)
+    private fun Mob.getAction(reader: Reader, writer: Writer): Action? = when (behavior) {
+        MobBehavior.PLAYER -> interpretPlayerAction(reader, writer, this)
         MobBehavior.HELPFUL -> TODO()
         MobBehavior.IMMOBILE -> TODO()
         MobBehavior.LOOTER -> {
@@ -73,9 +76,14 @@ class Game {
         MobBehavior.FEARFUL -> TODO()
     }
 
-    private fun interpretPlayerAction(reader: Reader, mob: Mob): Action? {
+    private fun interpretPlayerAction(
+        reader: Reader,
+        writer: Writer,
+        mob: Mob
+    ): Action? {
         val read = reader.read(mob)
         val input = read?.toLowerCase() ?: return Inactive
+        welcomeJoiningPlayer(mob, writer)
         val arg = " *([^\\s]*)?"
         return listOf<Pair<String, ((List<String>) -> Action)>>(
             // Util
@@ -145,5 +153,14 @@ class Game {
                     ?.also { println("Matches: $it") }
                     ?.let { pair.second.invoke(it) }
             } ?: Retry("Unknown Command")
+    }
+
+    private fun welcomeJoiningPlayer(mob: Mob, writer: Writer) {
+        if (mob.behavior == MobBehavior.PLAYER && mob.action == Inactive) {
+            writer.sayToAll().run {
+                join("${mob.name} has joined the game!")
+                turnStart(mob.name)
+            }
+        }
     }
 }

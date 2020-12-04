@@ -27,7 +27,7 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                         visited.add(self.location)
                     }
                 }?.run {
-                    writer.sayToAll().move("${self.name} moved ${direction.name}")
+                    writer.sayToRoomOf(self).move("${self.name} moved ${direction.name}")
                     if (self.behavior == MobBehavior.PLAYER) {
                         Look().also { it.writer = writer }(self)
                     }

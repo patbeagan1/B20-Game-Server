@@ -16,7 +16,7 @@ class LookDelegateProvider : ActionDelegateProvider<LookDelegate>() {
         override fun look(self: Mob, mobs: List<Mob>) {
             self.currentRoom()?.let { room ->
 
-                writer.sayTo(self).room(room.descriptionLook)
+                writer.sayTo(self).system(room.descriptionLook)
 
                 listOf(
                     // Mobs in the current room

@@ -107,7 +107,7 @@ object Pass : Action() {
 class Repeat(private val action: Action) : Action() {
     override fun invoke(self: Mob) {
         if (action !is Repeat) {
-            writer.sayToAll().info("Repeating the last action: ${action::class.java.simpleName}")
+            writer.sayTo(self).info("Repeating the last action: ${action::class.java.simpleName}")
         }
         action.invoke(self)
     }
@@ -116,30 +116,31 @@ class Repeat(private val action: Action) : Action() {
         get() = if (action is Repeat) action.isFreeAction else action is FreeAction
 }
 
-class Debug(private val target: String) : Action() {
+class Debug(private val target: String) : Action(), FreeAction {
 
     override fun invoke(self: Mob) {
-        searchMobs() ?: searchMobItems() ?: searchRoomItems()
+        searchMobs(self) ?: searchMobItems(self) ?: searchRoomItems(self)
     }
 
-    private fun searchRoomItems(): Unit? = rooms.map { it.value.items }.flatten().firstOrNull {
+    private fun searchRoomItems(self: Mob): Unit? = rooms.map { it.value.items }.flatten().firstOrNull {
         it.nameMatches(target)
     }?.let {
-        writer.sayToAll().info(it.toString())
+        writer.sayTo(self).info(it.toString())
     }
 
-    private fun searchMobItems(): Unit? = mobs.map { it.items }.flatten().firstOrNull {
+    private fun searchMobItems(self: Mob): Unit? = mobs.map { it.items }.flatten().firstOrNull {
         it.nameMatches(target)
     }?.let {
-        writer.sayToAll().info(it.toString())
+        writer.sayTo(self).info(it.toString())
     }
 
-    private fun searchMobs(): Unit? = mobs.firstOrNull {
+    private fun searchMobs(self: Mob): Unit? = mobs.firstOrNull {
         it.name.toLowerCase() == target.toLowerCase()
     }?.let { currentMob ->
-        writer.sayToAll().info(currentMob.toString())
-        writer.sayToAll().info("hearts: ${currentMob.hearts}")
-        writer.sayToAll().info("desc: ${currentMob.description}")
+        writer.sayTo(self).info(currentMob.toString())
+        writer.sayTo(self).info("hearts: ${currentMob.hearts}")
+        writer.sayTo(self).info("desc: ${currentMob.description}")
+        writer.sayTo(self).info("IO id: ${currentMob.idForIO}")
     }
 }
 
