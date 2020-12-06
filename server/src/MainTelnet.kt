@@ -4,6 +4,7 @@ import com.pbeagan.Game
 import com.pbeagan.SampleData
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
+import com.pbeagan.writer.WriterImpl
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
             .bind(InetSocketAddress("127.0.0.1", 2323))
         println("Started echo telnet server at ${server.localAddress}")
 
-        val writer = Writer()
+        val writer: Writer = WriterImpl()
         val reader = Reader(writer)
         val game = Game()
         val startGame = ApplyOnce {
@@ -47,13 +48,13 @@ fun main(args: Array<String>) {
                 writer.register(player, writeChannel)
                 reader.register(player, readChannel)
 
-                startGame(Unit)
-
                 writer.sayTo(player).run {
                     horizontalRule()
                     system("Welcome, ${player.name}!")
                     horizontalRule()
                 }
+
+                startGame(Unit)
             }
         }
     }

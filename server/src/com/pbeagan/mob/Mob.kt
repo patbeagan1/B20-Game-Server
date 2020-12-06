@@ -3,6 +3,7 @@ package com.pbeagan.mob
 import com.pbeagan.BoundedValue
 import com.pbeagan.ItemData
 import com.pbeagan.MobBehavior
+import com.pbeagan.MobMood
 import com.pbeagan.VisibleBy
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Pass
@@ -12,7 +13,7 @@ import com.pbeagan.writer.IDforIOGenerator
 import mobs
 import rooms
 
-data class Mob constructor(
+class Mob constructor(
     val name: String,
     val descriptionProvider: DescriptionProvider = object :
         DescriptionProvider {
@@ -21,6 +22,7 @@ data class Mob constructor(
     },
     var action: Action = Pass,
     var behavior: MobBehavior,
+    var mood: MobMood,
 
     var location: Int = 0,
     var visited: MutableSet<Int> = mutableSetOf(0),
@@ -47,9 +49,14 @@ data class Mob constructor(
     }
 }
 
-fun Mob.currentRoom() = rooms[location]
+fun Mob.currentRoom() =
+    rooms[location]
+
 fun Mob.currentRoomOtherMobs(list: List<Mob>) = list
     .filter { it.location == location && it != this }
+
+fun Mob.currentRoomOtherMobsAndSelf(list: List<Mob>) = list
+    .filter { it.location == location }
 
 fun Mob.getFirstVisibleMob(): Mob? = mobs
     .firstOrNull { it.location == location && it != this }

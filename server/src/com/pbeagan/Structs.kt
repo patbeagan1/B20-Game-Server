@@ -162,7 +162,16 @@ enum class Direction {
     SOUTH,
     WEST,
     UP,
-    DOWN
+    DOWN;
+
+    fun inverse() = when (this) {
+        NORTH -> SOUTH
+        EAST -> WEST
+        SOUTH -> NORTH
+        WEST -> EAST
+        UP -> DOWN
+        DOWN -> UP
+    }
 }
 
 enum class Biome {
@@ -277,8 +286,6 @@ enum class Genus {
 }
 
 enum class Position {
-    DEAD,
-    MORTALLYW,
     INCAPACITATED,
     STUNNED,
     SLEEPING,
@@ -288,14 +295,22 @@ enum class Position {
     STANDING
 }
 
-enum class MobBehavior(val descriptionDefault: String) : Flag {
+enum class MobBehavior(val descriptionDefault: String) {
     PLAYER("Has an intelligence unlike other creatures in this world."),
     HELPFUL("Seems to want to help."),
     IMMOBILE("It's rooted in place!"),
     LOOTER("It scours the area for items of value"),
     AGGRESSIVE("It looks angry..."),
     WANDERER("It is just passing through."),
-    FEARFUL("It wishes it was someplace else.")
+    FLEE("It wishes it was someplace else.")
+}
+
+enum class MobMood {
+    ANGRY,
+    PEACEFUL,
+    HAPPY,
+    NEUTRAL,
+    FEARFUL,
 }
 
 data class TimeData(

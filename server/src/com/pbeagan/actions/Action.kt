@@ -112,8 +112,8 @@ class Repeat(private val action: Action) : Action() {
         action.invoke(self)
     }
 
-    val isFreeAction: Boolean
-        get() = if (action is Repeat) action.isFreeAction else action is FreeAction
+    val isRepeatFreeAction: Boolean
+        get() = if (action is Repeat) action.isRepeatFreeAction else action is FreeAction
 }
 
 class Debug(private val target: String) : Action(), FreeAction {

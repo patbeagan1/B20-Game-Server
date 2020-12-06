@@ -21,13 +21,12 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                 ?.directions
                 ?.firstOrNull { it.direction == direction }
                 ?.let { room ->
+                    writer.sayToRoomOf(self).move("${self.name} left ${direction.name}")
                     self.location = room.destinationID
-                    val visited = self.visited
-                    if (!visited.contains(self.location)) {
-                        visited.add(self.location)
-                    }
-                }?.run {
-                    writer.sayToRoomOf(self).move("${self.name} moved ${direction.name}")
+                    writer.sayToRoomOf(self).move("${self.name} arrived from ${direction.name}")
+
+                    recordVisit(self)
+
                     if (self.behavior == MobBehavior.PLAYER) {
                         Look().also { it.writer = writer }(self)
                     }
@@ -35,6 +34,13 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                 ?: if (self.behavior == MobBehavior.PLAYER) {
                     writer.sayTo(self).error("Sorry, can't go that way.")
                 }
+        }
+
+        private fun recordVisit(self: Mob) {
+            val visited = self.visited
+            if (!visited.contains(self.location)) {
+                visited.add(self.location)
+            }
         }
 
         override fun doors(self: Mob) {

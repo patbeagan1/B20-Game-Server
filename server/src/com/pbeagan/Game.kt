@@ -27,14 +27,17 @@ class Game {
     fun gameLoop(writer: Writer, reader: Reader) {
         mobs.sortedByDescending { roll20() + it.attr.awareness }.forEach { mob ->
 
-            if (mob.behavior == MobBehavior.PLAYER && mob.action != Inactive) {
+            if (mob.behavior == MobBehavior.PLAYER && reader.isActive(mob)) {
+                if (mob.action == Inactive) {
+                    writer.sayToAll().join("${mob.name} has joined the game!")
+                }
                 writer.sayToAll().turnStart(mob.name)
             }
 
             var action: Action? = null
             while (checkIfTurnContinues(action)) {
 
-                action = mob.getAction(reader, writer)
+                action = mob.getAction(reader)
                 if (action != null) {
                     mob.action = action
                 }
@@ -47,10 +50,10 @@ class Game {
     }
 
     private fun checkIfTurnContinues(action: Action?) =
-        action == null || action is FreeAction || action is Repeat && action.isFreeAction
+        action == null || action is FreeAction || action is Repeat && action.isRepeatFreeAction
 
-    private fun Mob.getAction(reader: Reader, writer: Writer): Action? = when (behavior) {
-        MobBehavior.PLAYER -> interpretPlayerAction(reader, writer, this)
+    private fun Mob.getAction(reader: Reader): Action? = when (behavior) {
+        MobBehavior.PLAYER -> interpretPlayerAction(reader, this)
         MobBehavior.HELPFUL -> TODO()
         MobBehavior.IMMOBILE -> TODO()
         MobBehavior.LOOTER -> {
@@ -73,79 +76,16 @@ class Game {
             3 -> Move(Direction.WEST)
             else -> Pass
         }
-        MobBehavior.FEARFUL -> TODO()
+        MobBehavior.FLEE -> TODO()
     }
 
     private fun interpretPlayerAction(
         reader: Reader,
-        writer: Writer,
         mob: Mob
     ): Action? {
         val read = reader.read(mob)
         val input = read?.toLowerCase() ?: return Inactive
-        welcomeJoiningPlayer(mob, writer)
-        val arg = " *([^\\s]*)?"
-        return listOf<Pair<String, ((List<String>) -> Action)>>(
-            // Util
-            "(\\.|\n|again)" to { _ -> Repeat(mob.action) },
-            "debug$arg" to { i ->
-                safeLet(i.getOrNull(1)) { target ->
-                    Debug(target)
-                } ?: Retry("Debug what?")
-            },
-            "(wait|pass)" to { _ -> Pass },
-
-            // INFO
-            "l(s|l|ook)?" to { _ -> Look() },
-            "do(or(s)?)?" to { _ -> Doors() },
-            "exit(s)?" to { _ -> Doors() },
-            "ex(amine)?$arg" to { i ->
-                safeLet(i.getOrNull(2)) { target ->
-                    Examine(target)
-                } ?: Retry("What should I examine?")
-            },
-
-            // Items
-            "i(nventory)?" to { _ -> Inventory() },
-            "take$arg" to { i ->
-                safeLet(i.getOrNull(1)) { itemName ->
-                    if (itemName.isBlank()) {
-                        Retry("What would you like to take?")
-                    } else {
-                        Take.getOrRetry(mob, itemName)
-                    }
-                } ?: Retry("What would you like to take?")
-            },
-            "drop$arg" to { i ->
-                safeLet(i.getOrNull(1)) { itemName ->
-                    if (itemName.isBlank()) {
-                        Retry("What would you like to drop?")
-                    } else {
-                        Drop.getOrRetry(mob, itemName)
-                    }
-                } ?: Retry("What would you like to drop?")
-            },
-            "(eat|consume|quaff)$arg" to { i ->
-                safeLet(i.getOrNull(2)) { itemName ->
-                    Consume.getOrRetry(mob, itemName)
-                } ?: Retry("What would you like to consume?")
-            },
-
-            // Movement
-            "n(orth)?" to { _ -> Move(Direction.NORTH) },
-            "s(outh)?" to { _ -> Move(Direction.SOUTH) },
-            "e(ast)?" to { _ -> Move(Direction.EAST) },
-            "w(est)?" to { _ -> Move(Direction.WEST) },
-            "u(p)?" to { _ -> Move(Direction.UP) },
-            "d(own)?" to { _ -> Move(Direction.DOWN) },
-
-            // Combat
-            "(atk|attack)$arg" to { i ->
-                safeLet(i.getOrNull(2)) { mobName ->
-                    AttackMelee.attackOrRetry(mob, mobName)
-                } ?: Retry("You need to specify a target!")
-            }
-        ).map { it.first.toRegex() to it.second }
+        return getCommands(mob).map { it.first.toRegex() to it.second }
             .firstOrNull { it.first.matches(input) }
             ?.let { pair ->
                 pair.first.find(input)
@@ -155,12 +95,69 @@ class Game {
             } ?: Retry("Unknown Command")
     }
 
-    private fun welcomeJoiningPlayer(mob: Mob, writer: Writer) {
-        if (mob.behavior == MobBehavior.PLAYER && mob.action == Inactive) {
-            writer.sayToAll().run {
-                join("${mob.name} has joined the game!")
-                turnStart(mob.name)
-            }
+    private fun getCommands(mob: Mob) = listOf<Pair<String, ((List<String>) -> Action)>>(
+        // Util
+        "(\\.|\n|again)" to { _ -> Repeat(mob.action) },
+        "debug$ARG" to { i ->
+            safeLet(i.getOrNull(1)) { target ->
+                Debug(target)
+            } ?: Retry("Debug what?")
+        },
+        "(wait|pass)" to { _ -> Pass },
+
+        // INFO
+        "l(s|l|ook)?" to { _ -> Look() },
+        "do(or(s)?)?" to { _ -> Doors() },
+        "exit(s)?" to { _ -> Doors() },
+        "ex(amine)?$ARG" to { i ->
+            safeLet(i.getOrNull(2)) { target ->
+                Examine(target)
+            } ?: Retry("What should I examine?")
+        },
+
+        // Items
+        "i(nventory)?" to { _ -> Inventory() },
+        "take$ARG" to { i ->
+            safeLet(i.getOrNull(1)) { itemName ->
+                if (itemName.isBlank()) {
+                    Retry("What would you like to take?")
+                } else {
+                    Take.getOrRetry(mob, itemName)
+                }
+            } ?: Retry("What would you like to take?")
+        },
+        "drop$ARG" to { i ->
+            safeLet(i.getOrNull(1)) { itemName ->
+                if (itemName.isBlank()) {
+                    Retry("What would you like to drop?")
+                } else {
+                    Drop.getOrRetry(mob, itemName)
+                }
+            } ?: Retry("What would you like to drop?")
+        },
+        "(eat|consume|quaff)$ARG" to { i ->
+            safeLet(i.getOrNull(2)) { itemName ->
+                Consume.getOrRetry(mob, itemName)
+            } ?: Retry("What would you like to consume?")
+        },
+
+        // Movement
+        "n(orth)?" to { _ -> Move(Direction.NORTH) },
+        "s(outh)?" to { _ -> Move(Direction.SOUTH) },
+        "e(ast)?" to { _ -> Move(Direction.EAST) },
+        "w(est)?" to { _ -> Move(Direction.WEST) },
+        "u(p)?" to { _ -> Move(Direction.UP) },
+        "d(own)?" to { _ -> Move(Direction.DOWN) },
+
+        // Combat
+        "(atk|attack)$ARG" to { i ->
+            safeLet(i.getOrNull(2)) { mobName ->
+                AttackMelee.attackOrRetry(mob, mobName)
+            } ?: Retry("You need to specify a target!")
         }
+    )
+
+    companion object {
+        private const val ARG = " *([^\\s]*)?"
     }
 }
