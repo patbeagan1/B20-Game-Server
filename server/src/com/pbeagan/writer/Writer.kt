@@ -43,7 +43,6 @@ class WriterImpl : Writer, WriterInternal {
             }
         }
     }
-
 }
 
 interface WriterInternal {
@@ -51,9 +50,9 @@ interface WriterInternal {
 }
 
 interface Writer {
+    fun register(m: Mob, channel: ByteWriteChannel)
     fun sayToRoomOf(m: Mob): WriteTarget
     fun sayToAll(): WriteTarget
     fun sayTo(vararg m: Mob): WriteTarget
     fun debug(s: String)
-    fun register(m: Mob, channel: ByteWriteChannel)
 }

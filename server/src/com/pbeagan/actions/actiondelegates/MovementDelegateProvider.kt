@@ -23,7 +23,7 @@ class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
                 ?.let { room ->
                     writer.sayToRoomOf(self).move("${self.name} left ${direction.name}")
                     self.location = room.destinationID
-                    writer.sayToRoomOf(self).move("${self.name} arrived from ${direction.name}")
+                    writer.sayToRoomOf(self).move("${self.name} arrived from ${direction.inverse().name}")
 
                     recordVisit(self)
 

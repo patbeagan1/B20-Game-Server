@@ -241,6 +241,13 @@ enum class Impediments : Flag {  //Lowered Abilities
     Deafened
 }
 
+enum class AttackType {
+    MELEE,
+    RANGED,
+    THROWN,
+    MAGIC
+}
+
 enum class SneakLevel {
     HIDDEN,
     UNDETECTED,

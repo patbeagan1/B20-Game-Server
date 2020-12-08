@@ -1,5 +1,7 @@
 package com.pbeagan.mob
 
+import com.pbeagan.AttackType
+import com.pbeagan.AttackType.MELEE
 import com.pbeagan.BoundedValue
 import com.pbeagan.ItemData
 import com.pbeagan.MobBehavior
@@ -22,7 +24,7 @@ class Mob constructor(
     },
     var action: Action = Pass,
     var behavior: MobBehavior,
-    var mood: MobMood,
+    var mood: MobMood = MobMood.NEUTRAL,
 
     var location: Int = 0,
     var visited: MutableSet<Int> = mutableSetOf(0),
@@ -39,6 +41,7 @@ class Mob constructor(
 
     var items: MutableList<ItemData> = mutableListOf()
 ) {
+    var preferredAttack: AttackType = MELEE
     val idForIO: Int = IDforIOGenerator.get()
     var hearts by BoundedValue(totalHearts, 0..totalHearts)
 
@@ -51,6 +54,12 @@ class Mob constructor(
 
 fun Mob.currentRoom() =
     rooms[location]
+
+fun Mob.adjacentOrCurrentRoom() =
+    rooms[location]?.directions
+        ?.map { it.destinationID }
+        ?.let { it + location }
+        ?.map { rooms[it] }
 
 fun Mob.currentRoomOtherMobs(list: List<Mob>) = list
     .filter { it.location == location && it != this }

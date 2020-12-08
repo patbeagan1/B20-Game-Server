@@ -8,6 +8,7 @@ import com.pbeagan.actions.Doors
 import com.pbeagan.actions.Drop
 import com.pbeagan.actions.Examine
 import com.pbeagan.actions.FreeAction
+import com.pbeagan.actions.Give
 import com.pbeagan.actions.Inactive
 import com.pbeagan.actions.Inventory
 import com.pbeagan.actions.Look
@@ -15,6 +16,7 @@ import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.actions.Repeat
 import com.pbeagan.actions.Retry
+import com.pbeagan.actions.Settings
 import com.pbeagan.actions.Take
 import com.pbeagan.mob.Mob
 import com.pbeagan.mob.getFirstVisibleMob
@@ -45,6 +47,8 @@ class Game {
                     action?.also { it.writer = writer }?.invoke(mob)
                 }
             }
+
+            writer.sayTo(mob).info("Pending Action: ${mob.action::class.java.simpleName}")
         }
         mobs.forEach { it.action.apply { this.writer = writer }(it) }
     }
@@ -140,6 +144,11 @@ class Game {
                 Consume.getOrRetry(mob, itemName)
             } ?: Retry("What would you like to consume?")
         },
+        "(give)$ARG$ARG" to { i ->
+            safeLet(i.getOrNull(2), i.getOrNull(3)) { target, itemName ->
+                Give.getOrRetry(mob, target, itemName)
+            } ?: Retry("What would you like to give?")
+        },
 
         // Movement
         "n(orth)?" to { _ -> Move(Direction.NORTH) },
@@ -152,9 +161,25 @@ class Game {
         // Combat
         "(atk|attack)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->
-                AttackMelee.attackOrRetry(mob, mobName)
+                Action.attackOrRetry(mob, mobName)
             } ?: Retry("You need to specify a target!")
+        },
+
+        // Settings
+        "set$ARG$ARG" to { i ->
+            val action: Action = safeLet(i.getOrNull(1), i.getOrNull(2)) { settingKey, settingValue ->
+                when (settingKey) {
+                    "attack" -> Settings.getAttack(settingValue)
+                    else -> Retry("I don't know about that setting.")
+                }
+            } ?: Retry("What would you like to set?")
+            action
         }
+
+        // follow
+        // steal
+        // scan
+
     )
 
     companion object {

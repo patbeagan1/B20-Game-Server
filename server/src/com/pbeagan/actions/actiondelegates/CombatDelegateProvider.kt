@@ -26,19 +26,23 @@ class CombatDelegateProvider : ActionDelegateProvider<CombatDelegate>() {
         override fun attackMelee(self: Mob, target: Mob) {
             if (target.currentRoom() != self.currentRoom()) return
             val name = { m: Mob -> "${m.name}(${m.hearts} hp)" }
-            writer.sayToRoomOf(target).combat("${name(self)} has attacked ${name(target)}!")
+            writer.sayToRoomOf(target).combat("${name(self)} has melee attacked ${name(target)}!")
             if (roll6() + self.baseAtkMelee > target.armor) {
                 damageResolution(target, self.baseAtkMelee)
             }
         }
 
         override fun attackRanged(self: Mob, target: Mob) {
+            val name = { m: Mob -> "${m.name}(${m.hearts} hp)" }
+            writer.sayToRoomOf(target).combat("${name(self)} has range attacked ${name(target)}!")
             if (roll6() + self.baseAtkRanged > target.armor) {
                 damageResolution(target, self.baseAtkRanged)
             }
         }
 
         override fun attackThrow(self: Mob, target: Mob) {
+            val name = { m: Mob -> "${m.name}(${m.hearts} hp)" }
+            writer.sayToRoomOf(target).combat("${name(self)} has throw attacked ${name(target)}!")
             if (roll6() + self.baseAtkThrow > target.armor) {
                 damageResolution(target, self.baseAtkThrow)
             }

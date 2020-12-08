@@ -1,5 +1,9 @@
 package com.pbeagan.actions
 
+import com.pbeagan.AttackType.MAGIC
+import com.pbeagan.AttackType.MELEE
+import com.pbeagan.AttackType.RANGED
+import com.pbeagan.AttackType.THROWN
 import com.pbeagan.Direction
 import com.pbeagan.ItemData
 import com.pbeagan.ItemFlags
@@ -25,22 +29,29 @@ sealed class Action {
     val itemDelegateProvider = ItemDelegateProvider()
     val movementDelegateProvider = MovementDelegateProvider()
     val lookDelegateProvider = LookDelegateProvider()
+
+    companion object {
+        fun attackOrRetry(mob: Mob, target: String): Action {
+            fun onTargetFound(target: Mob): Action = when (mob.preferredAttack) {
+                MELEE -> AttackMelee(target)
+                RANGED -> AttackRanged(target)
+                THROWN -> AttackThrow(target)
+                MAGIC -> TODO()
+            }
+            return when {
+                target.isEmpty() -> mob.getFirstVisibleMob()?.let { onTargetFound(it) }
+                else -> mob.currentRoomOtherMobs(mobs)
+                    .firstOrNull { it.name.toLowerCase() == target }
+                    ?.let { onTargetFound(it) }
+            } ?: Retry("Looks like that mob isn't here...")
+        }
+    }
 }
 
 interface FreeAction
 
 class AttackMelee(private val target: Mob) : Action() {
     override operator fun invoke(self: Mob) = combatDelegate.prepare(writer).attackMelee(self, target)
-
-    companion object {
-        fun attackOrRetry(mob: Mob, target: String): Action = when {
-            target.isEmpty() -> mob.getFirstVisibleMob()?.let { AttackMelee(it) }
-            else ->
-                mob.currentRoomOtherMobs(mobs)
-                    .firstOrNull { it.name.toLowerCase() == target }
-                    ?.let { AttackMelee(it) }
-        } ?: Retry("Looks like that mob isn't here...")
-    }
 }
 
 class Take(private val item: ItemData) : Action() {
@@ -152,6 +163,22 @@ class Retry(private val errorMsg: String) : Action(), FreeAction {
     override operator fun invoke(self: Mob) = writer.sayTo(self).error(errorMsg)
 }
 
+class Settings(private val action: (Mob) -> Unit) : Action(), FreeAction {
+    override operator fun invoke(self: Mob) {
+        action(self)
+        writer.sayTo(self).info("Settings were changed.")
+    }
+
+    companion object {
+        fun getAttack(settingValue: String): Action = when (settingValue) {
+            "melee" -> Settings { it.preferredAttack = MELEE }
+            "range", "ranged" -> Settings { it.preferredAttack = RANGED }
+            "throw", "thrown" -> Settings { it.preferredAttack = THROWN }
+            else -> Retry("Not a valid attack")
+        }
+    }
+}
+
 class Examine(private val item: String) : Action(), FreeAction {
     override fun invoke(self: Mob) = itemDelegateProvider.prepare(writer).examine(self, item)
 }
@@ -164,11 +191,36 @@ class Consume(private val item: ItemData) : Action() {
     }
 
     companion object {
-        fun getOrRetry(self: Mob, itemName: String) = self.items.firstOrNull {
-            it.nameMatches(itemName)
-        }?.let {
-            Consume(it)
-        } ?: Retry("You aren't holding that item")
+        fun getOrRetry(self: Mob, itemName: String): Action {
+            val itemData = self.items.firstOrNull {
+                it.nameMatches(itemName)
+            } ?: return Retry("You're not holding that item")
+            return Consume(itemData)
+        }
+    }
+}
+
+class Give(private val target: Mob, private val item: ItemData) : Action() {
+    override fun invoke(self: Mob) {
+        self.items.remove(item)
+        target.items.add(item)
+        writer.sayTo(self, target).info("${self.name} gave ${target.name} a ${item.names[0]}")
+    }
+
+    companion object {
+        fun getOrRetry(self: Mob, target: String, itemName: String): Action {
+            val itemData = self
+                .items.firstOrNull { it.nameMatches(itemName) }
+                ?: return Retry("You aren't holding that item")
+
+            if (itemData.itemFlags.contains(UNDROPPABLE)) return Retry("You can't drop that item")
+            val mob = self
+                .currentRoomOtherMobs(mobs)
+                .also { println(it) }
+                .firstOrNull { target.earlyMatches(it.name) }
+                ?: return Retry("$target isn't here")
+            return Give(mob, itemData)
+        }
     }
 }
 
