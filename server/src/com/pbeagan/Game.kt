@@ -18,16 +18,18 @@ import com.pbeagan.actions.Repeat
 import com.pbeagan.actions.Retry
 import com.pbeagan.actions.Settings
 import com.pbeagan.actions.Take
-import com.pbeagan.mob.Mob
-import com.pbeagan.mob.getFirstVisibleMob
-import com.pbeagan.mob.getRandomVisibleItem
+import com.pbeagan.data.Direction
+import com.pbeagan.data.Mob
+import com.pbeagan.data.MobBehavior
+import com.pbeagan.data.getFirstVisibleMob
+import com.pbeagan.data.getRandomVisibleItem
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
 import mobs
 
 class Game {
     fun gameLoop(writer: Writer, reader: Reader) {
-        mobs.sortedByDescending { roll20() + it.attr.awareness }.forEach { mob ->
+        mobs.sortedByDescending { roll20() + it.awareness }.forEach { mob ->
 
             if (mob.behavior == MobBehavior.PLAYER && reader.isActive(mob)) {
                 if (mob.action == Inactive) {

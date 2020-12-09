@@ -1,24 +1,24 @@
 package com.pbeagan.actions
 
-import com.pbeagan.AttackType.MAGIC
-import com.pbeagan.AttackType.MELEE
-import com.pbeagan.AttackType.RANGED
-import com.pbeagan.AttackType.THROWN
-import com.pbeagan.Direction
-import com.pbeagan.ItemData
-import com.pbeagan.ItemFlags
-import com.pbeagan.ItemFlags.TAKEABLE
-import com.pbeagan.ItemFlags.UNDROPPABLE
+import com.pbeagan.data.AttackType.MAGIC
+import com.pbeagan.data.AttackType.MELEE
+import com.pbeagan.data.AttackType.RANGED
+import com.pbeagan.data.AttackType.THROWN
+import com.pbeagan.data.Direction
+import com.pbeagan.data.ItemData
+import com.pbeagan.data.ItemFlags
+import com.pbeagan.data.ItemFlags.TAKEABLE
+import com.pbeagan.data.ItemFlags.UNDROPPABLE
 import com.pbeagan.SampleData.mobs
 import com.pbeagan.actions.actiondelegates.CombatDelegateProvider
 import com.pbeagan.actions.actiondelegates.ItemDelegateProvider
 import com.pbeagan.actions.actiondelegates.LookDelegateProvider
 import com.pbeagan.actions.actiondelegates.MovementDelegateProvider
 import com.pbeagan.earlyMatches
-import com.pbeagan.mob.Mob
-import com.pbeagan.mob.currentRoom
-import com.pbeagan.mob.currentRoomOtherMobs
-import com.pbeagan.mob.getFirstVisibleMob
+import com.pbeagan.data.Mob
+import com.pbeagan.data.currentRoom
+import com.pbeagan.data.currentRoomOtherMobs
+import com.pbeagan.data.getFirstVisibleMob
 import com.pbeagan.writer.Writer
 import rooms
 

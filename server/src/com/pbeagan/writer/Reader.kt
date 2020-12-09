@@ -1,6 +1,6 @@
 package com.pbeagan.writer
 
-import com.pbeagan.mob.Mob
+import com.pbeagan.data.Mob
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.readUTF8Line
 import kotlinx.coroutines.runBlocking

@@ -1,16 +1,10 @@
-package com.pbeagan.mob
+package com.pbeagan.data
 
-import com.pbeagan.AttackType
-import com.pbeagan.AttackType.MELEE
 import com.pbeagan.BoundedValue
-import com.pbeagan.ItemData
-import com.pbeagan.MobBehavior
-import com.pbeagan.MobMood
-import com.pbeagan.VisibleBy
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Pass
+import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.models.FlagCombined
-import com.pbeagan.models.worldstate.Attr
 import com.pbeagan.writer.IDforIOGenerator
 import mobs
 import rooms
@@ -30,27 +24,43 @@ class Mob constructor(
     var visited: MutableSet<Int> = mutableSetOf(0),
     var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,
 
-    var attr: Attr = Attr(),
-    var baseAtkMelee: Int = 0,
-    var baseAtkRanged: Int = 0,
-    var baseAtkThrow: Int = 0,
+    var stats: List<Stats> = listOf(StatsImpl.getInitial()),
 
     var armor: Int = 0,
     var dodge: Int = 0,
-    var totalHearts: Int = 4,
 
     var items: MutableList<ItemData> = mutableListOf()
-) {
+) : Stats {
+    override val baseAtkMelee: Int get() = stats.sumBy { it.baseAtkMelee }
+    override val baseAtkRanged: Int get() = stats.sumBy { it.baseAtkRanged }
+    override val baseAtkThrow: Int get() = stats.sumBy { it.baseAtkThrow }
+    override val awareness: Int get() = stats.sumBy { it.awareness }
+    override val spirit: Int get() = stats.sumBy { it.spirit }
+    override val speed: Int get() = stats.sumBy { it.speed }
+    override val presence: Int get() = stats.sumBy { it.presence }
+    override val cunning: Int get() = stats.sumBy { it.cunning }
+    override val persuasion: Int get() = stats.sumBy { it.persuasion }
+    override val tenacity: Int get() = stats.sumBy { it.tenacity }
+    override val fortitude: Int get() = stats.sumBy { it.fortitude }
+    override val strength: Int get() = stats.sumBy { it.strength }
+    override val agility: Int get() = stats.sumBy { it.agility }
+    override val precision: Int get() = stats.sumBy { it.precision }
+    override val endurance: Int get() = stats.sumBy { it.endurance }
+    override val durability: Int get() = stats.sumBy { it.durability }
+    override val totalHearts: Int get() = endurance.mod() + stats.sumBy { it.totalHearts }
+
+    val description get() = descriptionProvider.describe(behavior, action)
     var preferredAttack: AttackType = MELEE
     val idForIO: Int = IDforIOGenerator.get()
     var hearts by BoundedValue(totalHearts, 0..totalHearts)
 
-    val description get() = descriptionProvider.describe(behavior, action)
 
     interface DescriptionProvider {
         fun describe(behavior: MobBehavior, action: Action): String
     }
 }
+
+fun Int.mod() = (this - 10) / 2
 
 fun Mob.currentRoom() =
     rooms[location]

@@ -2,8 +2,8 @@ package com.pbeagan.actions.actiondelegates
 
 import com.pbeagan.actions.Doors
 import com.pbeagan.actions.actiondelegates.LookDelegateProvider.LookDelegate
-import com.pbeagan.mob.Mob
-import com.pbeagan.mob.currentRoom
+import com.pbeagan.data.Mob
+import com.pbeagan.data.currentRoom
 
 class LookDelegateProvider : ActionDelegateProvider<LookDelegate>() {
     interface LookDelegate {

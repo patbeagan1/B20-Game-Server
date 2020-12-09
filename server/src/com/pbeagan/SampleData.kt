@@ -1,33 +1,73 @@
 package com.pbeagan
 
-import com.pbeagan.mob.Mob
+import com.pbeagan.data.Direction
+import com.pbeagan.data.ItemData
+import com.pbeagan.data.ItemFlags
+import com.pbeagan.data.Mob
+import com.pbeagan.data.MobBehavior
+import com.pbeagan.data.RoomData
+import com.pbeagan.data.RoomDirectionData
+import com.pbeagan.data.RoomFlags
+import com.pbeagan.data.StatsImpl
 import com.pbeagan.models.createFlagSet
 
 object SampleData {
     val mobs = listOf(
-        Mob("Alice", baseAtkMelee = 1, armor = 3, totalHearts = 25, behavior = MobBehavior.PLAYER),
-        Mob("Steve", baseAtkMelee = 1, armor = 3, totalHearts = 25, behavior = MobBehavior.PLAYER),
+        Mob(
+            "Alice",
+            armor = 3,
+            stats = listOf(
+                StatsImpl(
+                    baseAtkMelee = 1,
+                    totalHearts = 25
+                )
+            ),
+            behavior = MobBehavior.PLAYER
+        ),
+        Mob(
+            "Steve",
+            armor = 3,
+            stats = listOf(
+                StatsImpl(
+                    baseAtkMelee = 1,
+                    totalHearts = 25
+                )
+            ),
+            behavior = MobBehavior.PLAYER
+        ),
         Mob(
             "Bob",
-            baseAtkMelee = 2,
             armor = 2,
-            totalHearts = 14,
+            stats = listOf(
+                StatsImpl(
+                    baseAtkMelee = 2,
+                    totalHearts = 14
+                )
+            ),
             behavior = MobBehavior.AGGRESSIVE,
             location = 2
         ),
         Mob(
             "Charlie",
-            baseAtkMelee = 2,
             armor = 2,
-            totalHearts = 14,
+            stats = listOf(
+                StatsImpl(
+                    baseAtkMelee = 2,
+                    totalHearts = 14
+                )
+            ),
             behavior = MobBehavior.LOOTER,
             location = 3
         ),
         Mob(
             "Darla",
-            baseAtkMelee = 2,
             armor = 2,
-            totalHearts = 14,
+            stats = listOf(
+                StatsImpl(
+                    baseAtkMelee = 2,
+                    totalHearts = 14
+                )
+            ),
             behavior = MobBehavior.WANDERER,
             location = 0
         )
@@ -70,11 +110,13 @@ object SampleData {
                     descriptionOnExamination = "A spoiled red apple. It does not look good enough to eat!",
                     descriptionInRoom = "There is an apple laying on the ground"
                 ).apply {
-                    setItemFlags(ItemFlags.CONSUMABLE, object : ItemData.FlagHandler {
-                        override fun invoke(self: Mob) {
-                            self.hearts -= 1
-                        }
-                    })
+                    setItemFlags(
+                        ItemFlags.CONSUMABLE,
+                        object : ItemData.FlagHandler {
+                            override fun invoke(self: Mob) {
+                                self.hearts -= 1
+                            }
+                        })
                 }
             )
         ),
@@ -126,11 +168,13 @@ object SampleData {
                     descriptionOnExamination = "A polished red apple. It looks good enough to eat!",
                     descriptionInRoom = "There is an apple in a basket on the table"
                 ).apply {
-                    setItemFlags(ItemFlags.CONSUMABLE, object : ItemData.FlagHandler {
-                        override fun invoke(self: Mob) {
-                            self.hearts += 1
-                        }
-                    })
+                    setItemFlags(
+                        ItemFlags.CONSUMABLE,
+                        object : ItemData.FlagHandler {
+                            override fun invoke(self: Mob) {
+                                self.hearts += 1
+                            }
+                        })
                 }
             )
         )

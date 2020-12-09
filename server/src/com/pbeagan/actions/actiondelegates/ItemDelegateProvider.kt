@@ -1,10 +1,10 @@
 package com.pbeagan.actions.actiondelegates
 
-import com.pbeagan.ItemData
-import com.pbeagan.ItemFlags.TAKEABLE
+import com.pbeagan.data.ItemData
+import com.pbeagan.data.ItemFlags.TAKEABLE
 import com.pbeagan.actions.actiondelegates.ItemDelegateProvider.ItemDelegate
-import com.pbeagan.mob.Mob
-import com.pbeagan.mob.currentRoom
+import com.pbeagan.data.Mob
+import com.pbeagan.data.currentRoom
 
 class ItemDelegateProvider : ActionDelegateProvider<ItemDelegate>() {
     interface ItemDelegate {

@@ -1,11 +1,11 @@
 package com.pbeagan.actions.actiondelegates
 
-import com.pbeagan.Direction
-import com.pbeagan.MobBehavior
+import com.pbeagan.data.Direction
+import com.pbeagan.data.MobBehavior
 import com.pbeagan.actions.Look
 import com.pbeagan.actions.actiondelegates.MovementDelegateProvider.MovementDelegate
-import com.pbeagan.mob.Mob
-import com.pbeagan.mob.currentRoom
+import com.pbeagan.data.Mob
+import com.pbeagan.data.currentRoom
 
 class MovementDelegateProvider : ActionDelegateProvider<MovementDelegate>() {
     interface MovementDelegate {

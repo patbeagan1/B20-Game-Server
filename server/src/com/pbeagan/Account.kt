@@ -1,6 +1,7 @@
 package com.pbeagan
 
-import com.pbeagan.mob.Mob
+import com.pbeagan.data.Mob
+import com.pbeagan.data.MobBehavior
 import io.ktor.util.cio.write
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel

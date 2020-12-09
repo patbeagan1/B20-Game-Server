@@ -1,6 +1,6 @@
 package com.pbeagan.writer
 
-import com.pbeagan.mob.Mob
+import com.pbeagan.data.Mob
 
 class WriteTarget(
     private val writer: WriterInternal,
