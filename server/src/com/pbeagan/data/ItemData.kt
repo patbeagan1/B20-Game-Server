@@ -1,6 +1,6 @@
 package com.pbeagan.data
 
-import com.pbeagan.earlyMatches
+import com.pbeagan.startsWith
 import com.pbeagan.models.FlagCombined
 import com.pbeagan.models.createFlagSet
 
@@ -28,8 +28,8 @@ data class ItemData(
         }
     }
 
-    fun nameMatches(item: String) =
-        names.any { item.earlyMatches(it) }
+    fun nameStartsWith(item: String) =
+        names.any { it.startsWith(item) }
 
     interface FlagHandler {
         fun invoke(self: Mob) = Unit

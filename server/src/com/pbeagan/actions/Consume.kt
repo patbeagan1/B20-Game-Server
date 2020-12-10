@@ -14,7 +14,7 @@ class Consume(private val item: ItemData) : Action() {
     companion object {
         fun getOrRetry(self: Mob, itemName: String): Action {
             val itemData = self.items.firstOrNull {
-                it.nameMatches(itemName)
+                it.nameStartsWith(itemName)
             } ?: return Retry("You're not holding that item")
             return Consume(itemData)
         }

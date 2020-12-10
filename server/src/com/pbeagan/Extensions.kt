@@ -1,6 +1,5 @@
 package com.pbeagan
 
-import com.pbeagan.actions.Action
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
@@ -10,8 +9,8 @@ fun roll8() = Random.nextInt(1, 8)
 fun roll12() = Random.nextInt(1, 12)
 fun roll20() = Random.nextInt(1, 20)
 
-fun String.earlyMatches(s: String) =
-    commonPrefixWith(s.toLowerCase(), ignoreCase = true) == s.toLowerCase()
+fun String.startsWith(prefix: String) =
+    this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).toLowerCase() == prefix.toLowerCase()
 
 fun loggerGen(clazz: Class<out Any>): Logger =
     LoggerFactory.getLogger(clazz)

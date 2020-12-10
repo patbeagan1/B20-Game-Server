@@ -5,7 +5,7 @@ import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoomOtherMobs
-import com.pbeagan.earlyMatches
+import com.pbeagan.startsWith
 
 class Give(private val target: Mob, private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {
@@ -17,7 +17,7 @@ class Give(private val target: Mob, private val item: ItemData) : Action() {
     companion object {
         fun getOrRetry(self: Mob, target: String, itemName: String): Action {
             val itemData = self
-                .items.firstOrNull { it.nameMatches(itemName) }
+                .items.firstOrNull { it.nameStartsWith(itemName) }
                 ?: return Retry("You aren't holding that item")
 
             if (itemData.itemFlags.contains(ItemFlags.UNDROPPABLE)) {
@@ -27,7 +27,7 @@ class Give(private val target: Mob, private val item: ItemData) : Action() {
             val mob = self
                 .currentRoomOtherMobs(SampleData.mobs)
                 .also { println(it) }
-                .firstOrNull { target.earlyMatches(it.name) }
+                .firstOrNull { target.startsWith(it.name) }
                 ?: return Retry("$target isn't here")
             return Give(mob, itemData)
         }

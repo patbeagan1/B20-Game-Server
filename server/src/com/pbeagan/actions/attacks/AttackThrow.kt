@@ -1,12 +1,13 @@
-package com.pbeagan.actions
+package com.pbeagan.actions.attacks
 
+import com.pbeagan.actions.Action
 import com.pbeagan.data.Mob
+import com.pbeagan.data.formatHP
 import com.pbeagan.roll6
 
 class AttackThrow(private val target: Mob) : Action() {
     override fun invoke(self: Mob){
-        val name = { m: Mob -> "${m.name}(${m.hearts} hp)" }
-        writer.sayToRoomOf(target).combat("${name(self)} has throw attacked ${name(target)}!")
+        writer.sayToRoomOf(target).combat("${self.formatHP()} has throw attacked ${target.formatHP()}!")
         if (roll6() + self.baseAtkThrow > target.armor) {
             damageResolution(target, self.baseAtkThrow)
         }

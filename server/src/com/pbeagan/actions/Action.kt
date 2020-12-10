@@ -1,5 +1,8 @@
 package com.pbeagan.actions
 
+import com.pbeagan.actions.attacks.AttackRanged
+import com.pbeagan.actions.attacks.AttackThrow
+import com.pbeagan.actions.attacks.Punch
 import com.pbeagan.data.AttackType.MAGIC
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.AttackType.RANGED
@@ -25,7 +28,7 @@ abstract class Action {
     companion object {
         fun attackOrRetry(mob: Mob, target: String): Action {
             fun onTargetFound(target: Mob): Action = when (mob.preferredAttack) {
-                MELEE -> AttackMelee(target)
+                MELEE -> Punch(target)
                 RANGED -> AttackRanged(target)
                 THROWN -> AttackThrow(target)
                 MAGIC -> TODO()

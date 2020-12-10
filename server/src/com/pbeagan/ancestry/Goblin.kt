@@ -1,7 +1,7 @@
 package com.pbeagan.ancestry
 
 import com.pbeagan.actions.Action
-import com.pbeagan.actions.AttackMelee
+import com.pbeagan.actions.attacks.Punch
 import com.pbeagan.actions.Drop
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
@@ -23,17 +23,13 @@ class Goblin : Ancestry(AncestryBase()) {
                 MobBehavior.LOOTER -> {
                     when (roll20()) {
                         in 0..2 -> getRandomVisibleItem()?.let { Take(it) }
-                        in 3..4 -> this.items.takeIf { it.isNotEmpty() }?.random()?.let {
-                            Drop(
-                                it
-                            )
-                        }
+                        in 3..4 -> this.items.takeIf { it.isNotEmpty() }?.random()?.let { Drop(it) }
                         else -> Pass
                     } ?: Pass
                 }
                 MobBehavior.AGGRESSIVE -> {
                     when (roll20()) {
-                        in 0..18 -> getFirstVisibleMob()?.let { AttackMelee(it) }
+                        in 0..18 -> getFirstVisibleMob()?.let { Punch(it) }
                         else -> Pass
                     } ?: Pass
                 }

@@ -4,12 +4,11 @@ import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
-import com.pbeagan.earlyMatches
+import com.pbeagan.startsWith
 
 class Drop(private val item: ItemData) : Action() {
-    override fun invoke(self: Mob) = drop(self, item)
 
-    fun drop(self: Mob, item: ItemData) {
+    override fun invoke(self: Mob) {
         self.currentRoom()?.items?.add(item)
         self.items.remove(item)
         writer.sayToRoomOf(self).info("${self.name} dropped the ${item.names[0]}")
@@ -19,7 +18,7 @@ class Drop(private val item: ItemData) : Action() {
         fun getOrRetry(mob: Mob, itemName: String): Action = mob.items
             .firstOrNull { itemData ->
                 itemData.itemFlags.contains(ItemFlags.UNDROPPABLE).not() && itemData.names.any { name ->
-                    itemName.let { name.earlyMatches(it) }
+                    itemName.let { name.startsWith(it) }
                 }
             }
             ?.let { Drop(it) }

@@ -12,13 +12,13 @@ class Debug(private val target: String) : Action(),
     }
 
     private fun searchRoomItems(self: Mob): Unit? = rooms.map { it.value.items }.flatten().firstOrNull {
-        it.nameMatches(target)
+        it.nameStartsWith(target)
     }?.let {
         writer.sayTo(self).info(it.toString())
     }
 
     private fun searchMobItems(self: Mob): Unit? = SampleData.mobs.map { it.items }.flatten().firstOrNull {
-        it.nameMatches(target)
+        it.nameStartsWith(target)
     }?.let {
         writer.sayTo(self).info(it.toString())
     }

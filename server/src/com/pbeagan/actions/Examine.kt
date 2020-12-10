@@ -4,7 +4,7 @@ import com.pbeagan.SampleData.mobs
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
-import com.pbeagan.earlyMatches
+import com.pbeagan.startsWith
 
 class Examine(private val targetName: String) : Action(), FreeAction {
     override fun invoke(self: Mob) {
@@ -16,7 +16,7 @@ class Examine(private val targetName: String) : Action(), FreeAction {
     private fun examineMob(self: Mob, targetName: String): Unit? {
         val mob = self
             .currentRoomOtherMobs(mobs)
-            .firstOrNull { it.name.earlyMatches(targetName) }
+            .firstOrNull { it.name.startsWith(targetName) }
             ?: return null
 
         return mob.ancestry?.let { ancestry ->
@@ -24,9 +24,12 @@ class Examine(private val targetName: String) : Action(), FreeAction {
         }
     }
 
-    private fun examineItem(self: Mob, itemName: String) = self.currentRoom()
-        ?.items
-        ?.firstOrNull { it.nameMatches(itemName) }
-        ?.descriptionOnExamination
-        ?.also { writer.sayTo(self).info(it) }
+    private fun examineItem(self: Mob, itemName: String): String? {
+        val itemData = self.currentRoom()
+            ?.items
+            ?.firstOrNull { it.nameStartsWith(itemName) }
+        return itemData
+            ?.descriptionOnExamination
+            ?.also { writer.sayTo(self).info("${itemData.names.first()}: $it") }
+    }
 }

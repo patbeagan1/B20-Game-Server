@@ -4,7 +4,7 @@ import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
-import com.pbeagan.earlyMatches
+import com.pbeagan.startsWith
 
 class Take(private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {
@@ -24,7 +24,7 @@ class Take(private val item: ItemData) : Action() {
             return mob.currentRoom()?.items
                 ?.firstOrNull { itemData ->
                     itemData.itemFlags.contains(ItemFlags.TAKEABLE) && itemData.names.any { name ->
-                        itemName.let { name.earlyMatches(it) }
+                        itemName.let { name.startsWith(it) }
                     }
                 }
                 ?.let { Take(it) }

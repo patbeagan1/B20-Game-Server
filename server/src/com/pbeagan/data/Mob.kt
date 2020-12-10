@@ -1,7 +1,6 @@
 package com.pbeagan.data
 
 import com.pbeagan.BoundedValue
-import com.pbeagan.SampleData
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Pass
 import com.pbeagan.ancestry.Ancestry
@@ -10,13 +9,10 @@ import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.Effect.Type.ANCESTRY
 import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
-import com.pbeagan.earlyMatches
 import com.pbeagan.models.FlagCombined
 import com.pbeagan.writer.IDforIOGenerator
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
-import mobs
-import rooms
 
 class Mob constructor(
     val name: String,
@@ -76,29 +72,3 @@ class Mob constructor(
 
     fun getAction(reader: Reader): Action? = ancestry?.decide(this, this.behavior)
 }
-
-fun Mob.currentRoom() =
-    rooms[location]
-
-fun Mob.adjacentOrCurrentRoom() =
-    rooms[location]?.directions
-        ?.map { it.destinationID }
-        ?.let { it + location }
-        ?.map { rooms[it] }
-
-fun Mob.currentRoomOtherMobs(list: List<Mob>) = list
-    .filter { it.location == location && it != this }
-
-fun Mob.currentRoomOtherMobsAndSelf(list: List<Mob>) = list
-    .filter { it.location == location }
-
-fun Mob.getFirstVisibleMob(): Mob? = mobs
-    .firstOrNull { it.location == location && it != this }
-
-fun Mob.getRandomVisibleItem(): ItemData? =
-    currentRoom()?.items?.takeIf { it.isNotEmpty() }?.random()
-
-fun Mob.target(targetName: String): Mob? = this
-    .currentRoomOtherMobs(SampleData.mobs)
-    .firstOrNull { it.name.earlyMatches(targetName) }
-
