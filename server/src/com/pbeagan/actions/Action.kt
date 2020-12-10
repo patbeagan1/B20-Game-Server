@@ -1,28 +1,31 @@
 package com.pbeagan.actions
 
-import com.pbeagan.data.AttackType.MAGIC
-import com.pbeagan.data.AttackType.MELEE
-import com.pbeagan.data.AttackType.RANGED
-import com.pbeagan.data.AttackType.THROWN
-import com.pbeagan.data.Direction
-import com.pbeagan.data.ItemData
-import com.pbeagan.data.ItemFlags
-import com.pbeagan.data.ItemFlags.TAKEABLE
-import com.pbeagan.data.ItemFlags.UNDROPPABLE
 import com.pbeagan.SampleData.mobs
 import com.pbeagan.actions.actiondelegates.CombatDelegateProvider
 import com.pbeagan.actions.actiondelegates.ItemDelegateProvider
 import com.pbeagan.actions.actiondelegates.LookDelegateProvider
 import com.pbeagan.actions.actiondelegates.MovementDelegateProvider
-import com.pbeagan.earlyMatches
+import com.pbeagan.data.AttackType.MAGIC
+import com.pbeagan.data.AttackType.MELEE
+import com.pbeagan.data.AttackType.RANGED
+import com.pbeagan.data.AttackType.THROWN
+import com.pbeagan.data.Direction
+import com.pbeagan.data.Effect.Type.SPELL
+import com.pbeagan.data.EffectImpl
+import com.pbeagan.data.ItemData
+import com.pbeagan.data.ItemFlags
+import com.pbeagan.data.ItemFlags.TAKEABLE
+import com.pbeagan.data.ItemFlags.UNDROPPABLE
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
 import com.pbeagan.data.getFirstVisibleMob
+import com.pbeagan.data.target
+import com.pbeagan.earlyMatches
 import com.pbeagan.writer.Writer
 import rooms
 
-sealed class Action {
+abstract class Action {
     abstract operator fun invoke(self: Mob)
     lateinit var writer: Writer
     val combatDelegate = CombatDelegateProvider()
@@ -40,9 +43,7 @@ sealed class Action {
             }
             return when {
                 target.isEmpty() -> mob.getFirstVisibleMob()?.let { onTargetFound(it) }
-                else -> mob.currentRoomOtherMobs(mobs)
-                    .firstOrNull { it.name.toLowerCase() == target }
-                    ?.let { onTargetFound(it) }
+                else -> mob.target(target)?.let { onTargetFound(it) }
             } ?: Retry("Looks like that mob isn't here...")
         }
     }
@@ -148,10 +149,33 @@ class Debug(private val target: String) : Action(), FreeAction {
     private fun searchMobs(self: Mob): Unit? = mobs.firstOrNull {
         it.name.toLowerCase() == target.toLowerCase()
     }?.let { currentMob ->
-        writer.sayTo(self).info(currentMob.toString())
-        writer.sayTo(self).info("hearts: ${currentMob.hearts}")
-        writer.sayTo(self).info("desc: ${currentMob.description}")
-        writer.sayTo(self).info("IO id: ${currentMob.idForIO}")
+        writer.sayTo(self).run {
+            info(currentMob.toString())
+            info(currentMob.effects.toString())
+            info("")
+            info("baseAtkMelee: ${currentMob.baseAtkMelee}")
+            info("baseAtkRanged: ${currentMob.baseAtkRanged}")
+            info("baseAtkThrow: ${currentMob.baseAtkThrow}")
+            info("awareness: ${currentMob.awareness}")
+            info("spirit: ${currentMob.spirit}")
+            info("speed: ${currentMob.speed}")
+            info("presence: ${currentMob.presence}")
+            info("cunning: ${currentMob.cunning}")
+            info("persuasion: ${currentMob.persuasion}")
+            info("tenacity: ${currentMob.tenacity}")
+            info("fortitude: ${currentMob.fortitude}")
+            info("strength: ${currentMob.strength}")
+            info("agility: ${currentMob.agility}")
+            info("precision: ${currentMob.precision}")
+            info("endurance: ${currentMob.endurance}")
+            info("durability: ${currentMob.durability}")
+            info("totalHearts: ${currentMob.totalHearts}")
+            info("description: ${currentMob.description}")
+            info("preferredAttack: ${currentMob.preferredAttack}")
+            info("idForIO: ${currentMob.idForIO}")
+            info("hearts: ${currentMob.hearts}")
+            info("")
+        }
     }
 }
 
@@ -227,3 +251,25 @@ class Give(private val target: Mob, private val item: ItemData) : Action() {
 class Inventory : Action(), FreeAction {
     override fun invoke(self: Mob) = itemDelegateProvider.prepare(writer).inventory(self)
 }
+
+class Curse(private val target: Mob) : Action() {
+    override fun invoke(self: Mob) {
+        val effect = EffectImpl(
+            roundsLeft = 1,
+            totalHearts = -10,
+            descriptionActivation = "${target.name} has been cursed by ${self.name}!",
+            descriptionDeactivation = "The curse on ${target.name} has worn off.",
+            name = "Curse",
+            type = SPELL
+        )
+        target.addEffect(writer, effect)
+    }
+
+    companion object {
+        fun getOrRetry(mob: Mob, targetName: String): Action {
+            val target = mob.target(targetName) ?: return Retry("That mob isn't here")
+            return Curse(target)
+        }
+    }
+}
+

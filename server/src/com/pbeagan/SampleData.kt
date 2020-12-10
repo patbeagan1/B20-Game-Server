@@ -1,6 +1,9 @@
 package com.pbeagan
 
 import com.pbeagan.data.Direction
+import com.pbeagan.data.Goblin
+import com.pbeagan.data.Hobgoblin
+import com.pbeagan.data.Human
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
@@ -8,7 +11,6 @@ import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.RoomFlags
-import com.pbeagan.data.StatsImpl
 import com.pbeagan.models.createFlagSet
 
 object SampleData {
@@ -16,58 +18,33 @@ object SampleData {
         Mob(
             "Alice",
             armor = 3,
-            stats = listOf(
-                StatsImpl(
-                    baseAtkMelee = 1,
-                    totalHearts = 25
-                )
-            ),
+            effects = listOf(Human()),
             behavior = MobBehavior.PLAYER
         ),
         Mob(
             "Steve",
             armor = 3,
-            stats = listOf(
-                StatsImpl(
-                    baseAtkMelee = 1,
-                    totalHearts = 25
-                )
-            ),
+            effects = listOf(Human()),
             behavior = MobBehavior.PLAYER
         ),
         Mob(
             "Bob",
             armor = 2,
-            stats = listOf(
-                StatsImpl(
-                    baseAtkMelee = 2,
-                    totalHearts = 14
-                )
-            ),
+            effects = listOf(Goblin()),
             behavior = MobBehavior.AGGRESSIVE,
             location = 2
         ),
         Mob(
             "Charlie",
             armor = 2,
-            stats = listOf(
-                StatsImpl(
-                    baseAtkMelee = 2,
-                    totalHearts = 14
-                )
-            ),
+            effects = listOf(Hobgoblin()),
             behavior = MobBehavior.LOOTER,
             location = 3
         ),
         Mob(
             "Darla",
             armor = 2,
-            stats = listOf(
-                StatsImpl(
-                    baseAtkMelee = 2,
-                    totalHearts = 14
-                )
-            ),
+            effects = listOf(Goblin()),
             behavior = MobBehavior.WANDERER,
             location = 0
         )

@@ -12,18 +12,33 @@ class Reader(private val writer: Writer) {
     fun register(m: Mob, channel: ByteReadChannel) {
         inputs[m.idForIO] = channel
     }
+
     fun isActive(mob: Mob): Boolean = inputs[mob.idForIO] != null
 
     fun read(player: Mob): String? {
         val byteReadChannel = inputs[player.idForIO]
         if (byteReadChannel == null || byteReadChannel.isClosedForRead) {
-            inputs.remove(player.idForIO)
-            writer.debug("Reader Removed ${player.name}")
+            remove(player)
             return null
         }
 
         writer.debug("Reading: ${player.name} // $byteReadChannel")
 
-        return runBlocking { byteReadChannel.readUTF8Line() }
+        return runBlocking {
+            try {
+                byteReadChannel.readUTF8Line()
+            } catch (e: IllegalStateException) {
+                writer.debug(e.toString())
+                writer.sayTo(player).error("Something went wrong! We can't read your input anymore. Please log back in.")
+                writer.sayTo(player).error("If you are trying to close the client, type ^]. Then, ^C will work.")
+                remove(player)
+                null
+            }
+        }
+    }
+
+    private fun remove(player: Mob) {
+        inputs.remove(player.idForIO)
+        writer.debug("Reader Removed ${player.name}")
     }
 }

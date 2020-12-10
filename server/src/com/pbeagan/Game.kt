@@ -3,6 +3,7 @@ package com.pbeagan
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.AttackMelee
 import com.pbeagan.actions.Consume
+import com.pbeagan.actions.Curse
 import com.pbeagan.actions.Debug
 import com.pbeagan.actions.Doors
 import com.pbeagan.actions.Drop
@@ -30,6 +31,16 @@ import mobs
 class Game {
     fun gameLoop(writer: Writer, reader: Reader) {
         mobs.sortedByDescending { roll20() + it.awareness }.forEach { mob ->
+
+            mob.effects = mob.effects.mapNotNull {
+                it.roundsLeft -= 1
+                if (it.roundsLeft <= 0) {
+                    writer.sayToRoomOf(mob).info(it.descriptionDeactivation)
+                    null
+                } else {
+                    it
+                }
+            }
 
             if (mob.behavior == MobBehavior.PLAYER && reader.isActive(mob)) {
                 if (mob.action == Inactive) {
@@ -164,6 +175,11 @@ class Game {
         "(atk|attack)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->
                 Action.attackOrRetry(mob, mobName)
+            } ?: Retry("You need to specify a target!")
+        },
+        "(curse)$ARG" to { i ->
+            safeLet(i.getOrNull(2)) { mobName ->
+                Curse.getOrRetry(mob, mobName)
             } ?: Retry("You need to specify a target!")
         },
 
