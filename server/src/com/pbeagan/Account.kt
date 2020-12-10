@@ -22,7 +22,7 @@ class Account {
             val line = input.readUTF8Line()
 
             mobs.firstOrNull {
-                it.behavior == MobBehavior.PLAYER && it.name.toLowerCase() == line?.toLowerCase()
+                it.isPlayer && it.name.toLowerCase() == line?.toLowerCase()
             }?.also {
                 return it
             } ?: writer.write("Sorry, no players like that here...")

@@ -1,9 +1,9 @@
 package com.pbeagan
 
 import com.pbeagan.data.Direction
-import com.pbeagan.data.Goblin
-import com.pbeagan.data.Hobgoblin
-import com.pbeagan.data.Human
+import com.pbeagan.ancestry.Goblin
+import com.pbeagan.ancestry.Hobgoblin
+import com.pbeagan.ancestry.Human
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
@@ -19,34 +19,39 @@ object SampleData {
             "Alice",
             armor = 3,
             effects = listOf(Human()),
-            behavior = MobBehavior.PLAYER
+            isPlayer = true,
+            description = object : Mob.Description {}
         ),
         Mob(
             "Steve",
             armor = 3,
+            isPlayer = true,
             effects = listOf(Human()),
-            behavior = MobBehavior.PLAYER
+            description = object : Mob.Description {}
         ),
         Mob(
             "Bob",
             armor = 2,
             effects = listOf(Goblin()),
             behavior = MobBehavior.AGGRESSIVE,
-            location = 2
+            location = 2,
+            description = object : Mob.Description {}
         ),
         Mob(
             "Charlie",
             armor = 2,
             effects = listOf(Hobgoblin()),
             behavior = MobBehavior.LOOTER,
-            location = 3
+            location = 3,
+            description = object : Mob.Description {}
         ),
         Mob(
             "Darla",
             armor = 2,
             effects = listOf(Goblin()),
             behavior = MobBehavior.WANDERER,
-            location = 0
+            location = 0,
+            description = object : Mob.Description {}
         )
     )
     val rooms = listOf(

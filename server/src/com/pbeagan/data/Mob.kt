@@ -4,25 +4,28 @@ import com.pbeagan.BoundedValue
 import com.pbeagan.SampleData
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Pass
+import com.pbeagan.ancestry.Ancestry
+import com.pbeagan.ancestry.Human
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.Effect.Type.ANCESTRY
+import com.pbeagan.data.MobBehavior.WAITING
+import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.earlyMatches
 import com.pbeagan.models.FlagCombined
 import com.pbeagan.writer.IDforIOGenerator
+import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
 import mobs
 import rooms
 
 class Mob constructor(
     val name: String,
-    val descriptionProvider: DescriptionProvider = object :
-        DescriptionProvider {
-        override fun describe(behavior: MobBehavior, action: Action) =
-            behavior.descriptionDefault
-    },
+    val description: Description,
     var action: Action = Pass,
-    var behavior: MobBehavior,
-    var mood: MobMood = MobMood.NEUTRAL,
+    var behavior: MobBehavior = WAITING,
+    var mood: MobMood = NEUTRAL,
+
+    var isPlayer: Boolean = false,
 
     var armor: Int = 0,
     var dodge: Int = 0,
@@ -52,14 +55,14 @@ class Mob constructor(
     override val durability: Int get() = effects.sumBy { it.durability }
     override val totalHearts: Int get() = endurance.mod() + effects.sumBy { it.totalHearts }
 
-    val description get() = descriptionProvider.describe(behavior, action)
     var preferredAttack: AttackType = MELEE
     val idForIO: Int = IDforIOGenerator.get()
     var hearts by BoundedValue(totalHearts, 0..totalHearts)
+    val ancestry by lazy { effects.firstOrNull { it is Ancestry } as? Ancestry }
 
-
-    interface DescriptionProvider {
-        fun describe(behavior: MobBehavior, action: Action): String
+    interface Description {
+        fun onExamine(ancestry: Ancestry): String = "A fine example of a ${ancestry::class.java.simpleName}"
+        fun onLook(behavior: MobBehavior) = behavior.descriptionDefault
     }
 
     fun addEffect(writer: Writer, effect: Effect) {
@@ -70,9 +73,9 @@ class Mob constructor(
             else -> effects = effects + effect
         }
     }
-}
 
-fun Int.mod() = (this - 10) / 2
+    fun getAction(reader: Reader): Action? = ancestry?.decide(this, this.behavior)
+}
 
 fun Mob.currentRoom() =
     rooms[location]

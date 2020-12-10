@@ -29,3 +29,5 @@ interface Stats {
     // Total hearts
     val totalHearts: Int
 }
+
+fun Int.mod() = (this - 10) / 2
