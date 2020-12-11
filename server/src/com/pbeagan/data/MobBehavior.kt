@@ -8,5 +8,6 @@ enum class MobBehavior(val descriptionDefault: String) {
     WANDERER("It is just passing through."),
     FLEE("It wishes it was someplace else."),
     SLEEPING("Is is fast asleep."),
+    FOLLOW("It is following something."),
     WAITING("It is waiting for something to happen.")
 }

@@ -1,11 +1,15 @@
-package com.pbeagan.models
+package com.pbeagan.util
 
 interface Flag {
     val ordinal: Int
     val value get() = 1 shl (this.ordinal)
 }
 
-fun <T : Flag> createFlagSet(vararg a: T) = a.distinct().sumBy { it.value }.let { FlagCombined<T>(it) }
+fun <T : Flag> createFlagSet(vararg a: T) = a.distinct().sumBy { it.value }.let {
+    FlagCombined<T>(
+        it
+    )
+}
 data class FlagCombined<T : Flag>(private var value: Int) {
     fun contains(a: T) = (this.value and a.value) == a.value
     fun add(a: T) {
@@ -30,7 +34,11 @@ enum class FlagImpl : Flag {
 }
 
 fun main() {
-    val g = createFlagSet(FlagImpl.A, FlagImpl.A, FlagImpl.C)
+    val g = createFlagSet(
+        FlagImpl.A,
+        FlagImpl.A,
+        FlagImpl.C
+    )
     println("${g} ${g.contains(FlagImpl.B)}")
     g.add(FlagImpl.B)
     println("${g} ${g.contains(FlagImpl.B)}")

@@ -1,7 +1,7 @@
 import com.pbeagan.Account
-import com.pbeagan.ApplyOnce
+import com.pbeagan.util.ApplyOnce
 import com.pbeagan.Game
-import com.pbeagan.SampleData
+import com.pbeagan.demo.SampleData
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
 import com.pbeagan.writer.WriterImpl

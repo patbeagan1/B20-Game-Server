@@ -1,6 +1,6 @@
 package com.pbeagan.data
 
-import com.pbeagan.BoundedValue
+import com.pbeagan.util.BoundedValue
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Pass
 import com.pbeagan.ancestry.Ancestry
@@ -9,8 +9,8 @@ import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.Effect.Type.ANCESTRY
 import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
-import com.pbeagan.models.FlagCombined
-import com.pbeagan.writer.IDforIOGenerator
+import com.pbeagan.util.FlagCombined
+import com.pbeagan.writer.UniqueId
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer
 
@@ -27,6 +27,8 @@ class Mob constructor(
     var dodge: Int = 0,
 
     var location: Int = 0,
+    var locationInRoom: Pair<Int, Int> = 0 to 0,
+
     var visited: MutableSet<Int> = mutableSetOf(0),
     var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,
 
@@ -52,9 +54,10 @@ class Mob constructor(
     override val totalHearts: Int get() = endurance.mod() + effects.sumBy { it.totalHearts }
 
     var preferredAttack: AttackType = MELEE
-    val idForIO: Int = IDforIOGenerator.get()
+    val idForIO: Int = UniqueId.get()
     var hearts by BoundedValue(totalHearts, 0..totalHearts)
     val ancestry by lazy { effects.firstOrNull { it is Ancestry } as? Ancestry }
+    val party: MutableSet<Mob> = mutableSetOf()
 
     interface Description {
         fun onExamine(ancestry: Ancestry): String = "A fine example of a ${ancestry::class.java.simpleName}"

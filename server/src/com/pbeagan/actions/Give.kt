@@ -1,11 +1,11 @@
 package com.pbeagan.actions
 
-import com.pbeagan.SampleData
+import com.pbeagan.demo.SampleData
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoomOtherMobs
-import com.pbeagan.startsWith
+import com.pbeagan.util.startsWith
 
 class Give(private val target: Mob, private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {

@@ -1,9 +1,9 @@
-package com.pbeagan
+package com.pbeagan.demo
 
-import com.pbeagan.data.Direction
 import com.pbeagan.ancestry.Goblin
 import com.pbeagan.ancestry.Hobgoblin
 import com.pbeagan.ancestry.Human
+import com.pbeagan.data.Direction
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
@@ -11,7 +11,8 @@ import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.RoomFlags
-import com.pbeagan.models.createFlagSet
+import com.pbeagan.util.createFlagSet
+
 
 object SampleData {
     val mobs = listOf(
@@ -59,7 +60,7 @@ object SampleData {
             0,
             name = "The Front Porch",
             descriptionLook = "The front porch of Liz's house",
-            directions = listOf(
+            exits = listOf(
                 RoomDirectionData(
                     Direction.EAST,
                     1,
@@ -71,6 +72,15 @@ object SampleData {
                     "There is a door leading inside"
                 )
             ),
+            terrainString = """
+                ''''''''
+                ****''''
+                ---*''''
+                --------
+                ---*''''
+                ****''''
+                ''''''''
+            """.trimIndent(),
             roomFlags = createFlagSet(RoomFlags.INDOORS),
             items = mutableListOf(
                 ItemData(
@@ -106,7 +116,7 @@ object SampleData {
             1,
             name = "The Road",
             descriptionLook = "A portal to new places",
-            directions = listOf(
+            exits = listOf(
                 RoomDirectionData(
                     Direction.WEST,
                     0,
@@ -117,24 +127,43 @@ object SampleData {
                     2,
                     "In the distance you see an ice field."
                 )
-            )
+            ),
+            terrainString = """
+            ''''-'''
+            ''''-'''
+            '''--'''
+            ''--''''
+            ---'''''
+            ''''''''
+            ''''''''
+        """.trimIndent()
         ),
         RoomData(
             2,
             name = "A bridge across the fjord",
             descriptionLook = "A sturdy metal bridge spans the gap between two fissures in an icy field.",
-            directions = listOf(
+            exits = listOf(
                 RoomDirectionData(
                     Direction.SOUTH,
                     1,
                     "There is a road to the south."
                 )
-            )
+            ),
+            terrainString = """
+                ''''''--''''''
+                '''''*--*'''''
+                '*'*'*--*'*'*'
+                ~~~~~*--*~~~~~
+                ~~~~~*--*~~~~~
+                '*'*'*--*'*'*'
+                '''''*--*'''''
+                ''''''--''''''
+            """.trimIndent()
         ), RoomData(
             3,
             name = "The Kitchen",
             descriptionLook = "A metal table is laden with various fruits and vegetables.",
-            directions = listOf(
+            exits = listOf(
                 RoomDirectionData(
                     Direction.EAST,
                     0,
@@ -158,7 +187,14 @@ object SampleData {
                             }
                         })
                 }
-            )
+            ),
+            terrainString = """
+                *****
+                *---*
+                *-*--
+                *---*
+                *****
+            """.trimIndent()
         )
     ).associateBy { it.id }
 }

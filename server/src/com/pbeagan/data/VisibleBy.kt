@@ -1,8 +1,8 @@
 package com.pbeagan.data
 
-import com.pbeagan.models.Flag
-import com.pbeagan.models.FlagCombined
-import com.pbeagan.models.createFlagSet
+import com.pbeagan.util.Flag
+import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.createFlagSet
 
 enum class VisibleBy : Flag {
     SIGHT,

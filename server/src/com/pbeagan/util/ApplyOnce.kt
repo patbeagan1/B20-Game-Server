@@ -1,4 +1,4 @@
-package com.pbeagan
+package com.pbeagan.util
 
 import java.util.concurrent.atomic.AtomicBoolean
 

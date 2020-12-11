@@ -1,5 +1,5 @@
 import com.pbeagan.Injection
-import com.pbeagan.loggerGen
+import com.pbeagan.util.loggerGen
 import com.pbeagan.site.routers.DemoRouter
 import com.pbeagan.site.routers.ReadDataRouter
 import com.pbeagan.site.routers.UsernameRouter

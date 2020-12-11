@@ -4,7 +4,7 @@ import com.pbeagan.actions.Action
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.formatHP
-import com.pbeagan.roll6
+import com.pbeagan.util.roll6
 
 class Punch(private val target: Mob) : Action() {
     override operator fun invoke(self: Mob) {

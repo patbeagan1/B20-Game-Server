@@ -1,6 +1,6 @@
 package com.pbeagan.data
 
-import com.pbeagan.models.Flag
+import com.pbeagan.util.Flag
 
 enum class MessageReceiver {
     INITIATOR,

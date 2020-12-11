@@ -10,7 +10,7 @@ import com.pbeagan.data.Mob
 import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.getFirstVisibleMob
 import com.pbeagan.data.getRandomVisibleItem
-import com.pbeagan.roll20
+import com.pbeagan.util.roll20
 
 class Human : Ancestry(AncestryBase()) {
     override fun decide(mob: Mob, behavior: MobBehavior) = mob.run {
@@ -33,10 +33,10 @@ class Human : Ancestry(AncestryBase()) {
                 } ?: Pass
             }
             MobBehavior.WANDERER -> when (roll20()) {
-                0 -> Move(Direction.NORTH)
-                1 -> Move(Direction.EAST)
-                2 -> Move(Direction.SOUTH)
-                3 -> Move(Direction.WEST)
+                0 -> Move.forceMove(Direction.NORTH)
+                1 -> Move.forceMove(Direction.EAST)
+                2 -> Move.forceMove(Direction.SOUTH)
+                3 -> Move.forceMove(Direction.WEST)
                 else -> Pass
             }
             else -> TODO()

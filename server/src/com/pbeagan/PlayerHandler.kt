@@ -10,6 +10,7 @@ import com.pbeagan.actions.Examine
 import com.pbeagan.actions.Give
 import com.pbeagan.actions.Inactive
 import com.pbeagan.actions.Inventory
+import com.pbeagan.actions.LocalMap
 import com.pbeagan.actions.Look
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
@@ -19,6 +20,7 @@ import com.pbeagan.actions.Settings
 import com.pbeagan.actions.Take
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Mob
+import com.pbeagan.util.safeLet
 import com.pbeagan.writer.Reader
 
 class PlayerHandler {
@@ -53,6 +55,7 @@ class PlayerHandler {
         "l(s|l|ook)?" to { _ -> Look() },
         "do(or(s)?)?" to { _ -> Doors() },
         "exit(s)?" to { _ -> Doors() },
+        "m(ap)?" to { _ -> LocalMap() },
         "ex(amine)?$ARG" to { i ->
             safeLet(i.getOrNull(2)) { target ->
                 Examine(target)
@@ -91,12 +94,12 @@ class PlayerHandler {
         },
 
         // Movement
-        "n(orth)?" to { _ -> Move(Direction.NORTH) },
-        "s(outh)?" to { _ -> Move(Direction.SOUTH) },
-        "e(ast)?" to { _ -> Move(Direction.EAST) },
-        "w(est)?" to { _ -> Move(Direction.WEST) },
-        "u(p)?" to { _ -> Move(Direction.UP) },
-        "d(own)?" to { _ -> Move(Direction.DOWN) },
+        "n(orth)?" to { _ -> Move.getOrRetry(mob, Direction.NORTH) },
+        "s(outh)?" to { _ -> Move.getOrRetry(mob, Direction.SOUTH) },
+        "e(ast)?" to { _ -> Move.getOrRetry(mob, Direction.EAST) },
+        "w(est)?" to { _ -> Move.getOrRetry(mob, Direction.WEST) },
+        "u(p)?" to { _ -> Move.getOrRetry(mob, Direction.UP) },
+        "d(own)?" to { _ -> Move.getOrRetry(mob, Direction.DOWN) },
 
         // Combat
         "(atk|attack)$ARG" to { i ->
@@ -112,7 +115,10 @@ class PlayerHandler {
 
         // Settings
         "set$ARG$ARG" to { i ->
-            val action: Action = safeLet(i.getOrNull(1), i.getOrNull(2)) { settingKey, settingValue ->
+            val action: Action = safeLet(
+                i.getOrNull(1),
+                i.getOrNull(2)
+            ) { settingKey, settingValue ->
                 when (settingKey) {
                     "attack" -> Settings.getAttack(settingValue)
                     else -> Retry("I don't know about that setting.")

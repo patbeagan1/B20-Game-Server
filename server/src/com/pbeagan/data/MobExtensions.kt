@@ -1,7 +1,7 @@
 package com.pbeagan.data
 
-import com.pbeagan.SampleData
-import com.pbeagan.startsWith
+import com.pbeagan.demo.SampleData
+import com.pbeagan.util.startsWith
 import mobs
 import rooms
 
@@ -9,7 +9,7 @@ fun Mob.currentRoom() =
     rooms[location]
 
 fun Mob.adjacentOrCurrentRoom() =
-    rooms[location]?.directions
+    rooms[location]?.exits
         ?.map { it.destinationID }
         ?.let { it + location }
         ?.map { rooms[it] }

@@ -1,4 +1,4 @@
-package com.pbeagan
+package com.pbeagan.util
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -8,6 +8,8 @@ fun roll6() = Random.nextInt(1, 6)
 fun roll8() = Random.nextInt(1, 8)
 fun roll12() = Random.nextInt(1, 12)
 fun roll20() = Random.nextInt(1, 20)
+
+val Any.exhaustive get() = this.let {}
 
 fun String.startsWith(prefix: String) =
     this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).toLowerCase() == prefix.toLowerCase()

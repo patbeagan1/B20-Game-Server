@@ -3,7 +3,7 @@ package com.pbeagan.actions.attacks
 import com.pbeagan.actions.Action
 import com.pbeagan.data.Mob
 import com.pbeagan.data.formatHP
-import com.pbeagan.roll6
+import com.pbeagan.util.roll6
 
 class AttackThrow(private val target: Mob) : Action() {
     override fun invoke(self: Mob){

@@ -1,8 +1,8 @@
 package com.pbeagan.data
 
-import com.pbeagan.startsWith
-import com.pbeagan.models.FlagCombined
-import com.pbeagan.models.createFlagSet
+import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.createFlagSet
+import com.pbeagan.util.startsWith
 
 data class ItemData(
     val id: Int,
@@ -10,15 +10,13 @@ data class ItemData(
     val descriptionOnExamination: String,
     val descriptionInRoom: String
 ) {
-    val affectedByMagicPossible: FlagCombined<AffectedByMagic> =
-        AffectedByMagic.defaultItem
+    val locationInRoom: Pair<Int, Int> = 0 to 0
+    val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
     val affectedByMagicCurrent: FlagCombined<AffectedByMagic> =
         createFlagSet()
     val containsInnerItem: ItemData? = null
-    val itemFlags: FlagCombined<ItemFlags> =
-        ItemFlags.default
-    val visibleBy: FlagCombined<VisibleBy> =
-        VisibleBy.defaultItem
+    val itemFlags: FlagCombined<ItemFlags> = ItemFlags.default
+    val visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultItem
     val flagHandlers = mutableMapOf<ItemFlags, FlagHandler?>()
 
     fun setItemFlags(flags: ItemFlags, handler: FlagHandler? = null) {

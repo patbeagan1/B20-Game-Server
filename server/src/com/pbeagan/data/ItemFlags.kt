@@ -1,7 +1,7 @@
 package com.pbeagan.data
 
-import com.pbeagan.models.Flag
-import com.pbeagan.models.createFlagSet
+import com.pbeagan.util.Flag
+import com.pbeagan.util.createFlagSet
 
 enum class ItemFlags : Flag {
     GLOW,
@@ -14,6 +14,7 @@ enum class ItemFlags : Flag {
     KEY,
     WIELDABLE,
     CONSUMABLE,
+    COLLISION,
     BLESSED;
 
     companion object {

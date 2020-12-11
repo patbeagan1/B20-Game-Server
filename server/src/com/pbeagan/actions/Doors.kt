@@ -7,7 +7,7 @@ class Doors : Action(), FreeAction {
     override fun invoke(self: Mob) = doors(self)
     private fun doors(self: Mob) {
         self.currentRoom()
-            ?.directions
+            ?.exits
             ?.joinToString("\n") {
                 "${it.direction}: ${it.preview}"
             }?.also { writer.sayTo(self).info(it) }

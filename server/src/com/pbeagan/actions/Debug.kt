@@ -1,6 +1,6 @@
 package com.pbeagan.actions
 
-import com.pbeagan.SampleData
+import com.pbeagan.demo.SampleData
 import com.pbeagan.data.Mob
 import rooms
 

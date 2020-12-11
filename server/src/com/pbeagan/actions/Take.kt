@@ -4,7 +4,7 @@ import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
-import com.pbeagan.startsWith
+import com.pbeagan.util.startsWith
 
 class Take(private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {

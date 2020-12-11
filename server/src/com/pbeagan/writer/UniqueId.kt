@@ -2,7 +2,7 @@ package com.pbeagan.writer
 
 import java.util.concurrent.atomic.AtomicInteger
 
-object IDforIOGenerator {
+object UniqueId {
     private val current = AtomicInteger(0)
     fun get() = current.incrementAndGet()
 }

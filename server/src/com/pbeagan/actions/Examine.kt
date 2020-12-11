@@ -1,10 +1,10 @@
 package com.pbeagan.actions
 
-import com.pbeagan.SampleData.mobs
+import com.pbeagan.demo.SampleData.mobs
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
-import com.pbeagan.startsWith
+import com.pbeagan.util.startsWith
 
 class Examine(private val targetName: String) : Action(), FreeAction {
     override fun invoke(self: Mob) {
@@ -18,7 +18,6 @@ class Examine(private val targetName: String) : Action(), FreeAction {
             .currentRoomOtherMobs(mobs)
             .firstOrNull { it.name.startsWith(targetName) }
             ?: return null
-
         return mob.ancestry?.let { ancestry ->
             writer.sayTo(self).info(mob.description.onExamine(ancestry))
         }

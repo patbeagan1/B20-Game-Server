@@ -10,6 +10,7 @@ class WriteTarget(
     private val horizontalRule = (0..20).joinToString("") { "-" }
     fun system(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("GAME: ", shouldIndent) }
     fun info(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("INFO: ", shouldIndent) }
+    fun localMap(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("MAP : ", shouldIndent) }
     fun dead(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("DEAD: ", shouldIndent) }
     fun combat(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("CMBT: ", shouldIndent) }
     fun error(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("ERR : ", shouldIndent) }

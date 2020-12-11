@@ -14,6 +14,7 @@ import com.pbeagan.models.worldstate.WorldStateX
 import org.koin.dsl.module
 import com.pbeagan.site.controllers.CounterService
 import com.pbeagan.site.controllers.CounterServiceImpl
+import com.pbeagan.util.loggerGen
 
 object Injection {
 
