@@ -6,6 +6,7 @@ import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobsAndSelf
+import com.pbeagan.util.cloneStructure
 import mobs
 
 class LocalMap : Action(), FreeAction {
@@ -80,9 +81,3 @@ fun Int?.toFormattedChar() = when (this) {
     in 'A'.toInt()..'Z'.toInt() -> toChar()
     else -> ' '
 }
-
-inline fun <reified T> Array<Array<T>>.deepClone() =
-    this.map { rows -> rows.map { it }.toTypedArray() }.toTypedArray()
-
-inline fun <reified T, reified R> Array<Array<T>>.cloneStructure(default: (T) -> R) =
-    this.map { rows -> rows.map { default(it) }.toTypedArray() }.toTypedArray()
