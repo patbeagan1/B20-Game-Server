@@ -4,6 +4,7 @@ import com.pbeagan.actions.Action
 import com.pbeagan.actions.Follow
 import com.pbeagan.actions.FreeAction
 import com.pbeagan.actions.Inactive
+import com.pbeagan.actions.Move
 import com.pbeagan.actions.Repeat
 import com.pbeagan.data.Mob
 import com.pbeagan.util.roll20
@@ -24,29 +25,42 @@ class Game {
             }
             writer.sayTo(it).info("Pending Action: ${it.action::class.java.simpleName}")
         }
-        mobs.forEach { it.action.apply { this.writer = writer }(it) }
+        mobs.forEach {
+            it.actionMove?.apply { this.writer = writer }?.invoke(it)
+            it.action.apply { this.writer = writer }(it)
+        }
     }
 
     private fun Mob.takeTurn(reader: Reader, writer: Writer) {
-        var action: Action? = null
-        while (checkIfTurnContinues(action)) {
+        var actionCurrent: Action? = null
+        actionMove = null
+        while (checkIfTurnContinues(actionCurrent)) {
 
             if (this.action is Follow) {
                 break
             }
 
-            action = if (isPlayer) {
+            actionCurrent = if (isPlayer) {
                 playerHandler.interpretPlayerAction(reader, this)
             } else {
                 getAction(reader)
             }
 
-            if (action != null) {
-                this.action = action
+            if (actionCurrent != null) {
+                if (actionCurrent is Move && actionMove == null) {
+                    // we get one move action for free, so
+                    // we can forward it into actionMove and act like nothing happened.
+                    writer.sayTo(this).info("Pending Action: ${actionCurrent::class.java.simpleName}")
+                    actionMove = actionCurrent
+                    actionCurrent = null
+
+                } else {
+                    this.action = actionCurrent
+                }
             }
 
-            if (checkIfTurnContinues(action)) {
-                action?.also { it.writer = writer }?.invoke(this)
+            if (checkIfTurnContinues(actionCurrent)) {
+                actionCurrent?.also { it.writer = writer }?.invoke(this)
             }
         }
     }
