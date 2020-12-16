@@ -11,6 +11,12 @@ fun roll20() = Random.nextInt(1, 20)
 
 val Any.exhaustive get() = this.let {}
 
+fun Int.boundBy(range: ClosedRange<Int>): Int {
+    if (this < range.start) return range.start
+    if (this > range.endInclusive) return range.endInclusive
+    return this
+}
+
 fun String.startsWith(prefix: String) =
     this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).toLowerCase() == prefix.toLowerCase()
 

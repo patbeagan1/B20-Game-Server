@@ -18,6 +18,7 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
+import com.pbeagan.util.boundBy
 import com.pbeagan.util.exhaustive
 
 class Move private constructor(private val direction: Direction) : Action() {
@@ -46,9 +47,8 @@ class Move private constructor(private val direction: Direction) : Action() {
             direction,
             self.locationInRoom,
             currentRoom.terrain
-        ).also {
+        ).first {
             writer.debug(it.toString())
-        }.first {
             checkNewSpace(
                 currentRoom.terrain,
                 it,
@@ -74,13 +74,15 @@ class Move private constructor(private val direction: Direction) : Action() {
         currentRoom: RoomData,
         y: Int
     ): Pair<Int, Int> {
+        val boundX = x.boundBy(0..currentRoom.terrain.first().size)
+        val boundY = y.boundBy(0..currentRoom.terrain.size)
         return when (direction) {
-            NORTH -> x to 0
-            SOUTH -> x to currentRoom.height - 1
-            EAST -> 0 to y
-            WEST -> currentRoom.width - 1 to y
-            UP -> x to y
-            DOWN -> x to y
+            NORTH -> boundX to 0
+            SOUTH -> boundX to currentRoom.height - 1
+            EAST -> 0 to boundY
+            WEST -> currentRoom.width - 1 to boundY
+            UP -> boundX to boundY
+            DOWN -> boundX to boundY
         }
     }
 
@@ -98,10 +100,12 @@ class Move private constructor(private val direction: Direction) : Action() {
         var trial = xy.copy()
         var counter = 1
 
+        val failuresAllowed = if (!shouldScanHorizontal) terrain.size else terrain.first().size
+
         // we can allow one direction to go out of bounds, because the other is still valid
         // but if both of them are out of bounds, exit.
         var failures = 0
-        while (failures < 2) {
+        while (failures < failuresAllowed) {
             if (!checkRoomBounds(terrain, trial)) {
                 failures++
             } else {
