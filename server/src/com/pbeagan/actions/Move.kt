@@ -19,6 +19,7 @@ import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.util.exhaustive
+import kotlin.math.withSign
 
 class Move private constructor(private val direction: Direction) : Action() {
     override fun invoke(self: Mob) {
@@ -35,29 +36,27 @@ class Move private constructor(private val direction: Direction) : Action() {
         self: Mob,
         room: RoomDirectionData,
         direction: Direction
-    ) {
+    ): Unit? {
         writer.sayToRoomOf(self).move("${self.name} left ${this.direction.name}")
         self.location = room.destinationID
         val (x, y) = self.locationInRoom
-        val currentRoom = self.currentRoom() ?: return
+        val currentRoom = self.currentRoom() ?: return null
         self.locationInRoom = moveToEntranceOfRoom(direction, x, currentRoom, y)
 
         checkEdgeSpacesToLandInRoom(
             direction,
             self.locationInRoom,
             currentRoom.terrain
-        ).also {
-            writer.debug(it.toString())
-        }.first {
+        ).firstOrNull {
             checkNewSpace(
                 currentRoom.terrain,
                 it,
                 currentRoom,
                 self
             ) !is Failure
-        }.let {
+        }?.let {
             self.locationInRoom = it
-        }
+        } ?: return null
 
         writer.sayToRoomOf(self).move("${self.name} arrived from ${this.direction.inverse().name}")
 
@@ -66,6 +65,8 @@ class Move private constructor(private val direction: Direction) : Action() {
         if (self.isPlayer) {
             Look().also { it.writer = writer }(self)
         }
+
+        return Unit
     }
 
     private fun moveToEntranceOfRoom(
@@ -73,15 +74,13 @@ class Move private constructor(private val direction: Direction) : Action() {
         x: Int,
         currentRoom: RoomData,
         y: Int
-    ): Pair<Int, Int> {
-        return when (direction) {
-            NORTH -> x to 0
-            SOUTH -> x to currentRoom.height - 1
-            EAST -> 0 to y
-            WEST -> currentRoom.width - 1 to y
-            UP -> x to y
-            DOWN -> x to y
-        }
+    ): Pair<Int, Int> = when (direction) {
+        NORTH -> x to 0
+        SOUTH -> x to currentRoom.height - 1
+        EAST -> 0 to y
+        WEST -> currentRoom.width - 1 to y
+        UP -> x to y
+        DOWN -> x to y
     }
 
     fun checkEdgeSpacesToLandInRoom(
@@ -89,33 +88,34 @@ class Move private constructor(private val direction: Direction) : Action() {
         xy: Pair<Int, Int>,
         terrain: Array<Array<Terrain>>
     ) = sequence {
-        var isGoingUp = true
         val shouldScanHorizontal = when (direction) {
             NORTH, SOUTH -> true
             EAST, WEST -> false
             UP, DOWN -> TODO()
         }
+        // we can allow one direction to go out of bounds, because the other is still valid
+        // but if both of them are out of bounds, exit.
+        // Since it alternates, it can fail up to the number of spaces along the edge of the room
+        var failures = 0
+        val failuresAllowed = if (!shouldScanHorizontal) terrain.size else terrain.first().size
+
         var trial = xy.copy()
         var counter = 1
 
-        // we can allow one direction to go out of bounds, because the other is still valid
-        // but if both of them are out of bounds, exit.
-        var failures = 0
-        while (failures < 2) {
+        while (failures < failuresAllowed) {
             if (!checkRoomBounds(terrain, trial)) {
+                writer.debug(trial.toString())
                 failures++
             } else {
-                writer.debug(trial.toString())
                 yield(trial)
             }
 
             trial = if (shouldScanHorizontal) {
-                (trial.first + if (isGoingUp) counter else -counter) to trial.second
+                (trial.first + counter) to trial.second
             } else {
-                trial.first to (trial.second + if (isGoingUp) counter else -counter)
+                trial.first to (trial.second + counter)
             }
-            isGoingUp = !isGoingUp
-            counter++
+            counter = -(counter + 1.0.withSign(counter).toInt())
         }
     }
 

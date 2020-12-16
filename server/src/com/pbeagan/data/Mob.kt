@@ -58,6 +58,7 @@ class Mob constructor(
     var hearts by BoundedValue(totalHearts, 0..totalHearts)
     val ancestry by lazy { effects.firstOrNull { it is Ancestry } as? Ancestry }
     val party: MutableSet<Mob> = mutableSetOf()
+    val allies: MutableSet<Mob> = mutableSetOf()
 
     interface Description {
         fun onExamine(ancestry: Ancestry): String = "A fine example of a ${ancestry::class.java.simpleName}"

@@ -7,6 +7,7 @@ import com.pbeagan.actions.Debug
 import com.pbeagan.actions.Doors
 import com.pbeagan.actions.Drop
 import com.pbeagan.actions.Examine
+import com.pbeagan.actions.Follow
 import com.pbeagan.actions.Give
 import com.pbeagan.actions.Inactive
 import com.pbeagan.actions.Inventory
@@ -100,6 +101,11 @@ class PlayerHandler {
         "w(est)?" to { _ -> Move.getOrRetry(mob, Direction.WEST) },
         "u(p)?" to { _ -> Move.getOrRetry(mob, Direction.UP) },
         "d(own)?" to { _ -> Move.getOrRetry(mob, Direction.DOWN) },
+        "follow$ARG" to { i ->
+            safeLet(i.getOrNull(1)) { targetName ->
+                Follow.getOrRetry(mob, targetName)
+            } ?: Retry("Who would you like to follow?")
+        },
 
         // Combat
         "(atk|attack)$ARG" to { i ->
