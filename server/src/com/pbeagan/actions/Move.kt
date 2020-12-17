@@ -11,7 +11,6 @@ import com.pbeagan.data.Direction.NORTH
 import com.pbeagan.data.Direction.SOUTH
 import com.pbeagan.data.Direction.UP
 import com.pbeagan.data.Direction.WEST
-import com.pbeagan.data.ItemFlags.COLLISION
 import com.pbeagan.data.Mob
 import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
@@ -160,9 +159,13 @@ class Move private constructor(private val direction: Direction) : Action() {
 
             val notTraversableMessage = terrain.notTraversableMessage
             if (notTraversableMessage != null) return Failure(notTraversableMessage)
-            if (mobs.isNotEmpty()) return Failure("There are mobs in that location.")
-            if (items.any { it.itemFlags.contains(COLLISION) }) return Failure("There is an item in the way.")
             if (self.behavior == MobBehavior.IMMOBILE) return Failure("You appear to be immobile.")
+
+            // Blocking by mobs is situational, because their position is unpredictable.
+            // The same goes for items, if they are dropped.
+
+            // if (mobs.isNotEmpty()) return Failure("There are mobs in that location.")
+            // if (items.any { it.itemFlags.contains(COLLISION) }) return Failure("There is an item in the way.")
 
             return Point(newSpace)
         }

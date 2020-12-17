@@ -1,5 +1,6 @@
 package com.pbeagan.writer
 
+import com.pbeagan.actions.Action
 import com.pbeagan.data.Mob
 
 class WriteTarget(
@@ -16,6 +17,9 @@ class WriteTarget(
     fun error(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("ERR : ", shouldIndent) }
     fun move(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("MOVE: ", shouldIndent) }
     fun join(s: String, shouldIndent: Boolean = false) = write { s.formatChannel("JOIN: ", shouldIndent) }
+    fun pending(a: Action, shouldIndent: Boolean = false) =
+        write { a::class.java.simpleName.formatChannel("PEND: Pending Action: ", shouldIndent) }
+
     fun horizontalRule() = write { horizontalRule }
     fun turnStart(name: String) {
         write { target ->

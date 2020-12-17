@@ -72,7 +72,10 @@ class Mob constructor(
         when {
             effect.type == ANCESTRY && effects.any { it.type == ANCESTRY } ->
                 sayToRoom.error("Only one Ancestry allowed.")
-            else -> effects = effects + effect
+            else -> {
+                effects = effects + effect
+                sayToRoom.info(effect.descriptionActivation)
+            }
         }
     }
 

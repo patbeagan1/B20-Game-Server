@@ -49,7 +49,7 @@ class PlayerHandler {
                 Debug(target)
             } ?: Retry("Debug what?")
         },
-        "(wait|pass)" to { _ -> Pass },
+        "(wait|pass|end)" to { _ -> Pass },
 
         // INFO
         "l(s|l|ook)?" to { _ -> Look() },
