@@ -30,7 +30,7 @@ class Mob constructor(
     var dodge: Int = 0,
 
     var location: Int = 0,
-    var locationInRoom: Pair<Int, Int> = 0 to 0,
+    var locationInRoom: Pair<Int, Int>,
 
     var visited: MutableSet<Int> = mutableSetOf(0),
     var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,

@@ -1,56 +1,53 @@
 package com.pbeagan.actions
 
 import com.pbeagan.data.Direction
+import com.pbeagan.data.ItemData
 import com.pbeagan.data.Mob
+import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
-import com.pbeagan.data.currentRoomOtherMobsAndSelf
-import com.pbeagan.util.cloneStructure
-import mobs
+
+typealias RoomMap = Array<Array<Triple<Terrain, List<Mob>, List<ItemData>>>>
 
 class LocalMap : Action(), FreeAction {
     override fun invoke(self: Mob) {
-        val mobsAndSelf = self.currentRoomOtherMobsAndSelf(mobs)
         val currentRoom = self.currentRoom()
         val terrain = currentRoom?.terrain ?: return
-        val mobsInRoom = terrain.cloneStructure<Terrain, MutableList<Mob>?> { null }
-
-        mobsAndSelf.forEach { mob ->
-            val (x, y) = mob.locationInRoom
-            writer.debug("${mob.name} ${mob.locationInRoom}")
-            mobsInRoom[y][x]?.add(mob) ?: run { mobsInRoom[y][x] = arrayListOf(mob) }
-        }
-
-        printMap(terrain, self, mobsInRoom, currentRoom.exits)
+        printMap(fillRoomMap(terrain, currentRoom), self, currentRoom.exits)
     }
 
+    private fun fillRoomMap(
+        roomMap: Array<Array<Terrain>>,
+        currentRoom: RoomData
+    ): RoomMap =
+        roomMap.mapIndexed { y, arr ->
+            arr.mapIndexed { x, _ ->
+                currentRoom.getLocation(x to y)
+            }.toTypedArray()
+        }.toTypedArray()
+
     private fun printMap(
-        terrain: Array<Array<Terrain>>,
+        roomMap: RoomMap,
         self: Mob,
-        mobsInRoom: Array<Array<MutableList<Mob>?>>,
         exits: List<RoomDirectionData>
     ) {
         val checkExit = provideCheckExit(exits)
         val horizontalLine = StringBuilder().also { stringBuilder ->
-            repeat((terrain.map { it.size }.max() ?: 0) + 2) { stringBuilder.append("=") }
+            repeat((roomMap.map { it.size }.max() ?: 0) + 2) { stringBuilder.append("=") }
         }.toString()
 
-        checkExit(Direction.NORTH, {}) {
-            writer.sayTo(self).localMap(horizontalLine)
-        }
-        for (y in terrain.size - 1 downTo 0) {
+        checkExit(Direction.NORTH, {}) { writer.sayTo(self).localMap(horizontalLine) }
+        for (y in roomMap.size - 1 downTo 0) {
             val line = StringBuilder()
             checkExit(Direction.WEST, { line.append(' ') }) { line.append("|") }
-            for (x in terrain[y].indices) {
-                getCoordContent(line, x to y, mobsInRoom, terrain)
+            for (x in roomMap[y].indices) {
+                getCoordContent(line, x to y, roomMap)
             }
             checkExit(Direction.EAST, { line.append(' ') }) { line.append("|") }
             writer.sayTo(self).localMap(line.toString())
         }
-        checkExit(Direction.SOUTH, {}) {
-            writer.sayTo(self).localMap(horizontalLine)
-        }
+        checkExit(Direction.SOUTH, {}) { writer.sayTo(self).localMap(horizontalLine) }
     }
 
     private fun provideCheckExit(exits: List<RoomDirectionData>) =
@@ -61,15 +58,17 @@ class LocalMap : Action(), FreeAction {
     private fun getCoordContent(
         line: StringBuilder,
         xy: Pair<Int, Int>,
-        mobsInRoom: Array<Array<MutableList<Mob>?>>,
-        terrain: Array<Array<Terrain>>
+        roomMap: RoomMap
     ) {
         val (x, y) = xy
+        val (terrain, mobs, items) = roomMap[y][x]
         line.append(
-            if (mobsInRoom[y][x]?.isNotEmpty() == true) {
-                mobsInRoom[y][x]?.firstOrNull()?.name?.chars()?.findFirst()?.asInt?.toFormattedChar()
-            } else {
-                terrain[y][x].symbol
+            when {
+                mobs.isNotEmpty() -> {
+                    mobs.firstOrNull()?.name?.chars()?.findFirst()?.asInt?.toFormattedChar()
+                }
+                items.isNotEmpty() -> "@"
+                else -> terrain.symbol
             }
         )
     }

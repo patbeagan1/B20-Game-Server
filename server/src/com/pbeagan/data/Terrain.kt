@@ -14,11 +14,11 @@ object TerrainParser {
         .map { rows ->
             rows.toCharArray().map {
                 when (it) {
-                    Grass.SYMBOL -> Grass()
-                    Pavement.SYMBOL -> Pavement()
-                    Wall.SYMBOL -> Wall()
-                    Water.SYMBOL -> Water()
-                    else -> Grass()
+                    Grass.SYMBOL -> Grass('⾋')
+                    Pavement.SYMBOL -> Pavement('⌬')
+                    Wall.SYMBOL -> Wall('⌼')
+                    Water.SYMBOL -> Water('⍨')
+                    else -> Grass('⾋')
                 }
             }.toTypedArray()
         }.toTypedArray()
@@ -29,10 +29,11 @@ object TerrainParser {
 
 abstract class Terrain {
     abstract val symbol: Char
+    abstract val prettySymbol: Char
     abstract val notTraversableMessage: String?
 }
 
-class Grass : Terrain() {
+class Grass(override val prettySymbol: Char) : Terrain() {
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = null
 
@@ -41,7 +42,7 @@ class Grass : Terrain() {
     }
 }
 
-class Pavement : Terrain() {
+class Pavement(override val prettySymbol: Char) : Terrain() {
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = null
 
@@ -50,7 +51,7 @@ class Pavement : Terrain() {
     }
 }
 
-class Wall : Terrain() {
+class Wall(override val prettySymbol: Char) : Terrain() {
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = "There is a wall there!"
 
@@ -59,7 +60,7 @@ class Wall : Terrain() {
     }
 }
 
-class Water : Terrain() {
+class Water(override val prettySymbol: Char) : Terrain() {
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = "There is water here!"
 

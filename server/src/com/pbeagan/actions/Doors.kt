@@ -10,6 +10,6 @@ class Doors : Action(), FreeAction {
             ?.exits
             ?.joinToString("\n") {
                 "${it.direction}: ${it.preview}"
-            }?.also { writer.sayTo(self).info(it) }
+            }?.also { writer.sayTo(self).door(it) }
     }
 }

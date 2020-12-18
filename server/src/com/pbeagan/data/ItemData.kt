@@ -8,12 +8,11 @@ data class ItemData(
     val id: Int,
     val names: List<String>,
     val descriptionOnExamination: String,
-    val descriptionInRoom: String
+    val descriptionInRoom: String,
+    var locationInRoom: Pair<Int, Int>
 ) {
-    val locationInRoom: Pair<Int, Int> = 0 to 0
     val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
-    val affectedByMagicCurrent: FlagCombined<AffectedByMagic> =
-        createFlagSet()
+    val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = createFlagSet()
     val containsInnerItem: ItemData? = null
     val itemFlags: FlagCombined<ItemFlags> = ItemFlags.default
     val visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultItem
