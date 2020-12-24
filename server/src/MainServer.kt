@@ -4,6 +4,7 @@ import com.pbeagan.site.routers.DemoRouter
 import com.pbeagan.site.routers.ReadDataRouter
 import com.pbeagan.site.routers.UsernameRouter
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.application.log
 import io.ktor.features.CORS
@@ -15,7 +16,10 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.content.default
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
+import io.ktor.response.respondBytes
 import io.ktor.routing.Routing
+import io.ktor.routing.get
+import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.koin.ktor.ext.Koin

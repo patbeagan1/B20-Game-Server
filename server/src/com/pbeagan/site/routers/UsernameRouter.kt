@@ -8,7 +8,7 @@ import org.slf4j.Logger
 import com.pbeagan.site.Router
 import com.pbeagan.site.controllers.UserCommand
 
-class UsernameRouter(val logger: Logger) : Router() {
+class UsernameRouter(private val logger: Logger) : Router() {
     override fun get() = fun Routing.() {
 
         get("/user/{username}/") {
