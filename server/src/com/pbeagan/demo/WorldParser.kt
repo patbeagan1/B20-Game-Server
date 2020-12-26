@@ -16,9 +16,7 @@ object WorldParser {
                 when {
                     it.startsWith("name=") -> builder.name = it.substringAfter("name=")
                     it.startsWith("exit=") -> builder.exits.add(
-                        RoomDirectionData.from(
-                            it
-                        )
+                        RoomDirectionData.from(it)
                     )
                 }
             }

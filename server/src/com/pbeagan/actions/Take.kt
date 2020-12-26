@@ -14,7 +14,7 @@ class Take(private val item: ItemData) : Action() {
                 ?.let {
                     self.items.add(it)
                     self.currentRoom()?.items?.remove(it)
-                    writer.sayToRoomOf(self).info("${self.name} picked up the ${it.names[0]}")
+                    writer.sayToRoomOf(self).info("${self.nameStyled} picked up the ${it.nameStyled}")
                 }
     }
 

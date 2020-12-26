@@ -7,6 +7,9 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
+import com.pbeagan.writer.TerminalColorStyle.Colors.Red
+import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright
+import com.pbeagan.writer.TerminalColorStyle.style
 
 typealias RoomMap = Array<Array<Triple<Terrain, List<Mob>, List<ItemData>>>>
 
@@ -34,20 +37,20 @@ class LocalMap : Action(), FreeAction {
     ) {
         val checkExit = provideCheckExit(exits)
         val horizontalLine = StringBuilder().also { stringBuilder ->
-            repeat((roomMap.map { it.size }.max() ?: 0) + 2) { stringBuilder.append("=") }
+            repeat((roomMap.map { it.size }.max() ?: 0)) { stringBuilder.append("═") }
         }.toString()
 
-        checkExit(Direction.NORTH, {}) { writer.sayTo(self).localMap(horizontalLine) }
+        checkExit(Direction.NORTH, {}) { writer.sayTo(self).localMap("╔$horizontalLine╗") }
         for (y in roomMap.size - 1 downTo 0) {
             val line = StringBuilder()
-            checkExit(Direction.WEST, { line.append(' ') }) { line.append("|") }
+            checkExit(Direction.WEST, { line.append(' ') }) { line.append("║") }
             for (x in roomMap[y].indices) {
                 getCoordContent(line, x to y, roomMap)
             }
-            checkExit(Direction.EAST, { line.append(' ') }) { line.append("|") }
+            checkExit(Direction.EAST, { line.append(' ') }) { line.append("║") }
             writer.sayTo(self).localMap(line.toString())
         }
-        checkExit(Direction.SOUTH, {}) { writer.sayTo(self).localMap(horizontalLine) }
+        checkExit(Direction.SOUTH, {}) { writer.sayTo(self).localMap("╚$horizontalLine╝") }
     }
 
     private fun provideCheckExit(exits: List<RoomDirectionData>) =
@@ -65,10 +68,15 @@ class LocalMap : Action(), FreeAction {
         line.append(
             when {
                 mobs.isNotEmpty() -> {
-                    mobs.firstOrNull()?.name?.chars()?.findFirst()?.asInt?.toFormattedChar()
+                    mobs.firstOrNull()?.nameBase?.chars()
+                        ?.findFirst()
+                        ?.asInt
+                        ?.toFormattedChar()
+                        ?.toString()
+                        ?.style(YellowBright, terrain.style.colorBackground)
                 }
-                items.isNotEmpty() -> "@"
-                else -> terrain.symbol
+                items.isNotEmpty() -> "*".style(Red, terrain.style.colorBackground)
+                else -> terrain.prettySymbol.style(terrain.style)
             }
         )
     }

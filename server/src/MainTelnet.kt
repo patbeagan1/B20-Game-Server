@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
     runBlocking {
         val server = aSocket(ActorSelectorManager(Dispatchers.IO))
             .tcp()
-            .bind(InetSocketAddress("127.0.0.1", 2323))
+            .bind(InetSocketAddress("127.0.0.1", 2324))
         println("Started echo telnet server at ${server.localAddress}")
 
         val writer: Writer = WriterImpl()
@@ -50,7 +50,7 @@ fun main(args: Array<String>) {
 
                 writer.sayTo(player).run {
                     horizontalRule()
-                    system("Welcome, ${player.name}!")
+                    system("Welcome, ${player.nameStyled}!")
                     horizontalRule()
                 }
 

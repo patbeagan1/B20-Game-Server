@@ -17,11 +17,11 @@ abstract class Action {
     lateinit var writer: Writer
 
     fun damageResolution(target: Mob, damage: Int) {
-        writer.sayToRoomOf(target).combat("${target.name} was hit for $damage damage!")
+        writer.sayToRoomOf(target).combat("${target.nameStyled} was hit for $damage damage!")
         target.hearts -= damage
-        writer.sayToRoomOf(target).combat("${target.name} is down to ${target.hearts} hp!")
+        writer.sayToRoomOf(target).combat("${target.nameStyled} is down to ${target.hearts} hp!")
         if (target.hearts < 0) {
-            writer.sayToAll().dead("${target.name} has died.")
+            writer.sayToAll().dead("${target.nameStyled} has died.")
         }
     }
 

@@ -3,6 +3,8 @@ package com.pbeagan.data
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.createFlagSet
 import com.pbeagan.util.startsWith
+import com.pbeagan.writer.TerminalColorStyle.Colors.Cyan
+import com.pbeagan.writer.TerminalColorStyle.style
 
 data class ItemData(
     val id: Int,
@@ -11,6 +13,7 @@ data class ItemData(
     val descriptionInRoom: String,
     var locationInRoom: Pair<Int, Int>
 ) {
+    val nameStyled: String = names.first().style(colorForeground = Cyan)
     val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
     val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = createFlagSet()
     val containsInnerItem: ItemData? = null

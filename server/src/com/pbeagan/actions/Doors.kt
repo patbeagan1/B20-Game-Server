@@ -8,8 +8,8 @@ class Doors : Action(), FreeAction {
     private fun doors(self: Mob) {
         self.currentRoom()
             ?.exits
-            ?.joinToString("\n") {
-                "${it.direction}: ${it.preview}"
-            }?.also { writer.sayTo(self).door(it) }
+            ?.forEach {
+                writer.sayTo(self).door(it.direction, it.preview)
+            }
     }
 }

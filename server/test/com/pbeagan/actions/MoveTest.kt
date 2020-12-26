@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class MoveTest {
 
     val move = Move.forceMove(Direction.NORTH)
-    val terrain = Array(8) { Array<Terrain>(8) { Grass('"') } }
+    val terrain = Array(8) { Array<Terrain>(8) { Grass("\"") } }
 
     @Test
     fun `check surroundings alternates between north and south`() {

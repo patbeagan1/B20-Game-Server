@@ -12,11 +12,13 @@ import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.writer.Reader
+import com.pbeagan.writer.TerminalColorStyle
+import com.pbeagan.writer.TerminalColorStyle.style
 import com.pbeagan.writer.UniqueId
 import com.pbeagan.writer.Writer
 
 class Mob constructor(
-    val name: String,
+    val nameBase: String,
     val description: Description,
     var action: Action = Pass,
     var actionMove: Move? = null,
@@ -56,6 +58,7 @@ class Mob constructor(
     override val durability: Int get() = effects.sumBy { it.durability }
     override val totalHearts: Int get() = endurance.mod() + effects.sumBy { it.totalHearts }
 
+    val nameStyled = nameBase.style(colorForeground = TerminalColorStyle.Colors.Yellow)
     var preferredAttack: AttackType = MELEE
     val idForIO: Int = UniqueId.get()
     var hearts by BoundedValue(totalHearts, 0..totalHearts)

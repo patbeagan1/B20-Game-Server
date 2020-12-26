@@ -11,7 +11,7 @@ class Drop(private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {
         self.currentRoom()?.items?.add(item)
         self.items.remove(item)
-        writer.sayToRoomOf(self).info("${self.name} dropped the ${item.names[0]}")
+        writer.sayToRoomOf(self).info("${self.nameStyled} dropped the ${item.nameStyled}")
     }
 
     companion object {

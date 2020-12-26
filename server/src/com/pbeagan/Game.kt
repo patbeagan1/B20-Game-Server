@@ -108,9 +108,9 @@ Note, you can pass your turn to continue the action."""
     ) {
         if (isPlayer && reader.isActive(this)) {
             if (action == Inactive) {
-                writer.sayToAll().join("$name has joined the game!")
+                writer.sayToAll().join("$nameStyled has joined the game!")
             }
-            writer.sayToAll().turnStart(name)
+            writer.sayToAll().turnStart(nameStyled)
         }
     }
 

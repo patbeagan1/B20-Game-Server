@@ -28,6 +28,6 @@ fun Mob.getRandomVisibleItem(): ItemData? =
 
 fun Mob.target(targetName: String): Mob? = this
     .currentRoomOtherMobs(SampleData.mobs)
-    .firstOrNull { it.name.startsWith(targetName) }
+    .firstOrNull { it.nameBase.startsWith(targetName) }
 
-fun Mob.formatHP() = "${this.name}(${this.hearts} hp)"
+fun Mob.formatHP() = "${this.nameStyled}(${this.hearts} hp)"

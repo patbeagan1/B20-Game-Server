@@ -1,7 +1,6 @@
 package com.pbeagan
 
 import com.pbeagan.data.Mob
-import com.pbeagan.data.MobBehavior
 import io.ktor.util.cio.write
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
@@ -22,7 +21,7 @@ class Account {
             val line = input.readUTF8Line()
 
             mobs.firstOrNull {
-                it.isPlayer && it.name.toLowerCase() == line?.toLowerCase()
+                it.isPlayer && it.nameBase.toLowerCase() == line?.toLowerCase()
             }?.also {
                 return it
             } ?: writer.write("Sorry, no players like that here...")

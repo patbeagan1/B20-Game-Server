@@ -1,11 +1,10 @@
 package com.pbeagan.actions
 
-import com.pbeagan.demo.SampleData
 import com.pbeagan.data.Mob
+import com.pbeagan.demo.SampleData
 import rooms
 
-class Debug(private val target: String) : Action(),
-    FreeAction {
+class Debug(private val target: String) : Action(), FreeAction {
 
     override fun invoke(self: Mob) {
         searchMobs(self) ?: searchMobItems(self) ?: searchRoomItems(self)
@@ -24,7 +23,7 @@ class Debug(private val target: String) : Action(),
     }
 
     private fun searchMobs(self: Mob): Unit? = SampleData.mobs.firstOrNull {
-        it.name.toLowerCase() == target.toLowerCase()
+        it.nameBase.toLowerCase() == target.toLowerCase()
     }?.let { currentMob ->
         writer.sayTo(self).run {
             info(currentMob.toString())

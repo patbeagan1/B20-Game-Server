@@ -1,6 +1,8 @@
 package com.pbeagan.data
 
-data class EffectImpl(
+abstract class EffectImpl(effect: Effect): Effect by effect
+
+data class EffectBase(
     // Expiry - the only var
     // This stat block will be removed when the expiry reaches 0
     override val name: String,

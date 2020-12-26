@@ -16,6 +16,10 @@ object TerminalColorStyle {
      */
     const val RIS = "${ESC}c"
 
+    const val DOTS_LOW = '░'
+    const val DOTS_MED = '▒'
+    const val DOTS_HIGH = '▓'
+
     sealed class Colors(val foreground: String, val background: String) {
         object Default : Colors("39", "49")
         object White : Colors("30", "40")
@@ -76,6 +80,10 @@ object TerminalColorStyle {
     ): String = this.style(colorForeground, colorBackground, arrayOf(sgr))
 
     fun String.style(
+        style: TerminalStyle
+    ): String = this.style(style.colorForeground, style.colorBackground, style.sgr)
+
+    fun String.style(
         colorForeground: Colors = Colors.Default,
         colorBackground: Colors = Colors.Default,
         sgr: Array<SGR>
@@ -86,4 +94,10 @@ object TerminalColorStyle {
             "$CSI${sgr.joinToString(";") { it.disable.toString() }};${Colors.Default.foreground};${Colors.Default.background}m"
         return startColor + this + endColor
     }
+
+    data class TerminalStyle(
+        val colorForeground: Colors = Colors.Default,
+        val colorBackground: Colors = Colors.Default,
+        val sgr: SGR = SGR.Normal
+    )
 }

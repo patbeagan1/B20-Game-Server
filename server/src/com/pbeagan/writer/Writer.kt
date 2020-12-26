@@ -34,7 +34,7 @@ class WriterImpl : Writer, WriterInternal {
         if (byteWriteChannel == null || byteWriteChannel.isClosedForWrite) {
             outputs.remove(mob.idForIO)
         } else {
-            debug("Writing: ${mob.name} // $byteWriteChannel")
+            debug("Writing: ${mob.nameStyled} // $byteWriteChannel")
             try {
                 runBlocking { byteWriteChannel.write("${s(mob)}\n") }
             } catch (e: IOException) {

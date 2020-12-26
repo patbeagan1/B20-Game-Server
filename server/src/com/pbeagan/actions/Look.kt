@@ -10,11 +10,11 @@ class Look : Action(), FreeAction {
 
     private fun look(self: Mob, mobs: List<Mob>) = self.currentRoom()?.let { room ->
 
-        writer.sayTo(self).system(room.descriptionLook)
+        writer.sayTo(self).look(room.descriptionLook)
 
         // Mobs in the current room
         self.currentRoomOtherMobs(mobs).joinToString("\n") {
-            "${it.name} is here - ${it.description.onLook(it.behavior)}"
+            "${it.nameStyled} is here - ${it.description.onLook(it.behavior)}"
         }.takeIf { it.isNotBlank() }?.also {
             writer.sayTo(self).info(it)
         }

@@ -2,6 +2,7 @@ package com.pbeagan.actions
 
 import com.pbeagan.actions.MultiRoundActionDelegate.MultiRoundAction
 import com.pbeagan.data.Effect
+import com.pbeagan.data.EffectBase
 import com.pbeagan.data.EffectImpl
 import com.pbeagan.data.Mob
 import com.pbeagan.data.target
@@ -13,23 +14,15 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
     override val isComplete: Boolean get() = delegate.isComplete
 
     override fun onStart(self: Mob) {
-        writer.sayToRoomOf(self).combat("${self.name} is attempting to Curse ${target.name}")
+        writer.sayToRoomOf(self).combat("${self.nameStyled} is attempting to Curse ${target.nameStyled}")
     }
 
     override fun onDuring(self: Mob) {
-        writer.sayToRoomOf(self).combat("${self.name} is attempting to Curse ${target.name}")
+        writer.sayToRoomOf(self).combat("${self.nameStyled} is attempting to Curse ${target.nameStyled}")
     }
 
     override fun onComplete(self: Mob) {
-        val effect = EffectImpl(
-            roundsLeft = 1,
-            totalHearts = -10,
-            descriptionActivation = "${target.name} has been cursed by ${self.name}!",
-            descriptionDeactivation = "The curse on ${target.name} has worn off.",
-            name = "Curse",
-            type = Effect.Type.SPELL
-        )
-        target.addEffect(writer, effect)
+        target.addEffect(writer, CurseEffect(target.nameStyled, self.nameStyled))
     }
 
     companion object {
@@ -38,4 +31,15 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
             return Curse(target)
         }
     }
+
+    class CurseEffect(nameTarget: String, nameCaster: String) : EffectImpl(
+        EffectBase(
+            roundsLeft = 1,
+            totalHearts = -10,
+            descriptionActivation = "$nameTarget has been cursed by $nameCaster!",
+            descriptionDeactivation = "The curse on $nameTarget has worn off.",
+            name = "Curse",
+            type = Effect.Type.SPELL
+        )
+    )
 }

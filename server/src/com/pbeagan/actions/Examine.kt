@@ -16,7 +16,7 @@ class Examine(private val targetName: String) : Action(), FreeAction {
     private fun examineMob(self: Mob, targetName: String): Unit? {
         val mob = self
             .currentRoomOtherMobs(mobs)
-            .firstOrNull { it.name.startsWith(targetName) }
+            .firstOrNull { it.nameBase.startsWith(targetName) }
             ?: return null
         return mob.ancestry?.let { ancestry ->
             writer.sayTo(self).info(mob.description.onExamine(ancestry))
@@ -29,6 +29,6 @@ class Examine(private val targetName: String) : Action(), FreeAction {
             ?.firstOrNull { it.nameStartsWith(itemName) }
         return itemData
             ?.descriptionOnExamination
-            ?.also { writer.sayTo(self).info("${itemData.names.first()}: $it") }
+            ?.also { writer.sayTo(self).info("${itemData.nameStyled}: $it") }
     }
 }

@@ -22,7 +22,7 @@ class Reader(private val writer: Writer) {
             return null
         }
 
-        writer.debug("Reading: ${player.name} // $byteReadChannel")
+        writer.debug("Reading: ${player.nameStyled} // $byteReadChannel")
 
         return runBlocking {
             try {
@@ -39,6 +39,6 @@ class Reader(private val writer: Writer) {
 
     private fun remove(player: Mob) {
         inputs.remove(player.idForIO)
-        writer.debug("Reader Removed ${player.name}")
+        writer.debug("Reader Removed ${player.nameStyled}")
     }
 }

@@ -11,7 +11,7 @@ class Give(private val target: Mob, private val item: ItemData) : Action() {
     override fun invoke(self: Mob) {
         self.items.remove(item)
         target.items.add(item)
-        writer.sayTo(self, target).info("${self.name} gave ${target.name} a ${item.names[0]}")
+        writer.sayTo(self, target).info("${self.nameStyled} gave ${target.nameStyled} a ${item.nameStyled}")
     }
 
     companion object {
@@ -27,7 +27,7 @@ class Give(private val target: Mob, private val item: ItemData) : Action() {
             val mob = self
                 .currentRoomOtherMobs(SampleData.mobs)
                 .also { println(it) }
-                .firstOrNull { target.startsWith(it.name) }
+                .firstOrNull { target.startsWith(it.nameBase) }
                 ?: return Retry("$target isn't here")
             return Give(mob, itemData)
         }

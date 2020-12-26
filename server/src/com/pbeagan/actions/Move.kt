@@ -17,7 +17,6 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
-import com.pbeagan.util.boundBy
 import com.pbeagan.util.exhaustive
 
 class Move private constructor(private val direction: Direction) : Action() {
@@ -36,7 +35,7 @@ class Move private constructor(private val direction: Direction) : Action() {
         room: RoomDirectionData,
         direction: Direction
     ) {
-        writer.sayToRoomOf(self).move("${self.name} left ${this.direction.name}")
+        writer.sayToRoomOf(self).move("${self.nameStyled} left ${this.direction.name}")
         self.location = room.destinationID
         val (x, y) = self.locationInRoom
         val currentRoom = self.currentRoom() ?: return
@@ -58,7 +57,7 @@ class Move private constructor(private val direction: Direction) : Action() {
             self.locationInRoom = it
         }
 
-        writer.sayToRoomOf(self).move("${self.name} arrived from ${this.direction.inverse().name}")
+        writer.sayToRoomOf(self).move("${self.nameStyled} arrived from ${this.direction.inverse().name}")
 
         recordVisit(self)
 
@@ -73,8 +72,8 @@ class Move private constructor(private val direction: Direction) : Action() {
         currentRoom: RoomData,
         y: Int
     ): Pair<Int, Int> {
-        val boundX = x.boundBy(0..currentRoom.terrain.first().size)
-        val boundY = y.boundBy(0..currentRoom.terrain.size)
+        val boundX = (0..currentRoom.terrain.first().size).average().toInt()
+        val boundY = (0..currentRoom.terrain.size).average().toInt()
         return when (direction) {
             NORTH -> boundX to 0
             SOUTH -> boundX to currentRoom.height - 1
