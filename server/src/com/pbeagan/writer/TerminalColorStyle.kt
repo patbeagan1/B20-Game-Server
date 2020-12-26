@@ -19,8 +19,8 @@ object TerminalColorStyle {
     sealed class Colors(val foreground: String, val background: String) {
         object Default : Colors("39", "49")
         object White : Colors("30", "40")
-        object Black_1 : Colors("37", "47")
-        object Black_2 : Colors("90", "100")
+        object Black2 : Colors("37", "47")
+        object Black1 : Colors("90", "100")
         object Black : Colors("97", "107")
         object Blue : Colors("34", "44")
         object BlueBright : Colors("94", "104")
@@ -39,17 +39,24 @@ object TerminalColorStyle {
     }
 
     // Select Graphic Rendition
-    enum class SGR(val value: Int) {
-        RESET(0),
-        BOLD(1),
-        DIM(2),
-        ITALIC(3),
-        UNDERLINE(4),
-        NORMAL(22),
-        FRAMED(51),
-        SUPERSCRIPT(73),
-        SUBSCRIPT(74),
-        BLINK(5);
+    sealed class SGR(val enable: Int, val disable: Int? = 0) {
+        object RESET : SGR(0)
+        object Bold : SGR(1)
+        object Dim : SGR(2)
+        object Italic : SGR(3)
+        object Underline : SGR(4)
+        object Blink : SGR(5, 25)
+        object Concealed : SGR(8, 28)
+        object StrikeThrough : SGR(9, 29)
+        object UnderlineDoubled : SGR(21)
+        object Normal : SGR(22)
+        object Framed : SGR(51, 54)
+        object Encircled : SGR(52, 54)
+        object Superscript : SGR(73)
+        object Subscript : SGR(74)
+
+        fun enableString() = "$CSI${this.enable}m"
+        fun disableString() = "$CSI${this.disable}m"
     }
 
     fun colorIntToARGB(color: Int): ARGB {
@@ -65,10 +72,18 @@ object TerminalColorStyle {
     fun String.style(
         colorForeground: Colors = Colors.Default,
         colorBackground: Colors = Colors.Default,
-        sgr: SGR = SGR.NORMAL
+        sgr: SGR = SGR.Normal
+    ): String = this.style(colorForeground, colorBackground, arrayOf(sgr))
+
+    fun String.style(
+        colorForeground: Colors = Colors.Default,
+        colorBackground: Colors = Colors.Default,
+        sgr: Array<SGR>
     ): String {
-        val startColor = "$CSI${sgr.value};${colorForeground.foreground};${colorBackground.background}m"
-        val endColor = "$CSI${SGR.RESET.value};${Colors.Default.foreground};${Colors.Default.background}m"
+        val startColor =
+            "$CSI${sgr.joinToString(";") { it.enable.toString() }};${colorForeground.foreground};${colorBackground.background}m"
+        val endColor =
+            "$CSI${sgr.joinToString(";") { it.disable.toString() }};${Colors.Default.foreground};${Colors.Default.background}m"
         return startColor + this + endColor
     }
 }

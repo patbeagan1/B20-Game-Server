@@ -13,17 +13,10 @@ import org.junit.Test
 
 internal class TerminalColorStyleTest {
 
-//    Colors.values().forEach { println("bold" + it.name.style(it, Colors.Default, SGR.BOLD) + "test") }
-//    Colors.values().forEach {
-//        (it.name.style(colorBackground = it) + "test").also { println(it) }
-//    }
-//    Colors.values().forEach { (it.name.style(colorBackground = it, sgr = SGR.BOLD) + "test").also { println(it) } }
-//    Colors.values().forEach { (it.name.style(colorBackground = it, sgr = SGR.ITALIC) + "test").also { println(it) } }
-
     @Test
     fun demoSGRValues() {
-        SGR.values().forEach {
-            println(it.name.style(sgr = it))
+        SGR::class.sealedSubclasses.forEach {
+            println(it.simpleName?.style(sgr = it.objectInstance!!))
         }
     }
 
@@ -36,10 +29,10 @@ internal class TerminalColorStyleTest {
     fun demoInlineUsage() {
         println("Todd wanted a ${"blue".style(Blue)} car")
         println(
-            "Todd ${"wanted".style(sgr = SGR.ITALIC)} a ${"redOnGreen".style(
+            "Todd ${"wanted".style(sgr = SGR.Italic)} a ${"redOnGreen".style(
                 Red,
                 Green,
-                SGR.BOLD
+                SGR.Bold
             )} car"
         )
     }
@@ -51,6 +44,17 @@ internal class TerminalColorStyleTest {
                 println(name.style(color) + "test")
             }
         }
+    }
+
+    @Test
+    fun demoInlineSGR() {
+        SGR::class.sealedSubclasses.forEach {
+            safeLet(it.simpleName, it.objectInstance) { name, sgr ->
+                println("test${name.style(sgr = sgr)}test")
+            }
+        }
+        println()
+        println("1test${SGR.Underline.enableString()}2test${"3test".style(sgr = arrayOf(SGR.Bold, SGR.Framed))}4test")
     }
 
     @Test
@@ -69,5 +73,4 @@ internal class TerminalColorStyleTest {
             println("${ESC}[38;2;$it;$it;${it}m test" + " ".style(colorBackground = Custom(it, it, it)))
         }
     }
-
 }

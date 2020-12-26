@@ -22,16 +22,8 @@ class ImagePrinter {
                     UP_DOWN -> "▄"
                     DOTS -> "▓"
                 }.style(
-                    colorBackground = if (a == 0) Colors.Custom(g = 255) else Colors.Custom(
-                        r,
-                        g,
-                        b
-                    ),
-                    colorForeground = if (a1 == 0) Colors.Custom(g = 255) else Colors.Custom(
-                        r1,
-                        g1,
-                        b1
-                    )
+                    colorBackground = if (a == 0) Colors.Custom(g = 255) else Colors.Custom(r, g, b),
+                    colorForeground = if (a1 == 0) Colors.Custom(g = 255) else Colors.Custom(r1, g1, b1)
                 ).also { print(it) }
             }
             println()

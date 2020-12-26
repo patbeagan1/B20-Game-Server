@@ -34,7 +34,7 @@ internal class ImagePrinterTest {
 
     @Test
     fun `sizedown sampling comparison`() {
-        val read = ImageIO.read(File("/Users/pbeagan/Downloads/scene.png"))
+        val read = ImageIO.read(File("/Users/pbeagan/Downloads/lenna.png"))
         listOf(
             Image.SCALE_DEFAULT,
             Image.SCALE_FAST,
@@ -44,9 +44,9 @@ internal class ImagePrinterTest {
         ).forEach {
             val width = read.width
             val height = read.height
-            val aspectRatio = width / height
+            val aspectRatio = width.toDouble() / height.toDouble()
             val maxDimen = 100
-            read.getScaledInstance(maxDimen * aspectRatio, maxDimen, it)
+            read.getScaledInstance((maxDimen * aspectRatio).toInt(), maxDimen, it)
                 .convertToBufferedImage()
                 ?.also { bufferedImage -> imagePrinter.printImageCompressed(bufferedImage, ImagePrinter.CompressionStyle.DOTS) }
         }
