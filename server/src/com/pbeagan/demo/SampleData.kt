@@ -3,7 +3,13 @@ package com.pbeagan.demo
 import com.pbeagan.ancestry.Goblin
 import com.pbeagan.ancestry.Hobgoblin
 import com.pbeagan.ancestry.Human
-import com.pbeagan.data.Direction
+import com.pbeagan.data.Direction.DOWN
+import com.pbeagan.data.Direction.EAST
+import com.pbeagan.data.Direction.NORTH
+import com.pbeagan.data.Direction.SOUTH
+import com.pbeagan.data.Direction.UP
+import com.pbeagan.data.Direction.WEST
+import com.pbeagan.data.Exits
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
@@ -65,17 +71,16 @@ object SampleData {
             0,
             name = "The Front Porch",
             descriptionLook = "The front porch of Liz's house",
-            exits = listOf(
-                RoomDirectionData(
-                    Direction.EAST,
-                    1,
-                    "The Road"
-                ),
-                RoomDirectionData(
-                    Direction.WEST,
-                    3,
-                    "There is a door leading inside"
-                )
+            descriptionPreview = {
+                when (it) {
+                    NORTH, SOUTH, UP, DOWN -> TODO()
+                    EAST -> "You see a door leading outside."
+                    WEST -> "You see a safe area ahead"
+                }
+            },
+            exits = Exits(
+                east = RoomDirectionData(1),
+                west = RoomDirectionData(3)
             ),
             terrainString = """
                 ''''''''
@@ -123,17 +128,18 @@ object SampleData {
             1,
             name = "The Road",
             descriptionLook = "A portal to new places",
-            exits = listOf(
-                RoomDirectionData(
-                    Direction.WEST,
-                    0,
-                    "The safest place around"
-                ),
-                RoomDirectionData(
-                    Direction.NORTH,
-                    2,
-                    "In the distance you see an ice field."
-                )
+            descriptionPreview = {
+                when (it) {
+                    EAST, SOUTH -> "You see a road in this direction"
+                    WEST -> TODO()
+                    UP -> TODO()
+                    NORTH -> TODO()
+                    DOWN -> TODO()
+                }
+            },
+            exits = Exits(
+                west = RoomDirectionData(0),
+                north = RoomDirectionData(2)
             ),
             terrainString = """
             ''''-'''
@@ -149,17 +155,10 @@ object SampleData {
             2,
             name = "A bridge across the fjord",
             descriptionLook = "A sturdy metal bridge spans the gap between two fissures in an icy field.",
-            exits = listOf(
-                RoomDirectionData(
-                    Direction.SOUTH,
-                    1,
-                    "There is a road to the south."
-                ),
-                RoomDirectionData(
-                    Direction.NORTH,
-                    4,
-                    "There is a road to the north."
-                )
+            descriptionPreview = { "There is a bridge in this direction." },
+            exits = Exits(
+                south = RoomDirectionData(1),
+                north = RoomDirectionData(4)
             ),
             terrainString = """
                 ''''''--''''''
@@ -176,12 +175,9 @@ object SampleData {
             4,
             name = "A vast plain",
             descriptionLook = "A large, open area lies before you. There is nothing here but earth, sky and wind.",
-            exits = listOf(
-                RoomDirectionData(
-                    Direction.SOUTH,
-                    2,
-                    "There is a road to the south."
-                )
+            descriptionPreview = { "A gust of wind comes in from this direction" },
+            exits = Exits(
+                south = RoomDirectionData(2)
             ),
             terrainString = """
                 ''''''''''''''''''''''''''''''''''''''''''''''
@@ -204,12 +200,18 @@ object SampleData {
             3,
             name = "The Kitchen",
             descriptionLook = "A metal table is laden with various fruits and vegetables.",
-            exits = listOf(
-                RoomDirectionData(
-                    Direction.EAST,
-                    0,
-                    "There is a door leading outside"
-                )
+            descriptionPreview = {
+                when (it) {
+                    NORTH -> TODO()
+                    EAST -> TODO()
+                    SOUTH -> TODO()
+                    WEST -> "There is a door leading inside"
+                    UP -> TODO()
+                    DOWN -> TODO()
+                }
+            },
+            exits = Exits(
+                east = RoomDirectionData(0)
             ),
             items = mutableListOf(
                 ItemData(
@@ -220,7 +222,8 @@ object SampleData {
                     descriptionOnExamination = "A polished red apple. It looks good enough to eat!",
                     descriptionInRoom = "There is an apple in a basket on the table",
                     locationInRoom = 1 to 1
-                ).apply {
+                ).apply
+                {
                     setItemFlags(
                         ItemFlags.CONSUMABLE,
                         object : ItemData.FlagHandler {

@@ -1,10 +1,14 @@
 package com.pbeagan.actions
 
 import com.pbeagan.data.Direction
+import com.pbeagan.data.Direction.EAST
+import com.pbeagan.data.Direction.NORTH
+import com.pbeagan.data.Direction.SOUTH
+import com.pbeagan.data.Direction.WEST
+import com.pbeagan.data.Exits
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.Mob
 import com.pbeagan.data.RoomData
-import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.writer.TerminalColorStyle.Colors.Red
@@ -13,7 +17,7 @@ import com.pbeagan.writer.TerminalColorStyle.style
 
 typealias RoomMap = Array<Array<Triple<Terrain, List<Mob>, List<ItemData>>>>
 
-class LocalMap : Action(), FreeAction {
+class MapLocal : Action(), FreeAction {
     override fun invoke(self: Mob) {
         val currentRoom = self.currentRoom()
         val terrain = currentRoom?.terrain ?: return
@@ -33,29 +37,29 @@ class LocalMap : Action(), FreeAction {
     private fun printMap(
         roomMap: RoomMap,
         self: Mob,
-        exits: List<RoomDirectionData>
+        exits: Exits
     ) {
         val checkExit = provideCheckExit(exits)
         val horizontalLine = StringBuilder().also { stringBuilder ->
             repeat((roomMap.map { it.size }.max() ?: 0)) { stringBuilder.append("═") }
         }.toString()
 
-        checkExit(Direction.NORTH, {}) { writer.sayTo(self).localMap("╔$horizontalLine╗") }
+        checkExit(NORTH, {}) { writer.sayTo(self).localMap("╔$horizontalLine╗") }
         for (y in roomMap.size - 1 downTo 0) {
             val line = StringBuilder()
-            checkExit(Direction.WEST, { line.append(' ') }) { line.append("║") }
+            checkExit(WEST, { line.append(' ') }) { line.append("║") }
             for (x in roomMap[y].indices) {
                 getCoordContent(line, x to y, roomMap)
             }
-            checkExit(Direction.EAST, { line.append(' ') }) { line.append("║") }
+            checkExit(EAST, { line.append(' ') }) { line.append("║") }
             writer.sayTo(self).localMap(line.toString())
         }
-        checkExit(Direction.SOUTH, {}) { writer.sayTo(self).localMap("╚$horizontalLine╝") }
+        checkExit(SOUTH, {}) { writer.sayTo(self).localMap("╚$horizontalLine╝") }
     }
 
-    private fun provideCheckExit(exits: List<RoomDirectionData>) =
+    private fun provideCheckExit(exits: Exits) =
         { direction: Direction, successAction: () -> Unit, failAction: () -> Unit ->
-            if (exits.any { it.direction == direction }) successAction() else failAction()
+            if (exits.get(direction) != null) successAction() else failAction()
         }
 
     private fun getCoordContent(

@@ -9,8 +9,8 @@ fun Mob.currentRoom() =
     rooms[location]
 
 fun Mob.adjacentOrCurrentRoom() =
-    rooms[location]?.exits
-        ?.map { it.destinationID }
+    rooms[location]?.exits?.asList
+        ?.map { it.second.destinationID }
         ?.let { it + location }
         ?.map { rooms[it] }
 

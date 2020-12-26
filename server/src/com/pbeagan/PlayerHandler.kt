@@ -10,7 +10,7 @@ import com.pbeagan.actions.Examine
 import com.pbeagan.actions.Give
 import com.pbeagan.actions.Inactive
 import com.pbeagan.actions.Inventory
-import com.pbeagan.actions.LocalMap
+import com.pbeagan.actions.MapLocal
 import com.pbeagan.actions.Look
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
@@ -55,7 +55,7 @@ class PlayerHandler {
         "l(s|l|ook)?" to { _ -> Look() },
         "do(or(s)?)?" to { _ -> Doors() },
         "exit(s)?" to { _ -> Doors() },
-        "m(ap)?" to { _ -> LocalMap() },
+        "m(ap)?" to { _ -> MapLocal() },
         "ex(amine)?$ARG" to { i ->
             safeLet(i.getOrNull(2)) { target ->
                 Examine(target)

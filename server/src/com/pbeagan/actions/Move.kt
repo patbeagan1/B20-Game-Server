@@ -191,9 +191,8 @@ class Move private constructor(private val direction: Direction) : Action() {
             DOWN -> INVALID_MOVE
         }
 
-        private fun getNextRoom(self: Mob, direction: Direction) = self.currentRoom()
-            ?.exits
-            ?.firstOrNull { it.direction == direction }
+        private fun getNextRoom(self: Mob, direction: Direction) =
+            self.currentRoom()?.exits?.get(direction)
 
         private fun recordVisit(self: Mob) {
             val visited = self.visited
