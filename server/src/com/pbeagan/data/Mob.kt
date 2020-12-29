@@ -7,6 +7,10 @@ import com.pbeagan.ancestry.Ancestry
 import com.pbeagan.ancestry.Human
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.Effect.Type.ANCESTRY
+import com.pbeagan.data.Lighting.BRIGHT
+import com.pbeagan.data.Lighting.DARK
+import com.pbeagan.data.Lighting.DIM
+import com.pbeagan.data.Lighting.NONE
 import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
@@ -56,7 +60,11 @@ class Mob constructor(
     override val precision: Int get() = effects.sumBy { it.precision }
     override val endurance: Int get() = effects.sumBy { it.endurance }
     override val durability: Int get() = effects.sumBy { it.durability }
-    override val totalHearts: Int get() = endurance.mod() + effects.sumBy { it.totalHearts }
+    override val totalHearts: Int get() = effects.sumBy { it.totalHearts } + endurance.mod()
+    override val visionBright: Int get() = effects.sumBy { it.visionBright }
+    override val visionDim: Int get() = effects.sumBy { it.visionDim }
+    override val visionDark: Int get() = effects.sumBy { it.visionDark }
+    override val visionNone: Int get() = effects.sumBy { it.visionNone }
 
     val nameStyled = nameBase.style(colorForeground = TerminalColorStyle.Colors.Yellow)
     var preferredAttack: AttackType = MELEE
@@ -68,6 +76,13 @@ class Mob constructor(
     interface Description {
         fun onExamine(ancestry: Ancestry): String = "A fine example of a ${ancestry::class.java.simpleName}"
         fun onLook(behavior: MobBehavior) = behavior.descriptionDefault
+    }
+
+    fun visionRange(lighting: Lighting) = when (lighting) {
+        BRIGHT -> 100
+        DIM -> TODO()
+        DARK -> TODO()
+        NONE -> TODO()
     }
 
     fun addEffect(writer: Writer, effect: Effect) {

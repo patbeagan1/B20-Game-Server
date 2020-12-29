@@ -1,5 +1,7 @@
 package com.pbeagan.writer
 
+import kotlin.random.Random
+
 object TerminalColorStyle {
     /**
      * Terminal escape sequence
@@ -38,7 +40,17 @@ object TerminalColorStyle {
         object RedBright : Colors("91", "101")
         object Yellow : Colors("33", "43")
         object YellowBright : Colors("93", "103")
-        class Custom(r: Int = 0, g: Int = 0, b: Int = 0) : Colors("38;2;$r;$g;$b", "48;2;$r;$g;$b")
+        class Custom(
+            private val r: Int = 0,
+            private val g: Int = 0,
+            private val b: Int = 0
+        ) : Colors("38;2;$r;$g;$b", "48;2;$r;$g;$b") {
+            fun mutate(variation: Int): Colors {
+                fun Int.newColorVal() = this + (Random.nextInt() % variation).coerceIn(0..255)
+                return Custom(r.newColorVal(), g.newColorVal(), b.newColorVal())
+            }
+        }
+
         class CustomPreset(value: Int = 0) : Colors("38;5;$value", "48;5;$value")
     }
 

@@ -23,3 +23,7 @@ enum class VisibleBy : Flag {
             get() = createFlagSet(SIGHT)
     }
 }
+
+enum class Lighting{
+    BRIGHT, DIM, DARK, NONE
+}

@@ -28,6 +28,11 @@ class AncestryBase : Ancestry(
         override var durability: Int = 10
 
         override var totalHearts: Int = 4
+
+        override var visionBright: Int = 100
+        override var visionDim: Int = 20
+        override var visionDark: Int = 5
+        override var visionNone: Int = 1
     }
 ) {
     override fun decide(mob: Mob, behavior: MobBehavior) = Pass

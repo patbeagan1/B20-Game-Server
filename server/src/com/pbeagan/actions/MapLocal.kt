@@ -7,6 +7,7 @@ import com.pbeagan.data.Direction.SOUTH
 import com.pbeagan.data.Direction.WEST
 import com.pbeagan.data.Exits
 import com.pbeagan.data.ItemData
+import com.pbeagan.data.Lighting
 import com.pbeagan.data.Mob
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.Terrain
@@ -80,7 +81,7 @@ class MapLocal : Action(), FreeAction {
                         ?.style(YellowBright, terrain.style.colorBackground)
                 }
                 items.isNotEmpty() -> "*".style(Red, terrain.style.colorBackground)
-                else -> terrain.prettySymbol.style(terrain.style)
+                else -> terrain.prettySymbols.random().style(terrain.style)
             }
         )
     }

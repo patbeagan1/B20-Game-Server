@@ -12,6 +12,7 @@ class RoomData constructor(
     var exits: Exits,
     var roomFlags: FlagCombined<RoomFlags> = createFlagSet(),
     var weather: Weather = Weather.CLEAR,
+    var lighting: Lighting = Lighting.BRIGHT,
     var items: MutableCollection<ItemData> = mutableListOf(),
     terrainString: String
 ) : Lookable {

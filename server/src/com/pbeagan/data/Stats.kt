@@ -28,6 +28,10 @@ interface Stats {
 
     // Total hearts
     val totalHearts: Int
+    val visionBright: Int
+    val visionDim: Int
+    val visionDark: Int
+    val visionNone: Int
 }
 
 fun Int.mod() = (this - 10) / 2
