@@ -15,6 +15,7 @@ import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
 import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.Senses
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.TerminalColorStyle
 import com.pbeagan.writer.TerminalColorStyle.style
@@ -78,12 +79,12 @@ class Mob constructor(
         fun onLook(behavior: MobBehavior) = behavior.descriptionDefault
     }
 
-    fun visionRange(lighting: Lighting) = when (lighting) {
-        BRIGHT -> 100
-        DIM -> TODO()
-        DARK -> TODO()
-        NONE -> TODO()
-    }
+    fun vision(lighting: Lighting) = when (lighting) {
+        BRIGHT -> visionBright
+        DIM -> visionDim
+        DARK -> visionDark
+        NONE -> visionNone
+    }.let { Senses.checkLocalRange(this.locationInRoom.first, this.locationInRoom.second, it) }
 
     fun addEffect(writer: Writer, effect: Effect) {
         val sayToRoom = writer.sayToRoomOf(this)

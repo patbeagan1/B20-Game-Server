@@ -19,7 +19,7 @@ object Senses {
         x: Int,
         y: Int,
         range: Int
-    ): List<Pair<Int, Int>> =
+    ): HashSet<Pair<Int, Int>> =
         Util.intRange(y, range).flatMap { ly ->
             Util.intRange(x, range).map { lx -> lx to ly }
         }.filter {
@@ -29,7 +29,7 @@ object Senses {
                 it.first.toDouble(),
                 it.second.toDouble()
             ) < range + 1
-        }.also { debugLocalRange(y, range, x, it) }
+        }.toHashSet()
 
     fun checkVisionRange(x: Int, y: Int, range: Double, angleLeft: Double, angleRight: Double) {
         val v1 = Point(x, y)
@@ -52,7 +52,7 @@ object Senses {
         }
     }
 
-    private fun debugLocalRange(y: Int, range: Int, x: Int, filter: List<Pair<Int, Int>>) {
+    private fun debugLocalRange(y: Int, range: Int, x: Int, filter: Collection<Pair<Int, Int>>) {
         Util.intRange(y, range).flatMap { ly ->
             println()
             Util.intRange(x, range).map { lx ->

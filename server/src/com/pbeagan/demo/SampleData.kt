@@ -12,6 +12,7 @@ import com.pbeagan.data.Direction.WEST
 import com.pbeagan.data.Exits
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
+import com.pbeagan.data.Lighting
 import com.pbeagan.data.Mob
 import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
@@ -179,6 +180,7 @@ object SampleData {
             exits = Exits(
                 south = RoomDirectionData(2)
             ),
+            lighting = Lighting.DARK,
             terrainString = """
                 ''''''''''''''''''''''''''''''''''''''''''''''
                 '''''''''''''''--'''''''''''''-'''''''''''''''

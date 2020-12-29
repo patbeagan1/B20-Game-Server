@@ -1,6 +1,6 @@
 package com.pbeagan.data
 
-abstract class EffectImpl(effect: Effect): Effect by effect
+abstract class EffectImpl(effect: Effect) : Effect by effect
 
 data class EffectBase(
     // Expiry - the only var
@@ -37,5 +37,11 @@ data class EffectBase(
     override var durability: Int = 0,
 
     // Total hearts
-    override var totalHearts: Int = 0
+    override var totalHearts: Int = 0,
+
+    // vision
+    override val visionBright: Int = 0,
+    override val visionDim: Int = 0,
+    override val visionDark: Int = 0,
+    override val visionNone: Int = 0
 ) : Effect

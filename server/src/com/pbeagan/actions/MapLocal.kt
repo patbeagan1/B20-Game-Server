@@ -7,7 +7,6 @@ import com.pbeagan.data.Direction.SOUTH
 import com.pbeagan.data.Direction.WEST
 import com.pbeagan.data.Exits
 import com.pbeagan.data.ItemData
-import com.pbeagan.data.Lighting
 import com.pbeagan.data.Mob
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.Terrain
@@ -22,7 +21,8 @@ class MapLocal : Action(), FreeAction {
     override fun invoke(self: Mob) {
         val currentRoom = self.currentRoom()
         val terrain = currentRoom?.terrain ?: return
-        printMap(fillRoomMap(terrain, currentRoom), self, currentRoom.exits)
+        val vision = self.vision(currentRoom.lighting)
+        printMap(vision, fillRoomMap(terrain, currentRoom), self, currentRoom.exits)
     }
 
     private fun fillRoomMap(
@@ -36,6 +36,7 @@ class MapLocal : Action(), FreeAction {
         }.toTypedArray()
 
     private fun printMap(
+        vision: HashSet<Pair<Int, Int>>,
         roomMap: RoomMap,
         self: Mob,
         exits: Exits
@@ -50,7 +51,7 @@ class MapLocal : Action(), FreeAction {
             val line = StringBuilder()
             checkExit(WEST, { line.append(' ') }) { line.append("║") }
             for (x in roomMap[y].indices) {
-                getCoordContent(line, x to y, roomMap)
+                getCoordContent(vision, line, x to y, roomMap)
             }
             checkExit(EAST, { line.append(' ') }) { line.append("║") }
             writer.sayTo(self).localMap(line.toString())
@@ -64,24 +65,30 @@ class MapLocal : Action(), FreeAction {
         }
 
     private fun getCoordContent(
+        vision: HashSet<Pair<Int, Int>>,
         line: StringBuilder,
         xy: Pair<Int, Int>,
         roomMap: RoomMap
     ) {
         val (x, y) = xy
         val (terrain, mobs, items) = roomMap[y][x]
+
         line.append(
-            when {
-                mobs.isNotEmpty() -> {
-                    mobs.firstOrNull()?.nameBase?.chars()
-                        ?.findFirst()
-                        ?.asInt
-                        ?.toFormattedChar()
-                        ?.toString()
-                        ?.style(YellowBright, terrain.style.colorBackground)
+            if (xy in vision) {
+                when {
+                    mobs.isNotEmpty() -> {
+                        mobs.firstOrNull()?.nameBase?.chars()
+                            ?.findFirst()
+                            ?.asInt
+                            ?.toFormattedChar()
+                            ?.toString()
+                            ?.style(YellowBright, terrain.style.colorBackground)
+                    }
+                    items.isNotEmpty() -> "*".style(Red, terrain.style.colorBackground)
+                    else -> terrain.prettySymbols.random().style(terrain.style)
                 }
-                items.isNotEmpty() -> "*".style(Red, terrain.style.colorBackground)
-                else -> terrain.prettySymbols.random().style(terrain.style)
+            } else {
+                " "
             }
         )
     }
