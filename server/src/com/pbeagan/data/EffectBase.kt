@@ -40,8 +40,8 @@ data class EffectBase(
     override var totalHearts: Int = 0,
 
     // vision
-    override val visionBright: Int = 0,
-    override val visionDim: Int = 0,
-    override val visionDark: Int = 0,
-    override val visionNone: Int = 0
+    override var visionBright: Int = 0,
+    override var visionDim: Int = 0,
+    override var visionDark: Int = 0,
+    override var visionNone: Int = 0
 ) : Effect

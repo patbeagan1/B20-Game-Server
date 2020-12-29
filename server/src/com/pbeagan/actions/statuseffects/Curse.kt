@@ -1,6 +1,9 @@
-package com.pbeagan.actions
+package com.pbeagan.actions.statuseffects
 
+import com.pbeagan.actions.Action
+import com.pbeagan.actions.MultiRoundActionDelegate
 import com.pbeagan.actions.MultiRoundActionDelegate.MultiRoundAction
+import com.pbeagan.actions.Retry
 import com.pbeagan.data.Effect
 import com.pbeagan.data.EffectBase
 import com.pbeagan.data.EffectImpl
@@ -22,7 +25,9 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
     }
 
     override fun onComplete(self: Mob) {
-        target.addEffect(writer, CurseEffect(target.nameStyled, self.nameStyled))
+        target.addEffect(writer,
+            CurseEffect(target.nameStyled, self.nameStyled)
+        )
     }
 
     companion object {

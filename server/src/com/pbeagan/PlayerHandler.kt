@@ -2,7 +2,6 @@ package com.pbeagan
 
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.Consume
-import com.pbeagan.actions.Curse
 import com.pbeagan.actions.Debug
 import com.pbeagan.actions.Doors
 import com.pbeagan.actions.Drop
@@ -10,14 +9,16 @@ import com.pbeagan.actions.Examine
 import com.pbeagan.actions.Give
 import com.pbeagan.actions.Inactive
 import com.pbeagan.actions.Inventory
-import com.pbeagan.actions.MapLocal
 import com.pbeagan.actions.Look
+import com.pbeagan.actions.MapLocal
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.actions.Repeat
 import com.pbeagan.actions.Retry
 import com.pbeagan.actions.Settings
 import com.pbeagan.actions.Take
+import com.pbeagan.actions.statuseffects.Curse
+import com.pbeagan.actions.statuseffects.NightSight
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Mob
 import com.pbeagan.util.safeLet
@@ -111,6 +112,15 @@ class PlayerHandler {
             safeLet(i.getOrNull(2)) { mobName ->
                 Curse.getOrRetry(mob, mobName)
             } ?: Retry("You need to specify a target!")
+        },
+
+        "cast$ARG" to { i ->
+            safeLet(i.getOrNull(1)) {
+                when (it) {
+                    "nightsight" -> NightSight()
+                    else -> null
+                }
+            } ?: Retry("I don't know that spell")
         },
 
         // Settings
