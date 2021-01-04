@@ -5,7 +5,6 @@ import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
 import com.pbeagan.util.Util
 import mobs
-import kotlin.math.roundToInt
 
 class Look : Action(), FreeAction {
     override fun invoke(self: Mob) = look(self, mobs)
@@ -25,14 +24,19 @@ class Look : Action(), FreeAction {
         }
 
         // Items in the current room
-        room.items.joinToString("\n") {
-            "${it.nameStyled} (${Util.distanceManhattan(
-                self.locationInRoom,
-                it.locationInRoom
-            )} paces): ${it.descriptionInRoom}"
-        }.takeIf { it.isNotBlank() }?.also {
-            writer.sayTo(self).info(it)
-        }
+        room.items
+            .map {
+                "(${Util.distanceManhattan(
+                    self.locationInRoom,
+                    it.locationInRoom
+                )} paces) ${it.nameStyled} : ${it.descriptionInRoom}"
+            }
+            .sorted()
+            .joinToString("\n")
+            .takeIf { it.isNotBlank() }
+            ?.also {
+                writer.sayTo(self).info(it)
+            }
 
         // Doors in the room
         Doors().also { it.writer = writer }.invoke(self)

@@ -111,5 +111,18 @@ class Mob constructor(
         items.map { itemData ->
             Drop(itemData).also { it.writer = writer }
         }.forEach { it.invoke(this) }
+
+        Drop(
+            ItemData(
+                this.idForIO,
+                listOf("Body", this.nameBase),
+                "${this.nameStyled} died here. RIP ${this.nameStyled}.",
+                "There is a body here.",
+                0 to 0
+            )
+        ).also { it.writer = writer }(this)
+
+        location = 0
+        locationInRoom = 0 to 0
     }
 }

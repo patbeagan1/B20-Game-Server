@@ -50,7 +50,7 @@ class PlayerHandler {
                 Debug(target)
             } ?: Retry("Debug what?")
         },
-        "(wait|pass|end)" to { _ -> Pass },
+        "(wait|pass|end| )" to { _ -> Pass },
 
         // INFO
         "l(s|l|ook)?" to { _ -> Look() },
@@ -95,13 +95,25 @@ class PlayerHandler {
         },
 
         // Movement
-        "n(orth)?" to { _ -> Move.getOrRetry(mob, Direction.NORTH) },
-        "s(outh)?" to { _ -> Move.getOrRetry(mob, Direction.SOUTH) },
-        "e(ast)?" to { _ -> Move.getOrRetry(mob, Direction.EAST) },
-        "w(est)?" to { _ -> Move.getOrRetry(mob, Direction.WEST) },
-        "u(p)?" to { _ -> Move.getOrRetry(mob, Direction.UP) },
-        "d(own)?" to { _ -> Move.getOrRetry(mob, Direction.DOWN) },
-
+        "n(orth)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.NORTH)) },
+        "s(outh)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.SOUTH)) },
+        "e(ast)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.EAST)) },
+        "w(est)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.WEST)) },
+        "u(p)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.UP)) },
+        "d(own)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.DOWN)) },
+        // moving multiple paces at a time
+        "([nsewud]+)" to { i ->
+            val directionList = i.getOrNull(1)?.take(4)?.map { input ->
+                Direction.values().first {
+                    it.name.startsWith(input, true)
+                }
+            }
+            if (directionList == null) {
+                Retry("Sorry, couldn't parse that.")
+            } else {
+                Move.getOrRetry(mob, directionList)
+            }
+        },
         // Combat
         "(atk|attack)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->

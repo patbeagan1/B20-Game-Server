@@ -1,9 +1,9 @@
 package com.pbeagan.actions
 
-import com.pbeagan.demo.SampleData.mobs
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
+import com.pbeagan.demo.SampleData.mobs
 import com.pbeagan.util.startsWith
 
 class Examine(private val targetName: String) : Action(), FreeAction {
@@ -24,9 +24,12 @@ class Examine(private val targetName: String) : Action(), FreeAction {
     }
 
     private fun examineItem(self: Mob, itemName: String): String? {
-        val itemData = self.currentRoom()
-            ?.items
-            ?.firstOrNull { it.nameStartsWith(itemName) }
+        val itemData =
+            self.currentRoom()?.items?.firstOrNull {
+                it.nameStartsWith(itemName)
+            } ?: self.items.firstOrNull {
+                it.nameStartsWith(itemName)
+            }
         return itemData
             ?.descriptionOnExamination
             ?.also { writer.sayTo(self).info("${itemData.nameStyled}: $it") }
