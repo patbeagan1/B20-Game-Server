@@ -1,6 +1,7 @@
 package com.pbeagan.data
 
 import com.pbeagan.actions.Action
+import com.pbeagan.actions.Drop
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.ancestry.Ancestry
@@ -25,8 +26,6 @@ import com.pbeagan.writer.Writer
 class Mob constructor(
     val nameBase: String,
     val description: Description,
-    var action: Action = Pass,
-    var actionMove: Move? = null,
 
     var behavior: MobBehavior = WAITING,
     var mood: MobMood = NEUTRAL,
@@ -37,14 +36,14 @@ class Mob constructor(
     var dodge: Int = 0,
 
     var location: Int = 0,
-    var locationInRoom: Pair<Int, Int>,
+    override var locationInRoom: Pair<Int, Int>,
 
     var visited: MutableSet<Int> = mutableSetOf(0),
     var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,
 
     var effects: List<Effect> = listOf(Human()),
     var items: MutableList<ItemData> = mutableListOf()
-) : Stats {
+) : Stats, HasLocation {
     override val baseAtkMelee: Int get() = effects.sumBy { it.baseAtkMelee }
     override val baseAtkRanged: Int get() = effects.sumBy { it.baseAtkRanged }
     override val baseAtkThrow: Int get() = effects.sumBy { it.baseAtkThrow }
@@ -67,6 +66,8 @@ class Mob constructor(
     override val visionDark: Int get() = effects.sumBy { it.visionDark }
     override val visionNone: Int get() = effects.sumBy { it.visionNone }
 
+    var action: Action = Pass
+    var actionMove: Move? = null
     val nameStyled = nameBase.style(colorForeground = TerminalColorStyle.Colors.Yellow)
     var preferredAttack: AttackType = MELEE
     val idForIO: Int = UniqueId.get()
@@ -86,6 +87,12 @@ class Mob constructor(
         NONE -> visionNone
     }.let { Senses.checkLocalRange(this.locationInRoom.first, this.locationInRoom.second, it) }
 
+    fun range(r: Int) = Senses.checkLocalRange(
+        this.locationInRoom.first,
+        this.locationInRoom.second,
+        r
+    )
+
     fun addEffect(writer: Writer, effect: Effect) {
         val sayToRoom = writer.sayToRoomOf(this)
         when {
@@ -99,4 +106,10 @@ class Mob constructor(
     }
 
     fun getAction(reader: Reader): Action? = ancestry?.decide(this, this.behavior)
+
+    fun die(writer: Writer) {
+        items.map { itemData ->
+            Drop(itemData).also { it.writer = writer }
+        }.forEach { it.invoke(this) }
+    }
 }

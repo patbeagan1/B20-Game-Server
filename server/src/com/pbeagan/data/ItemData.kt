@@ -11,8 +11,8 @@ data class ItemData(
     val names: List<String>,
     val descriptionOnExamination: String,
     val descriptionInRoom: String,
-    var locationInRoom: Pair<Int, Int>
-) {
+    override var locationInRoom: Pair<Int, Int>
+) : HasLocation {
     val nameStyled: String = names.first().style(colorForeground = Cyan)
     val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
     val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = createFlagSet()

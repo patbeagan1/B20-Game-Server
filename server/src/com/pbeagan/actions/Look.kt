@@ -3,7 +3,9 @@ package com.pbeagan.actions
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
+import com.pbeagan.util.Util
 import mobs
+import kotlin.math.roundToInt
 
 class Look : Action(), FreeAction {
     override fun invoke(self: Mob) = look(self, mobs)
@@ -14,14 +16,20 @@ class Look : Action(), FreeAction {
 
         // Mobs in the current room
         self.currentRoomOtherMobs(mobs).joinToString("\n") {
-            "${it.nameStyled} is here - ${it.description.onLook(it.behavior)}"
+            "${it.nameStyled} (${Util.distanceManhattan(
+                self.locationInRoom,
+                it.locationInRoom
+            )} paces): ${it.description.onLook(it.behavior)}"
         }.takeIf { it.isNotBlank() }?.also {
             writer.sayTo(self).info(it)
         }
 
         // Items in the current room
         room.items.joinToString("\n") {
-            it.descriptionInRoom
+            "${it.nameStyled} (${Util.distanceManhattan(
+                self.locationInRoom,
+                it.locationInRoom
+            )} paces): ${it.descriptionInRoom}"
         }.takeIf { it.isNotBlank() }?.also {
             writer.sayTo(self).info(it)
         }

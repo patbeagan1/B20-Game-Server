@@ -1,5 +1,6 @@
 package com.pbeagan.util
 
+import kotlin.math.absoluteValue
 import kotlin.math.cos
 import kotlin.math.roundToInt
 import kotlin.math.sin
@@ -14,13 +15,14 @@ object Util {
         xy2.second.toDouble()
     )
 
+    fun distanceManhattan(xy1: Pair<Int, Int>, xy2: Pair<Int, Int>) =
+        (xy1.first - xy2.first).absoluteValue + (xy1.second - xy2.second).absoluteValue
+
     fun distance(xy1: Pair<Double, Double>, xy2: Pair<Double, Double>) =
         distance(xy1.first, xy1.second, xy2.first, xy2.second)
 
     fun distance(x1: Double, y1: Double, x2: Double, y2: Double): Double =
         sqrt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1))
-
-    fun intRange(coord: Int, range: Int) = (coord - range)..(coord + range)
 
     fun toCartesian(range: Double, angle: Double): Pair<Double, Double> =
         range * cos(angle) to range * sin(angle)

@@ -20,8 +20,8 @@ object Senses {
         y: Int,
         range: Int
     ): HashSet<Pair<Int, Int>> =
-        Util.intRange(y, range).flatMap { ly ->
-            Util.intRange(x, range).map { lx -> lx to ly }
+        y.rangeBy(range).flatMap { ly ->
+            x.rangeBy(range).map { lx -> lx to ly }
         }.filter {
             Util.distance(
                 x.toDouble(),
@@ -53,9 +53,9 @@ object Senses {
     }
 
     private fun debugLocalRange(y: Int, range: Int, x: Int, filter: Collection<Pair<Int, Int>>) {
-        Util.intRange(y, range).flatMap { ly ->
+        y.rangeBy(range).flatMap { ly ->
             println()
-            Util.intRange(x, range).map { lx ->
+            x.rangeBy(range).map { lx ->
                 if (lx to ly in filter) print("X") else print("-")
             }
         }

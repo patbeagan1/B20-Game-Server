@@ -59,7 +59,7 @@ class Game {
                     clearExpiredMultiRoundAction()
                     if (this.action is MultiRoundAction) {
                         // Breaking here means that we can end the turn and continue the action.
-                        if (actionCurrent == Pass) break
+                        if (actionCurrent == Pass || actionCurrent is FreeAction) break
                         // If we are not passing, we need to make sure they know that the action is ongoing.
                         if (verifyMultiRoundActionShouldStop(writer, actionCurrent, reader)) {
                             // If the action is stopped, we set the new action here.

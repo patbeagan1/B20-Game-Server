@@ -9,6 +9,7 @@ import com.pbeagan.util.startsWith
 class Drop(private val item: ItemData) : Action() {
 
     override fun invoke(self: Mob) {
+        item.locationInRoom = self.locationInRoom
         self.currentRoom()?.items?.add(item)
         self.items.remove(item)
         writer.sayToRoomOf(self).info("${self.nameStyled} dropped the ${item.nameStyled}")

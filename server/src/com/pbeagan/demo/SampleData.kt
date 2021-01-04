@@ -25,7 +25,7 @@ object SampleData {
     val mobs = listOf(
         Mob(
             "Alice",
-            armor = 3,
+//            armor = 3,
             effects = listOf(Human()),
             isPlayer = true,
             description = object : Mob.Description {},

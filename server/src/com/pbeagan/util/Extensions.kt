@@ -14,6 +14,8 @@ val Any.exhaustive get() = this.let {}
 fun String.startsWith(prefix: String) =
     this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).toLowerCase() == prefix.toLowerCase()
 
+fun Int.rangeBy(range: Int) = (this - range)..(this + range)
+
 fun loggerGen(clazz: Class<out Any>): Logger =
     LoggerFactory.getLogger(clazz)
 

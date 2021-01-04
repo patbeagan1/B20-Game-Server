@@ -20,8 +20,9 @@ abstract class Action {
         writer.sayToRoomOf(target).combat("${target.nameStyled} was hit for $damage damage!")
         target.hearts -= damage
         writer.sayToRoomOf(target).combat("${target.nameStyled} is down to ${target.hearts} hp!")
-        if (target.hearts < 0) {
+        if (target.hearts <= 0) {
             writer.sayToAll().dead("${target.nameStyled} has died.")
+            target.die(writer)
         }
     }
 
