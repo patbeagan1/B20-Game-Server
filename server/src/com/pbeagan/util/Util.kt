@@ -8,15 +8,15 @@ import kotlin.math.sqrt
 
 object Util {
 
-    fun distanceInt(xy1: Pair<Int, Int>, xy2: Pair<Int, Int>) = distance(
-        xy1.first.toDouble(),
-        xy1.second.toDouble(),
-        xy2.first.toDouble(),
-        xy2.second.toDouble()
+    fun distance(xy1: Coord, xy2: Coord) = distance(
+        xy1.x.toDouble(),
+        xy1.y.toDouble(),
+        xy2.x.toDouble(),
+        xy2.y.toDouble()
     )
 
-    fun distanceManhattan(xy1: Pair<Int, Int>, xy2: Pair<Int, Int>) =
-        (xy1.first - xy2.first).absoluteValue + (xy1.second - xy2.second).absoluteValue
+    fun distanceManhattan(first: Coord, second: Coord) =
+        (first.x - second.x).absoluteValue + (first.y - second.y).absoluteValue
 
     fun distance(xy1: Pair<Double, Double>, xy2: Pair<Double, Double>) =
         distance(xy1.first, xy1.second, xy2.first, xy2.second)
@@ -27,11 +27,11 @@ object Util {
     fun toCartesian(range: Double, angle: Double): Pair<Double, Double> =
         range * cos(angle) to range * sin(angle)
 
-    fun convertToPointAndTranslateBy(x: Int, y: Int): (Pair<Double, Double>) -> Point = {
-        Point(x + it.first.roundToInt(), y + it.second.roundToInt())
+    fun convertToPointAndTranslateBy(x: Int, y: Int): (Pair<Double, Double>) -> Coord = {
+        Coord(x + it.first.roundToInt(), y + it.second.roundToInt())
     }
 
-    fun pointIsInsideTriangle(s: Point, a: Point, b: Point, c: Point): Boolean {
+    fun pointIsInsideTriangle(s: Coord, a: Coord, b: Coord, c: Coord): Boolean {
         // https://stackoverflow.com/questions/2049582/how-to-determine-if-a-point-is-in-a-2d-triangle
         val asX: Int = s.x - a.x
         val asY: Int = s.y - a.y

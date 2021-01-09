@@ -18,6 +18,7 @@ import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.RoomFlags
+import com.pbeagan.util.coord
 import com.pbeagan.util.createFlagSet
 
 
@@ -29,7 +30,7 @@ object SampleData {
             effects = listOf(Human()),
             isPlayer = true,
             description = object : Mob.Description {},
-            locationInRoom = 2 to 3
+            locationInRoom = 2 coord 3
         ),
         Mob(
             "Steve",
@@ -37,7 +38,7 @@ object SampleData {
             isPlayer = true,
             effects = listOf(Human()),
             description = object : Mob.Description {},
-            locationInRoom = 2 to 4
+            locationInRoom = 2 coord 4
         ),
         Mob(
             "Bob",
@@ -46,7 +47,7 @@ object SampleData {
             behavior = MobBehavior.AGGRESSIVE,
             location = 2,
             description = object : Mob.Description {},
-            locationInRoom = 5 to 5
+            locationInRoom = 5 coord 5
         ),
         Mob(
             "Charlie",
@@ -55,7 +56,7 @@ object SampleData {
             behavior = MobBehavior.LOOTER,
             location = 3,
             description = object : Mob.Description {},
-            locationInRoom = 1 to 1
+            locationInRoom = 1 coord 1
         ),
         Mob(
             "Darla",
@@ -64,7 +65,7 @@ object SampleData {
             behavior = MobBehavior.WANDERER,
             location = 0,
             description = object : Mob.Description {},
-            locationInRoom = 5 to 5
+            locationInRoom = 5 coord 5
         )
     )
     val rooms = listOf(
@@ -99,7 +100,7 @@ object SampleData {
                     listOf("Rusty Sword", "sword"),
                     "It's got a few notches in it.",
                     "A rusty sword is lying on the ground.",
-                    6 to 6
+                    6 coord 6
                 ).apply {
                     itemFlags.add(
                         ItemFlags.TAKEABLE,
@@ -111,9 +112,9 @@ object SampleData {
                     listOf(
                         "Spoiled Red Apple", "fruit", "apple", "food"
                     ),
-                    descriptionOnExamination = "A spoiled red apple. It does not look good enough to eat!",
+                    descriptionOnExamination = "A spoiled red apple. It does not look good enough coord eat!",
                     descriptionInRoom = "There is an apple laying on the ground",
-                    locationInRoom = 4 to 4
+                    locationInRoom = 4 coord 4
                 ).apply {
                     setItemFlags(
                         ItemFlags.CONSUMABLE,
@@ -223,7 +224,7 @@ object SampleData {
                     ),
                     descriptionOnExamination = "A polished red apple. It looks good enough to eat!",
                     descriptionInRoom = "There is an apple in a basket on the table",
-                    locationInRoom = 1 to 1
+                    locationInRoom = 1 coord 1
                 ).apply
                 {
                     setItemFlags(

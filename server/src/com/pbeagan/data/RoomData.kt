@@ -1,5 +1,6 @@
 package com.pbeagan.data
 
+import com.pbeagan.util.Coord
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.createFlagSet
 import mobs
@@ -18,8 +19,8 @@ class RoomData constructor(
 ) : Lookable {
     val terrain: Array<Array<Terrain>> = TerrainParser.parse(terrainString)
 
-    fun getLocation(xy: Pair<Int, Int>) = Triple(
-        terrain[xy.second][xy.first],
+    fun getLocation(xy: Coord) = Triple(
+        terrain[xy.y][xy.x],
         mobs.filter { it.location == id && it.locationInRoom == xy },
         items.filter { it.locationInRoom == xy }
     )

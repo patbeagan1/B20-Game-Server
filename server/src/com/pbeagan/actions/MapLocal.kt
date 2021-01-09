@@ -11,6 +11,8 @@ import com.pbeagan.data.Mob
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
+import com.pbeagan.util.Coord
+import com.pbeagan.util.coord
 import com.pbeagan.writer.TerminalColorStyle.Colors.Red
 import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright
 import com.pbeagan.writer.TerminalColorStyle.style
@@ -31,12 +33,12 @@ class MapLocal : Action(), FreeAction {
     ): RoomMap =
         roomMap.mapIndexed { y, arr ->
             arr.mapIndexed { x, _ ->
-                currentRoom.getLocation(x to y)
+                currentRoom.getLocation(x coord y)
             }.toTypedArray()
         }.toTypedArray()
 
     private fun printMap(
-        vision: HashSet<Pair<Int, Int>>,
+        vision: HashSet<Coord>,
         roomMap: RoomMap,
         self: Mob,
         exits: Exits
@@ -51,7 +53,7 @@ class MapLocal : Action(), FreeAction {
             val line = StringBuilder()
             checkExit(WEST, { line.append(' ') }) { line.append("║") }
             for (x in roomMap[y].indices) {
-                getCoordContent(vision, line, x to y, roomMap)
+                getCoordContent(vision, line, x coord y, roomMap)
             }
             checkExit(EAST, { line.append(' ') }) { line.append("║") }
             writer.sayTo(self).localMap(line.toString())
@@ -65,9 +67,9 @@ class MapLocal : Action(), FreeAction {
         }
 
     private fun getCoordContent(
-        vision: HashSet<Pair<Int, Int>>,
+        vision: HashSet<Coord>,
         line: StringBuilder,
-        xy: Pair<Int, Int>,
+        xy: Coord,
         roomMap: RoomMap
     ) {
         val (x, y) = xy

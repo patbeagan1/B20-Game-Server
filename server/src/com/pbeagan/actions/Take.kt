@@ -13,7 +13,7 @@ class Take(private val item: ItemData) : Action() {
         self.currentRoom()
             ?.items
             ?.firstOrNull { it == item }
-            ?.takeIf { Util.distanceInt(self.locationInRoom, it.locationInRoom) <= 1 }
+            ?.takeIf { Util.distance(self.locationInRoom, it.locationInRoom) <= 1 }
             ?.let {
                 self.items.add(it)
                 self.currentRoom()?.items?.remove(it)

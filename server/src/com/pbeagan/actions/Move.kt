@@ -17,6 +17,8 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
+import com.pbeagan.util.Coord
+import com.pbeagan.util.coord
 import com.pbeagan.util.exhaustive
 
 class Move private constructor(private val directionList: List<Direction>) : Action() {
@@ -24,8 +26,8 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         directionList.forEach { direction ->
             when (val checkMove = checkSpace(
                 direction,
-                self.locationInRoom.first,
-                self.locationInRoom.second,
+                self.locationInRoom.x,
+                self.locationInRoom.y,
                 self.currentRoom()!!.terrain,
                 self.currentRoom()!!
             )) {
@@ -84,22 +86,22 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         x: Int,
         currentRoom: RoomData,
         y: Int
-    ): Pair<Int, Int> {
+    ): Coord {
         val boundX = (0..currentRoom.terrain.first().size).average().toInt()
         val boundY = (0..currentRoom.terrain.size).average().toInt()
         return when (direction) {
-            NORTH -> boundX to 0
-            SOUTH -> boundX to currentRoom.height - 1
-            EAST -> 0 to boundY
-            WEST -> currentRoom.width - 1 to boundY
-            UP -> boundX to boundY
-            DOWN -> boundX to boundY
+            NORTH -> boundX coord 0
+            SOUTH -> boundX coord currentRoom.height - 1
+            EAST -> 0 coord boundY
+            WEST -> currentRoom.width - 1 coord boundY
+            UP -> boundX coord boundY
+            DOWN -> boundX coord boundY
         }
     }
 
     fun checkEdgeSpacesToLandInRoom(
         direction: Direction,
-        xy: Pair<Int, Int>,
+        xy: Coord,
         terrain: Array<Array<Terrain>>
     ) = sequence {
         var isGoingUp = true
@@ -125,9 +127,9 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             }
 
             trial = if (shouldScanHorizontal) {
-                (trial.first + if (isGoingUp) counter else -counter) to trial.second
+                (trial.x + if (isGoingUp) counter else -counter) coord trial.y
             } else {
-                trial.first to (trial.second + if (isGoingUp) counter else -counter)
+                trial.x coord (trial.y + if (isGoingUp) counter else -counter)
             }
             isGoingUp = !isGoingUp
             counter++
@@ -135,14 +137,14 @@ class Move private constructor(private val directionList: List<Direction>) : Act
     }
 
     sealed class Result {
-        class Point(val data: Pair<Int, Int>) : Result()
+        class Point(val data: Coord) : Result()
         class RoomId(val data: Int) : Result()
         object EndOfRoomFailure : Result()
         class Failure(val reason: String) : Result()
     }
 
     companion object {
-        private val INVALID_MOVE = -1 to -1
+        private val INVALID_MOVE = -1 coord -1
 
         fun checkMove(
             self: Mob,
@@ -171,7 +173,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
 
         private fun checkNewSpace(
             layout: Array<Array<Terrain>>,
-            newSpace: Pair<Int, Int>,
+            newSpace: Coord,
             currentRoom: RoomData
         ): Result {
             val isInRoom = checkRoomBounds(layout, newSpace)
@@ -193,22 +195,22 @@ class Move private constructor(private val directionList: List<Direction>) : Act
 
         private fun checkRoomBounds(
             layout: Array<Array<Terrain>>,
-            newSpace: Pair<Int, Int>
+            newSpace: Coord
         ): Boolean {
             val yBound = layout.size - 1
             val xBound = layout.first().size - 1
-            return newSpace.first in 0..xBound && newSpace.second in 0..yBound
+            return newSpace.x in 0..xBound && newSpace.y in 0..yBound
         }
 
         private fun getNewSpace(
             direction: Direction,
             x: Int,
             y: Int
-        ): Pair<Int, Int> = when (direction) {
-            NORTH -> x to y + 1
-            EAST -> x + 1 to y
-            SOUTH -> x to y - 1
-            WEST -> x - 1 to y
+        ): Coord = when (direction) {
+            NORTH -> x coord y + 1
+            EAST -> x + 1 coord y
+            SOUTH -> x coord y - 1
+            WEST -> x - 1 coord y
             UP -> INVALID_MOVE
             DOWN -> INVALID_MOVE
         }
@@ -228,8 +230,8 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             directionList.forEach { direction ->
                 when (val checkMove = checkSpace(
                     direction,
-                    location.first,
-                    location.second,
+                    location.x,
+                    location.y,
                     self.currentRoom()!!.terrain,
                     self.currentRoom()!!
                 )) {
@@ -237,7 +239,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
                         ?: return Retry("There is no room to enter in that direction.")
                     is Failure -> return Retry("Sorry, can't go that way. ${checkMove.reason}")
                     else -> {
-                        location = getNewSpace(direction, location.first, location.second)
+                        location = getNewSpace(direction, location.x, location.y)
                     }
                 }
             }

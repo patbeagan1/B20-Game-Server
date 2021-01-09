@@ -1,5 +1,6 @@
 package com.pbeagan.data
 
+import com.pbeagan.util.Coord
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.createFlagSet
 import com.pbeagan.util.startsWith
@@ -11,7 +12,7 @@ data class ItemData(
     val names: List<String>,
     val descriptionOnExamination: String,
     val descriptionInRoom: String,
-    override var locationInRoom: Pair<Int, Int>
+    override var locationInRoom: Coord
 ) : HasLocation {
     val nameStyled: String = names.first().style(colorForeground = Cyan)
     val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem

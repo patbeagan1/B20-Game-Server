@@ -49,7 +49,7 @@ class Grass(override val prettySymbols: Array<String>, override val style: Termi
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = null
 
-    constructor(prettySymbol: String, style: TerminalStyle) : this(arrayOf(prettySymbol), style)
+    constructor(prettySymbol: String, style: TerminalStyle = TerminalStyle()) : this(arrayOf(prettySymbol), style)
 
     companion object {
         const val SYMBOL = '\''
@@ -60,7 +60,7 @@ class Pavement(override val prettySymbols: Array<String>, override val style: Te
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = null
 
-    constructor(prettySymbol: String, style: TerminalStyle) : this(arrayOf(prettySymbol), style)
+    constructor(prettySymbol: String, style: TerminalStyle = TerminalStyle()) : this(arrayOf(prettySymbol), style)
 
     companion object {
         const val SYMBOL = '-'
@@ -71,7 +71,7 @@ class Wall(override val prettySymbols: Array<String>, override val style: Termin
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = "There is a wall there!"
 
-    constructor(prettySymbol: String, style: TerminalStyle) : this(arrayOf(prettySymbol), style)
+    constructor(prettySymbol: String, style: TerminalStyle = TerminalStyle()) : this(arrayOf(prettySymbol), style)
 
     companion object {
         const val SYMBOL = '*'
@@ -82,7 +82,7 @@ class Water(override val prettySymbols: Array<String>, override val style: Termi
     override val symbol: Char = SYMBOL
     override val notTraversableMessage: String? = "There is water here!"
 
-    constructor(prettySymbol: String, style: TerminalStyle) : this(arrayOf(prettySymbol), style)
+    constructor(prettySymbol: String, style: TerminalStyle = TerminalStyle()) : this(arrayOf(prettySymbol), style)
 
     companion object {
         const val SYMBOL = '~'

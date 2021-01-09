@@ -15,8 +15,10 @@ import com.pbeagan.data.Lighting.NONE
 import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
+import com.pbeagan.util.Coord
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.Senses
+import com.pbeagan.util.coord
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.TerminalColorStyle
 import com.pbeagan.writer.TerminalColorStyle.style
@@ -36,7 +38,7 @@ class Mob constructor(
     var dodge: Int = 0,
 
     var location: Int = 0,
-    override var locationInRoom: Pair<Int, Int>,
+    override var locationInRoom: Coord,
 
     var visited: MutableSet<Int> = mutableSetOf(0),
     var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,
@@ -85,11 +87,11 @@ class Mob constructor(
         DIM -> visionDim
         DARK -> visionDark
         NONE -> visionNone
-    }.let { Senses.checkLocalRange(this.locationInRoom.first, this.locationInRoom.second, it) }
+    }.let { Senses.checkLocalRange(this.locationInRoom.x, this.locationInRoom.y, it) }
 
     fun range(r: Int) = Senses.checkLocalRange(
-        this.locationInRoom.first,
-        this.locationInRoom.second,
+        this.locationInRoom.x,
+        this.locationInRoom.y,
         r
     )
 
@@ -118,11 +120,11 @@ class Mob constructor(
                 listOf("Body", this.nameBase),
                 "${this.nameStyled} died here. RIP ${this.nameStyled}.",
                 "There is a body here.",
-                0 to 0
+                0 coord 0
             )
         ).also { it.writer = writer }(this)
 
         location = 0
-        locationInRoom = 0 to 0
+        locationInRoom = 0 coord 0
     }
 }
