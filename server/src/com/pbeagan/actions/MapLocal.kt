@@ -13,7 +13,6 @@ import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.util.Coord
 import com.pbeagan.util.coord
-import com.pbeagan.util.traverseMap
 import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle.Colors.Red
 import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright

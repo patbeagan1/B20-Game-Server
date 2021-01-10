@@ -1,5 +1,18 @@
-package com.pbeagan.util
+package com.pbeagan
 
+import com.pbeagan.util.Coord
+import com.pbeagan.util.CoordRect
+import com.pbeagan.util.addLayer
+import com.pbeagan.util.coord
+import com.pbeagan.util.merge
+import com.pbeagan.util.printAll
+import com.pbeagan.util.roll20
+import com.pbeagan.util.roll6
+import com.pbeagan.util.rollSign
+import com.pbeagan.util.traverse
+import com.pbeagan.util.traverseAdd
+import com.pbeagan.util.traverseMap
+import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle
 import com.pbeagan.writer.TerminalColorStyle.style
 import kotlin.math.abs
@@ -66,29 +79,6 @@ fun circleBres(xc: Int, yc: Int, r: Int): Pair<List<Coord>, CoordRect> {
     val botRight = (xc + r) coord (yc + r)
     return res.distinct() to (topLeft coord botRight)
 }
-
-data class Coord(val x: Int, val y: Int) : Comparable<Coord> {
-    override fun compareTo(other: Coord): Int = when {
-        other.y < y -> -Util.distance(other, this)
-        other.x < x -> -Util.distance(other, this)
-        else -> Util.distance(other, this)
-    }.toInt()
-}
-
-data class CoordRect(val lesser: Coord, val greater: Coord) {
-    fun modifyBy(
-        lx: Int = 0,
-        ly: Int = 0,
-        gx: Int = 0,
-        gy: Int = 0
-    ) = CoordRect(
-        (this.lesser.x + lx) coord (this.lesser.y + ly),
-        (this.greater.x + gx) coord (this.greater.y + gy)
-    )
-}
-
-infix fun Int.coord(other: Int) = Coord(this, other)
-infix fun Coord.coord(other: Coord) = CoordRect(this, other)
 
 fun Array<Array<Boolean>>.fillPolygon(rect: CoordRect, fill: Boolean = true): Array<Array<Boolean>> {
     var last = false
