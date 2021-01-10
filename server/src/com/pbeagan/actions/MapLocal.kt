@@ -13,6 +13,8 @@ import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.util.Coord
 import com.pbeagan.util.coord
+import com.pbeagan.util.traverseMap
+import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle.Colors.Red
 import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright
 import com.pbeagan.writer.TerminalColorStyle.style
@@ -30,12 +32,9 @@ class MapLocal : Action(), FreeAction {
     private fun fillRoomMap(
         roomMap: Array<Array<Terrain>>,
         currentRoom: RoomData
-    ): RoomMap =
-        roomMap.mapIndexed { y, arr ->
-            arr.mapIndexed { x, _ ->
-                currentRoom.getLocation(x coord y)
-            }.toTypedArray()
-        }.toTypedArray()
+    ): RoomMap = roomMap.traverseMapIndexed { x, y, _ ->
+        currentRoom.getLocation(x coord y)
+    }
 
     private fun printMap(
         vision: HashSet<Coord>,

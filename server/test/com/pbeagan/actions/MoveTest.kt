@@ -3,6 +3,7 @@ package com.pbeagan.actions
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Grass
 import com.pbeagan.data.Terrain
+import com.pbeagan.util.coord
 import org.junit.Assert
 import org.junit.jupiter.api.Test
 
@@ -14,7 +15,7 @@ internal class MoveTest {
     @Test
     fun `check surroundings alternates between north and south`() {
         val list = move
-            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 to 4, terrain)
+            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 coord 4, terrain)
             .take(5).toList().toTypedArray()
 
         Assert.assertArrayEquals(
@@ -31,7 +32,7 @@ internal class MoveTest {
     @Test
     fun `check surroundings includes whole side`() {
         val list = move
-            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 to 0, terrain)
+            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 coord 0, terrain)
             .take(3).toList().toTypedArray()
 
         Assert.assertArrayEquals(
@@ -46,7 +47,7 @@ internal class MoveTest {
     @Test
     fun `check surroundings alternates between east and west`() {
         val list = move
-            .checkEdgeSpacesToLandInRoom(Direction.SOUTH, 4 to 7, terrain)
+            .checkEdgeSpacesToLandInRoom(Direction.SOUTH, 4 coord 7, terrain)
             .take(5).toList().toTypedArray()
 
         Assert.assertArrayEquals(
@@ -63,17 +64,17 @@ internal class MoveTest {
     @Test
     fun `check surroundings does not go past the bounds of the room`() {
         val checkSurroundingsHori = move
-            .checkEdgeSpacesToLandInRoom(Direction.SOUTH, 4 to 7, terrain)
+            .checkEdgeSpacesToLandInRoom(Direction.SOUTH, 4 coord 7, terrain)
 
         Assert.assertTrue(checkSurroundingsHori.all {
-            it.first in 0..7 && it.second in 0..7
+            it.x in 0..7 && it.y in 0..7
         })
 
         val checkSurroundingsVert = move
-            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 to 4, terrain)
+            .checkEdgeSpacesToLandInRoom(Direction.EAST, 0 coord 4, terrain)
 
         Assert.assertTrue(checkSurroundingsVert.all {
-            it.first in 0..7 && it.second in 0..7
+            it.x in 0..7 && it.y in 0..7
         })
     }
 }

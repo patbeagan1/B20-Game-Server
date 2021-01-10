@@ -8,11 +8,12 @@ fun roll6() = Random.nextInt(1, 6)
 fun roll8() = Random.nextInt(1, 8)
 fun roll12() = Random.nextInt(1, 12)
 fun roll20() = Random.nextInt(1, 20)
+fun rollSign() = if (Random.nextBoolean()) 1 else -1
 
 val Any.exhaustive get() = this.let {}
 
 fun String.startsWith(prefix: String) =
-    this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).toLowerCase() == prefix.toLowerCase()
+    this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).equals(prefix, ignoreCase = true)
 
 fun Int.rangeBy(range: Int) = (this - range)..(this + range)
 

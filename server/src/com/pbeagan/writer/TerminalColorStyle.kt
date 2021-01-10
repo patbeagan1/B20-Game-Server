@@ -18,6 +18,8 @@ object TerminalColorStyle {
      */
     const val RIS = "${ESC}c"
 
+    const val HIDE_CURSOR = "$CSI?25l"
+
     const val DOTS_LOW = '░'
     const val DOTS_MED = '▒'
     const val DOTS_HIGH = '▓'
@@ -45,6 +47,9 @@ object TerminalColorStyle {
             private val g: Int = 0,
             private val b: Int = 0
         ) : Colors("38;2;$r;$g;$b", "48;2;$r;$g;$b") {
+
+            constructor(argb: ARGB) : this(argb.r, argb.g, argb.b)
+
             fun mutate(variation: Int): Colors {
                 fun Int.newColorVal() = this + (Random.nextInt() % variation).coerceIn(0..255)
                 return Custom(r.newColorVal(), g.newColorVal(), b.newColorVal())

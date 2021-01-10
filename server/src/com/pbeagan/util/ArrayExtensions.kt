@@ -1,33 +1,71 @@
 package com.pbeagan.util
 
-typealias  List2D<T> = Iterable<Iterable<T>>
+inline fun <reified T> List<List<T>>.toArray2D() = map { rows -> rows.toTypedArray() }.toTypedArray()
+inline fun <reified T> Array<Array<T>>.toList2D() = map { rows -> rows.toList() }
 
-inline fun <reified T> List2D<T>.toArray2D() = map { rows -> rows.map { it }.toTypedArray() }.toTypedArray()
-inline fun <reified T> Array<Array<T>>.toList2D() = map { rows -> rows.map { it } }
+//inline fun <reified T, reified R> Array<Array<T>>.cloneStructure(default: (T) -> R) =
+//    (0..this.size).forEach { y -> (0..this[y].size).forEach { this[y][it] = default(it) } }
 
-inline fun <reified T, reified R> Array<Array<T>>.cloneStructure(default: (T) -> R) =
-    this.map { rows -> rows.map { default(it) }.toTypedArray() }.toTypedArray()
+//inline fun <T> List2D<T>.traverse(onRowEnd: () -> Unit = {}, onElement: (T) -> Unit) {
+//    forEach { innerArray ->
+//        innerArray.forEach { onElement(it) }
+//        onRowEnd()
+//    }
+//}
 
-inline fun <T> List2D<T>.traverse(onRowEnd: () -> Unit = {}, onElement: (T) -> Unit) {
-    forEach { innerArray ->
-        innerArray.forEach { onElement(it) }
+inline fun <T, reified R> Array<Array<T>>.traverseMapIndexed(
+    onElement: (x: Int, y: Int, T) -> R
+): Array<Array<R>> = mapIndexed { y, r -> r.mapIndexed { x, it -> onElement(x, y, it) } }.toArray2D()
+
+inline fun <T, reified R> Array<Array<T>>.traverseMap(
+    onElement: (T) -> R
+): Array<Array<R>> = traverseMapIndexed { _, _, t -> onElement(t) }
+
+
+inline fun <T> Array<Array<T>>.traverse(onRowEnd: () -> Unit = {}, onElement: (x: Int, y: Int, T) -> Unit) {
+    forEachIndexed { y, r ->
+        r.forEachIndexed { x, t -> onElement(x, y, t) }
         onRowEnd()
     }
 }
 
-inline fun <T, R> List2D<T>.traverseMap(onElement: (T) -> R): List<List<R>> =
-    map { r -> r.map { onElement(it) } }
+fun <T> Array<Array<T>>.containsCoord(c: Coord): Boolean =
+    this.isNotEmpty() &&
+            this.all { it.size == this[0].size } &&
+            c.y in 0..this.size &&
+            c.x in 0..this[0].size
 
-fun <T> List2D<T>.traverseMutable(): MutableList<MutableList<T>> = map { it.toMutableList() }.toMutableList()
+inline fun <reified T, reified S, reified R> Pair<Array<Array<T>>, Array<Array<S>>>.merge(
+    default: R,
+    onElement: (first: T, second: S) -> R
+) = first.mapIndexed { y, r ->
+    r.mapIndexed { x, t ->
+        if (second.containsCoord(x coord y)) onElement(first[y][x], second[y][x]) else default
+    }
+}.toArray2D()
 
-
-inline fun <T> List2D<T>.traverseIndexed(onRowEnd: () -> Unit = {}, onElement: (T, Int, Int) -> Unit) {
-    forEachIndexed { y, innerArray ->
-        innerArray.forEachIndexed { x, t -> onElement(t, x, y) }
-        onRowEnd()
+fun Array<Array<Int>>.addLayer(
+    color: Int,
+    config: Array<Array<Boolean>>.() -> Unit
+) {
+    val other = this.traverseMap { false }.also(config)
+    this.forEachIndexed { y, r ->
+        r.forEachIndexed { x, t ->
+            if (other.containsCoord(x coord y)) {
+                if (other[y][x]) this[y][x] = color
+            }
+        }
     }
 }
 
-inline fun <reified T> List2D<T>.printAll(delimiter: String = "\t") {
-    traverse({ println() }) { print("$it$delimiter") }
+fun <T> Array<Array<T>>.traverseAdd(list: List<Coord>, t: T) {
+    list.forEach {
+        if (it.y in this.indices && it.x in this[0].indices) {
+            this[it.y][it.x] = t
+        }
+    }
+}
+
+inline fun <reified T> Array<Array<T>>.printAll(delimiter: String = "\t") {
+    traverse({ println() }) { _, _, t -> print("$t$delimiter") }
 }

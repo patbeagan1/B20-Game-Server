@@ -1,10 +1,12 @@
 package com.pbeagan.util
 
+import com.pbeagan.writer.TerminalColorStyle
+import com.pbeagan.writer.TerminalColorStyle.style
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-fun Coord.lineByDDATo(end: Coord) {
+fun Coord.lineByDDATo(end: Coord): List<Coord> {
     val dx = end.x - x
     val dy = end.y - y
     val steps = max(abs(dx), abs(dy))
@@ -14,12 +16,12 @@ fun Coord.lineByDDATo(end: Coord) {
     var x = x.toFloat()
     var y = y.toFloat()
 
-    (0..steps).map {
-        val ret = x.roundToInt() to y.roundToInt()
+    return (0..steps).map {
+        val ret = x.roundToInt() coord y.roundToInt()
         x += stepX
         y += stepY
         ret
-    }.also { println(it) }
+    }
 }
 
 fun main() {
@@ -73,17 +75,25 @@ data class Coord(val x: Int, val y: Int) : Comparable<Coord> {
     }.toInt()
 }
 
-data class CoordRect(val lesser: Coord, val greater: Coord)
+data class CoordRect(val lesser: Coord, val greater: Coord) {
+    fun modifyBy(
+        lx: Int = 0,
+        ly: Int = 0,
+        gx: Int = 0,
+        gy: Int = 0
+    ) = CoordRect(
+        (this.lesser.x + lx) coord (this.lesser.y + ly),
+        (this.greater.x + gx) coord (this.greater.y + gy)
+    )
+}
 
 infix fun Int.coord(other: Int) = Coord(this, other)
 infix fun Coord.coord(other: Coord) = CoordRect(this, other)
 
-fun List<List<Boolean>>.fillPolygon(rect: CoordRect) {
+fun Array<Array<Boolean>>.fillPolygon(rect: CoordRect, fill: Boolean = true): Array<Array<Boolean>> {
     var last = false
     var isInShape = 0
     var entering = true
-
-    val res = traverseMap { if (it) "X" else "." }.traverseMutable()
 
     for (y in (rect.lesser.y + 1)..rect.greater.y) {
         for (x in rect.lesser.x..rect.greater.x) {
@@ -94,9 +104,9 @@ fun List<List<Boolean>>.fillPolygon(rect: CoordRect) {
                     if (isInShape == 2) entering = false
                     if (isInShape == 0) entering = true
                     if (entering) isInShape++ else isInShape--
-                    if (isInShape > 0) res[y][x] = isInShape.toString()
+                    if (isInShape > 0) this[y][x] = fill
                 }
-                isInShape > 0 -> res[y][x] = isInShape.toString()
+                isInShape > 0 -> this[y][x] = fill
             }
             last = b
         }
@@ -105,47 +115,146 @@ fun List<List<Boolean>>.fillPolygon(rect: CoordRect) {
         entering = true
         last = false
     }
-    res.printAll("  ")
+    return this
 }
 
 fun getCircleByBresenham(center: Coord, radius: Int) {
-    var p = 0
-    var q = radius
-    var r = radius
-    var decision = 3 - 2 * r
-    val results = mutableListOf<Coord>()
-    while (p < q) {
-        results.drawCircle(center.x, center.y, p, q)
-        p++
-        if (decision < 0) {
-            decision += 4 * p + 6
-        } else {
-            r -= 1
-            decision += 4 * (p - q) + 10
+//    var p = 0
+//    var q = radius
+//    var r = radius
+//    var decision = 3 - 2 * r
+//    val results = mutableListOf<Coord>()
+//    while (p < q) {
+//        results.drawCircle(center.x, center.y, p, q)
+//        p++
+//        if (decision < 0) {
+//            decision += 4 * p + 6
+//        } else {
+//            r -= 1
+//            decision += 4 * (p - q) + 10
+//        }
+//        results.drawCircle(center.x, center.y, p, q)
+//    }
+//    val sorted = results.sorted()
+//    (0..results.maxBy { it.y }!!.y).forEach { y ->
+//        (0..results.maxBy { it.x }!!.x).forEach { x ->
+//            if (x coord y in sorted) print("x") else print(".")
+//        }
+//        println()
+//    }
+//    println(sorted)
+//    println()
+
+    previewCircle()
+
+    val height = 40
+    val width = 80
+    val screen = Array(height) { Array(width) { 0 } }
+    var tick = 0
+    forever(1000 / 20) {
+        println(TerminalColorStyle.HIDE_CURSOR + TerminalColorStyle.RIS)
+        (0..5).forEach {
+            screen.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
+                drawCircle(it * 7 + roll6() coord 32 + roll20() * rollSign(), 5)
+            }
         }
-        results.drawCircle(center.x, center.y, p, q)
-    }
-    val sorted = results.sorted()
-    (0..results.maxBy { it.y }!!.y).forEach { y ->
-        (0..results.maxBy { it.x }!!.x).forEach { x ->
-            if (x coord y in sorted) print("x") else print(".")
+        screen.addLayer(0xff0000) {
+            drawCircle(((tick++) % width) coord 20, 10)
         }
-        println()
+        screen.also { printScreenColor(it) }
+        screen.traverse { x, y, i -> screen[y][x] = 0 }
     }
-    println(sorted)
-    println()
+}
 
-    circleBres(20, 20, 10).also { pair ->
-        val (list, rect) = pair
-        val array = Array(rect.greater.y + 1) {
-            Array(rect.greater.x + 1) { false }
+fun forever(limiter: Int? = 100, action: () -> Unit) {
+    while (true) {
+        action()
+        limiter?.let { Thread.sleep(it.toLong()) }
+    }
+}
+
+fun Array<Array<Boolean>>.drawCircle(center: Coord, radius: Int) {
+    circleBres(center.x, center.y, radius).also {
+        val (list, _) = it
+        traverseAdd(list, true)
+    }
+}
+
+fun Array<Array<Boolean>>.drawLine(start: Coord, end: Coord) {
+    start.lineByDDATo(end).also { traverseAdd(it, true) }
+}
+
+fun Array<Array<Boolean>>.drawCircleFilled(center: Coord, radius: Int) {
+    circleBres(center.x, center.y, radius).also {
+        val (list, rect) = it
+        traverseAdd(list, true)
+        fillPolygon(rect.modifyBy(gy = -1), true)
+    }
+}
+
+private fun previewCircle() {
+    val screen = Array(43) {
+        Array(80) { false }
+    }
+//    circleBres(20, 20, 10).also { pair ->
+//        val (list, rect) = pair
+//        screen.traverseAdd(list, true)
+//
+//        printScreen(screen)
+//
+//        println()
+//
+//        screen.fillPolygon(rect.modifyBy(gy = -1), true)
+//        printScreen(screen)
+//    }
+
+    screen.drawCircleFilled(30 coord 30, 10)
+    screen.drawCircle(20 coord 20, 10)
+    printScreen(screen)
+
+    val screen2 = screen.traverseMap { false }
+    screen2.drawCircleFilled(35 coord 35, 10)
+
+    val merge = (screen to screen2).merge(false) { first: Boolean, second: Boolean -> first xor second }
+    printScreen(merge)
+
+    val screenColor = screen.traverseMapIndexed { x, y, t -> x shl 16 or y shl 8 }
+    printScreenColor(screenColor)
+
+    val screenColor2 = screen.traverseMap { t -> if (t) 0xFF0000 else 0 }
+    val also = (screenColor to screenColor2).merge(0) { first, second ->
+        if (second != 0) second else first
+    }.also { printScreenColor(it) }
+
+    val traverseMap = screen.traverseMap { false }
+    traverseMap.drawLine(23 coord 20, 40 coord 75)
+    (also to traverseMap).merge(0) { first, second ->
+        if (second) 0xffffff else first
+    }.also { printScreenColor(it) }
+
+    (0..5).forEach {
+        also.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
+            drawCircle(it * 7 + roll6() coord 32 + roll20() * rollSign(), 5)
         }
-        list.forEach { array[it.y][it.x] = true }
-
-        array.toList2D().traverseMap { if (it) "X" else "." }.printAll("  ")
-
-        println()
-
-        array.toList2D().fillPolygon((10 coord 10) coord (30 coord 30))
     }
+    also.also { printScreenColor(it) }
+
+//    circleBres(40, 30, 20).also {
+//        val (list, rect) = it
+//        screen.traverseAdd(list, true)
+//        screen.fillPolygon(rect.modifyBy(gy = -1), true)
+//    }
+//
+//    printScreen(screen)
+}
+
+private fun printScreen(screen: Array<Array<Boolean>>) {
+    screen.traverseMap { t -> if (t) "XX" else ".." }.printAll("")
+}
+
+private fun printScreenColor(screen: Array<Array<Int>>) {
+    screen.traverseMap { t ->
+        "  ".style(
+            colorBackground = TerminalColorStyle.Colors.Custom(TerminalColorStyle.colorIntToARGB(t)))
+    }.printAll("")
 }
