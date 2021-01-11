@@ -20,6 +20,8 @@ object TerminalColorStyle {
 
     const val HIDE_CURSOR = "$CSI?25l"
 
+    const val CURSOR_TO_START = "${CSI}1;1H"
+
     const val DOTS_LOW = '░'
     const val DOTS_MED = '▒'
     const val DOTS_HIGH = '▓'
@@ -80,13 +82,18 @@ object TerminalColorStyle {
         fun disableString() = "$CSI${this.disable}m"
     }
 
-    fun colorIntToARGB(color: Int): ARGB {
-        val a = color shr 24 and 255
-        val r = color shr 16 and 255
-        val g = color shr 8 and 255
-        val b = color and 255
-        return ARGB(a, r, g, b)
-    }
+    fun Int.colorIntToARGB(): ARGB = ARGB(
+        this shr 24 and 255,
+        this shr 16 and 255,
+        this shr 8 and 255,
+        this and 255
+    )
+
+    fun ARGB.argbToColorInt(withAlpha: Boolean = true): Int =
+        (a shl 24).takeIf { withAlpha } ?: 0
+            .or(r shl 16)
+            .or(g shl 8)
+            .or(b)
 
     data class ARGB(val a: Int, val r: Int, val g: Int, val b: Int)
 

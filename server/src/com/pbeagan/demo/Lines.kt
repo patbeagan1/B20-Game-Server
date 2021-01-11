@@ -14,6 +14,7 @@ import com.pbeagan.util.traverseAdd
 import com.pbeagan.util.traverseMap
 import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle
+import com.pbeagan.writer.TerminalColorStyle.colorIntToARGB
 import com.pbeagan.writer.TerminalColorStyle.style
 import kotlin.math.abs
 import kotlin.math.max
@@ -245,6 +246,7 @@ private fun printScreen(screen: Array<Array<Boolean>>) {
 private fun printScreenColor(screen: Array<Array<Int>>) {
     screen.traverseMap { t ->
         "  ".style(
-            colorBackground = TerminalColorStyle.Colors.Custom(TerminalColorStyle.colorIntToARGB(t)))
+            colorBackground = TerminalColorStyle.Colors.Custom(t.colorIntToARGB())
+        )
     }.printAll("")
 }
