@@ -1,7 +1,7 @@
 package com.pbeagan.ancestry
 
 import com.pbeagan.actions.Pass
-import com.pbeagan.data.CombatValue
+import com.pbeagan.data.AttackValue
 import com.pbeagan.data.HealthValue
 import com.pbeagan.data.MentalValue
 import com.pbeagan.data.MiscValue
@@ -13,9 +13,9 @@ import com.pbeagan.data.VisionValue
 
 class AncestryBase : Ancestry(
     object : Stats {
-        override var baseAtkMelee: CombatValue = CombatValue(0)
-        override var baseAtkRanged: CombatValue = CombatValue(0)
-        override var baseAtkThrow: CombatValue = CombatValue(0)
+        override var baseAtkMelee: AttackValue = AttackValue(0)
+        override var baseAtkRanged: AttackValue = AttackValue(0)
+        override var baseAtkThrow: AttackValue = AttackValue(0)
 
         override var awareness: MiscValue = MiscValue(4)
         override var spirit: MiscValue = MiscValue(0)

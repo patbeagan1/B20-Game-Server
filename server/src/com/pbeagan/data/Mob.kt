@@ -34,8 +34,8 @@ class Mob constructor(
 
     var isPlayer: Boolean = false,
 
-    var armor: Int = 0,
-    var dodge: Int = 0,
+    var armor: DefenseValue = DefenseValue(0),
+    var dodge: DefenseValue = DefenseValue(0),
 
     var location: Int = 0,
     override var locationInRoom: Coord,
@@ -50,9 +50,9 @@ class Mob constructor(
         this.sumBy(selector = { valueContainerTransform(it).value })
 
 
-    override val baseAtkMelee: CombatValue get() = CombatValue(effects.sumBy { it.baseAtkMelee })
-    override val baseAtkRanged: CombatValue get() = CombatValue(effects.sumBy { it.baseAtkRanged })
-    override val baseAtkThrow: CombatValue get() = CombatValue(effects.sumBy { it.baseAtkThrow })
+    override val baseAtkMelee: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkMelee })
+    override val baseAtkRanged: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkRanged })
+    override val baseAtkThrow: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkThrow })
     override val awareness: MiscValue get() = MiscValue(effects.sumBy { it.awareness })
     override val spirit: MiscValue get() = MiscValue(effects.sumBy { it.spirit })
     override val speed: MiscValue get() = MiscValue(effects.sumBy { it.speed })

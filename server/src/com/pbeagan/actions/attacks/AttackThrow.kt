@@ -9,7 +9,7 @@ class AttackThrow(private val target: Mob) : Attack() {
     override val range: Int = 2
     override fun invoke(self: Mob) {
         writer.sayToRoomOf(target).combat("${self.formatHP()} has throw attacked ${target.formatHP()}!")
-        if (roll6() + self.baseAtkThrow.value > target.armor) {
+        if (self.baseAtkThrow.adjustBy(roll6()) > target.armor) {
             damageResolution(target, self.baseAtkThrow)
         }
     }

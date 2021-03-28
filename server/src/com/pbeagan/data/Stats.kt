@@ -1,11 +1,13 @@
 package com.pbeagan.data
 
+import com.pbeagan.util.DiceRoll
+
 interface Stats {
 
     // Combat
-    val baseAtkMelee: CombatValue
-    val baseAtkRanged: CombatValue
-    val baseAtkThrow: CombatValue
+    val baseAtkMelee: AttackValue
+    val baseAtkRanged: AttackValue
+    val baseAtkThrow: AttackValue
 
     // Misc
     val awareness: MiscValue
@@ -28,46 +30,62 @@ interface Stats {
 
     // Total hearts
     val totalHearts: HealthValue
+
     val visionBright: VisionValue
     val visionDim: VisionValue
     val visionDark: VisionValue
     val visionNone: VisionValue
 }
 
-interface ValueInt<T : ValueContainer<Int>> : ValueContainer<Int> {
-    @Suppress("UNCHECKED_CAST")
-    fun create(a: Int): T = this::class.constructors.first().call(a) as T
+
+typealias IntContainer = ValueContainer<Int>
+
+interface AddableInt<T : IntContainer> : ValueInt<T> {
     operator fun minus(a: T): T = create(value - a.value)
     operator fun plus(a: T): T = create(value + a.value)
+}
+
+interface AdjustableInt<T : IntContainer> : ValueInt<T> {
+    fun adjustBy(a: Int) = create(value + a)
+    fun adjustBy(a: DiceRoll) = create(value + a.value)
+}
+
+interface ValueInt<T : IntContainer> : IntContainer, IntContainerFactory<T>
+interface IntContainerFactory<T : IntContainer> {
+    /**
+     * Default assumes usage as an inline class.
+     * If this is not an inline class, please override.
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun create(a: Int): T = this::class.constructors.first().call(a) as T
 }
 
 interface ValueContainer<T> {
     val value: T
 }
 
-interface StatValueI<T : ValueContainer<Int>> : ValueInt<T> {
+interface StatValueI<T : IntContainer> : MobValueInt<T> {
     fun mod(): T = create((value - 10) / 2)
 }
 
-inline class CombatValue(override val value: Int) : ValueInt<CombatValue> {
-    override fun create(a: Int): CombatValue = CombatValue(a)
+interface MobValueInt<T : IntContainer> : ValueInt<T>,
+    AdjustableInt<T>,
+    AddableInt<T>
+
+inline class AttackValue(override val value: Int) : MobValueInt<AttackValue>,
+    Comparable<DefenseValue> {
+    override fun compareTo(other: DefenseValue): Int = value - other.value
 }
 
-inline class VisionValue(override val value: Int) : ValueInt<VisionValue> {
-    override fun create(a: Int): VisionValue = VisionValue(a)
+inline class DefenseValue(override val value: Int) : MobValueInt<DefenseValue>,
+    Comparable<AttackValue> {
+    override fun compareTo(other: AttackValue): Int = other.value - value
 }
 
+inline class VisionValue(override val value: Int) : MobValueInt<VisionValue>
 inline class PhysicalValue(override val value: Int) : StatValueI<PhysicalValue>
-
-inline class MentalValue(override val value: Int) : StatValueI<MentalValue> {
-    override fun create(a: Int): MentalValue = MentalValue(a)
-}
-
-inline class MiscValue(override val value: Int) : StatValueI<MiscValue> {
-    override fun create(a: Int): MiscValue = MiscValue(a)
-}
-
-inline class HealthValue(override val value: Int) : StatValueI<HealthValue> {
-    override fun create(a: Int): HealthValue = HealthValue(a)
+inline class MentalValue(override val value: Int) : StatValueI<MentalValue>
+inline class MiscValue(override val value: Int) : StatValueI<MiscValue>
+inline class HealthValue(override val value: Int) : MobValueInt<HealthValue> {
     operator fun plus(a: PhysicalValue): HealthValue = HealthValue(value + a.value)
 }

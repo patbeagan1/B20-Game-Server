@@ -13,9 +13,9 @@ data class EffectBase(
     override val descriptionDeactivation: String,
 
     // Combat
-    override var baseAtkMelee: CombatValue = CombatValue(0),
-    override var baseAtkRanged: CombatValue = CombatValue(0),
-    override var baseAtkThrow: CombatValue = CombatValue(0),
+    override var baseAtkMelee: AttackValue = AttackValue(0),
+    override var baseAtkRanged: AttackValue = AttackValue(0),
+    override var baseAtkThrow: AttackValue = AttackValue(0),
 
     // Misc
     override var awareness: MiscValue = MiscValue(0),

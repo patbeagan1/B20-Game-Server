@@ -22,19 +22,19 @@ class Goblin : Ancestry(AncestryBase()) {
         return mob.run {
             when (behavior) {
                 MobBehavior.LOOTER -> {
-                    when (roll20()) {
+                    when (roll20().value) {
                         in 0..2 -> getRandomVisibleItem()?.let { Take(it) }
                         in 3..4 -> this.items.takeIf { it.isNotEmpty() }?.random()?.let { Drop(it) }
                         else -> Pass
                     } ?: Pass
                 }
                 MobBehavior.AGGRESSIVE -> {
-                    when (roll20()) {
+                    when (roll20().value) {
                         in 0..18 -> getFirstVisibleMob()?.let { Punch(it) }
                         else -> Pass
                     } ?: Pass
                 }
-                MobBehavior.WANDERER -> when (roll20()) {
+                MobBehavior.WANDERER -> when (roll20().value) {
                     0 -> Move.forceMove(Direction.NORTH)
                     1 -> Move.forceMove(Direction.EAST)
                     2 -> Move.forceMove(Direction.SOUTH)
