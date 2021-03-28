@@ -2,6 +2,7 @@ package com.pbeagan.writer
 
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoomOtherMobsAndSelf
+import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.cio.write
 import io.ktor.utils.io.ByteWriteChannel
 import kotlinx.coroutines.runBlocking
@@ -29,14 +30,15 @@ class WriterImpl : Writer, WriterInternal {
 
     override fun debug(s: String) = println(s)
 
-    override fun write(mob: Mob, s: (Mob) -> String) {
+    @KtorExperimentalAPI
+    override fun write(mob: Mob, stringGenerator: (Mob) -> String) {
         val byteWriteChannel = outputs[mob.idForIO]
         if (byteWriteChannel == null || byteWriteChannel.isClosedForWrite) {
             outputs.remove(mob.idForIO)
         } else {
             debug("Writing: ${mob.nameStyled} // $byteWriteChannel")
             try {
-                runBlocking { byteWriteChannel.write("${s(mob)}\n") }
+                runBlocking { byteWriteChannel.write("${stringGenerator(mob)}\n") }
             } catch (e: IOException) {
                 debug(e.toString())
                 outputs.remove(mob.idForIO)
@@ -46,7 +48,7 @@ class WriterImpl : Writer, WriterInternal {
 }
 
 interface WriterInternal {
-    fun write(s1: Mob, s: (Mob) -> String)
+    fun write(mob: Mob, stringGenerator: (Mob) -> String)
 }
 
 interface Writer {

@@ -7,16 +7,18 @@ import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.actions.Take
 import com.pbeagan.data.Direction
+import com.pbeagan.data.HealthValue
 import com.pbeagan.data.Mob
 import com.pbeagan.data.MobBehavior
+import com.pbeagan.data.MentalValue
 import com.pbeagan.data.getFirstVisibleMob
 import com.pbeagan.data.getRandomVisibleItem
 import com.pbeagan.util.roll20
 
 class Hobgoblin : Ancestry(Goblin()) {
 
-    override val fortitude: Int get() = super.fortitude - 4
-    override val totalHearts: Int get() = super.totalHearts + 5
+    override val fortitude: MentalValue get() = super.fortitude - MentalValue(4)
+    override val totalHearts: HealthValue get() = super.totalHearts + HealthValue(5)
 
     override fun decide(mob: Mob, behavior: MobBehavior): Action = mob.run {
         when (behavior) {

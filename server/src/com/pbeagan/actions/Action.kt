@@ -7,6 +7,7 @@ import com.pbeagan.data.AttackType.MAGIC
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.AttackType.RANGED
 import com.pbeagan.data.AttackType.THROWN
+import com.pbeagan.data.CombatValue
 import com.pbeagan.data.Mob
 import com.pbeagan.data.getFirstVisibleMob
 import com.pbeagan.data.target
@@ -16,9 +17,9 @@ abstract class Action {
     abstract operator fun invoke(self: Mob)
     lateinit var writer: Writer
 
-    fun damageResolution(target: Mob, damage: Int) {
+    fun damageResolution(target: Mob, damage: CombatValue) {
         writer.sayToRoomOf(target).combat("${target.nameStyled} was hit for $damage damage!")
-        target.hearts -= damage
+        target.hearts -= damage.value
         writer.sayToRoomOf(target).combat("${target.nameStyled} is down to ${target.hearts} hp!")
         if (target.hearts <= 0) {
             writer.sayToAll().dead("${target.nameStyled} has died.")

@@ -1,5 +1,6 @@
 package com.pbeagan.actions.attacks
 
+import com.pbeagan.data.CombatValue
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.formatHP
@@ -16,11 +17,11 @@ class Punch(private val target: Mob) : Attack() {
         if (target.currentRoom() != self.currentRoom()) return
         if (target.locationInRoom !in self.range(range)) return
         writer.sayToRoomOf(target).combat("${self.formatHP()} has ${"Punched".style(Magenta)} ${target.formatHP()}!")
-        val accuracy = roll20() + self.baseAtkMelee
+        val accuracy = roll20() + self.baseAtkMelee.value
         val dodge = roll20() + target.dodge
         if (accuracy > dodge) {
-            val damage = roll6() + self.strength - target.armor
-            damageResolution(target, damage)
+            val damage = roll6() + self.strength.value - target.armor
+            damageResolution(target, CombatValue(damage))
         } else {
             writer.sayToRoomOf(target).combat("${self.nameStyled} ${"missed".style(Red)} ${target.formatHP()}!")
         }

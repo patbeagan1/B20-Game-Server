@@ -7,6 +7,7 @@ import com.pbeagan.data.Effect
 import com.pbeagan.data.EffectBase
 import com.pbeagan.data.EffectImpl
 import com.pbeagan.data.Mob
+import com.pbeagan.data.VisionValue
 import com.pbeagan.writer.TerminalColorStyle.Colors.Magenta
 import com.pbeagan.writer.TerminalColorStyle.style
 
@@ -34,10 +35,10 @@ class NightSight : Action(), MultiRoundAction {
     class NightSightEffect(nameTarget: String) : EffectImpl(
         EffectBase(
             roundsLeft = 3,
-            visionBright = -20,
-            visionDim = 10,
-            visionDark = 15,
-            visionNone = 2,
+            visionBright = VisionValue(-20),
+            visionDim = VisionValue(10),
+            visionDark = VisionValue(15),
+            visionNone = VisionValue(2),
             descriptionActivation = "$nameTarget has been blessed with $spellName!",
             descriptionDeactivation = "$nameTarget's $spellName has worn off.",
             name = "NightSight",
