@@ -113,7 +113,7 @@ object SampleData {
                     listOf(
                         "Spoiled Red Apple", "fruit", "apple", "food"
                     ),
-                    descriptionOnExamination = "A spoiled red apple. It does not look good enough coord eat!",
+                    descriptionOnExamination = "A spoiled red apple. It does not look good enough to eat!",
                     descriptionInRoom = "There is an apple laying on the ground",
                     locationInRoom = 4 coord 4
                 ).apply {

@@ -53,11 +53,12 @@ interface AdjustableInt<T : IntContainer> : ValueInt<T> {
 interface ValueInt<T : IntContainer> : IntContainer, IntContainerFactory<T>
 interface IntContainerFactory<T : IntContainer> {
     /**
-     * Default assumes usage as an inline class.
-     * If this is not an inline class, please override.
+     * Default assumes usage as an data class.
+     * If this is not an data class, please override.
      */
     @Suppress("UNCHECKED_CAST")
-    fun create(a: Int): T = this::class.constructors.first().call(a) as T
+    fun create(a: Int): T
+//    = this::class.constructors.first{it.parameters.size == 1 && it.parameters . all { it }}.call(a) as T
 }
 
 interface ValueContainer<T> {
@@ -72,20 +73,42 @@ interface MobValueInt<T : IntContainer> : ValueInt<T>,
     AdjustableInt<T>,
     AddableInt<T>
 
-inline class AttackValue(override val value: Int) : MobValueInt<AttackValue>,
+data class AttackValue(val v: Int) : MobValueInt<AttackValue>,
     Comparable<DefenseValue> {
     override fun compareTo(other: DefenseValue): Int = value - other.value
+    override fun create(a: Int): AttackValue = AttackValue(a)
+    override val value: Int get() = v
 }
 
-inline class DefenseValue(override val value: Int) : MobValueInt<DefenseValue>,
+data class DefenseValue(val v: Int) : MobValueInt<DefenseValue>,
     Comparable<AttackValue> {
     override fun compareTo(other: AttackValue): Int = other.value - value
+    override fun create(a: Int): DefenseValue = DefenseValue(a)
+    override val value: Int get() = v
 }
 
-inline class VisionValue(override val value: Int) : MobValueInt<VisionValue>
-inline class PhysicalValue(override val value: Int) : StatValueI<PhysicalValue>
-inline class MentalValue(override val value: Int) : StatValueI<MentalValue>
-inline class MiscValue(override val value: Int) : StatValueI<MiscValue>
-inline class HealthValue(override val value: Int) : MobValueInt<HealthValue> {
+data class VisionValue(val v: Int) : MobValueInt<VisionValue> {
+    override fun create(a: Int): VisionValue = VisionValue(a)
+    override val value: Int get() = v
+}
+
+data class PhysicalValue(val v: Int) : StatValueI<PhysicalValue> {
+    override fun create(a: Int): PhysicalValue = PhysicalValue(a)
+    override val value: Int get() = v
+}
+
+data class MentalValue(val v: Int) : StatValueI<MentalValue> {
+    override fun create(a: Int): MentalValue = MentalValue(a)
+    override val value: Int get() = v
+}
+
+data class MiscValue(val v: Int) : StatValueI<MiscValue> {
+    override fun create(a: Int): MiscValue = MiscValue(a)
+    override val value: Int get() = v
+}
+
+data class HealthValue(val v: Int) : MobValueInt<HealthValue> {
     operator fun plus(a: PhysicalValue): HealthValue = HealthValue(value + a.value)
+    override fun create(a: Int): HealthValue = HealthValue(a)
+    override val value: Int get() = v
 }
