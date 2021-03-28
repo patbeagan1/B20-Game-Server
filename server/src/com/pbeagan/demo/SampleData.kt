@@ -3,6 +3,7 @@ package com.pbeagan.demo
 import com.pbeagan.ancestry.Goblin
 import com.pbeagan.ancestry.Hobgoblin
 import com.pbeagan.ancestry.Human
+import com.pbeagan.data.DefenseValue
 import com.pbeagan.data.Direction.DOWN
 import com.pbeagan.data.Direction.EAST
 import com.pbeagan.data.Direction.NORTH
@@ -34,7 +35,7 @@ object SampleData {
         ),
         Mob(
             "Steve",
-            armor = 3,
+            armor = DefenseValue(3),
             isPlayer = true,
             effects = listOf(Human()),
             description = object : Mob.Description {},
@@ -42,7 +43,7 @@ object SampleData {
         ),
         Mob(
             "Bob",
-            armor = 2,
+            armor = DefenseValue(2),
             effects = listOf(Goblin()),
             behavior = MobBehavior.AGGRESSIVE,
             location = 2,
@@ -51,7 +52,7 @@ object SampleData {
         ),
         Mob(
             "Charlie",
-            armor = 2,
+            armor = DefenseValue(2),
             effects = listOf(Hobgoblin()),
             behavior = MobBehavior.LOOTER,
             location = 3,
@@ -60,7 +61,7 @@ object SampleData {
         ),
         Mob(
             "Darla",
-            armor = 2,
+            armor = DefenseValue(2),
             effects = listOf(Goblin()),
             behavior = MobBehavior.WANDERER,
             location = 0,
@@ -112,7 +113,7 @@ object SampleData {
                     listOf(
                         "Spoiled Red Apple", "fruit", "apple", "food"
                     ),
-                    descriptionOnExamination = "A spoiled red apple. It does not look good enough coord eat!",
+                    descriptionOnExamination = "A spoiled red apple. It does not look good enough to eat!",
                     descriptionInRoom = "There is an apple laying on the ground",
                     locationInRoom = 4 coord 4
                 ).apply {

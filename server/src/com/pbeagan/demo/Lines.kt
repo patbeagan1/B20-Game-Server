@@ -8,12 +8,12 @@ import com.pbeagan.util.merge
 import com.pbeagan.util.printAll
 import com.pbeagan.util.roll20
 import com.pbeagan.util.roll6
-import com.pbeagan.util.rollSign
 import com.pbeagan.util.traverse
 import com.pbeagan.util.traverseAdd
 import com.pbeagan.util.traverseMap
 import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle
+import com.pbeagan.writer.TerminalColorStyle.colorIntToARGB
 import com.pbeagan.writer.TerminalColorStyle.style
 import kotlin.math.abs
 import kotlin.math.max
@@ -145,7 +145,7 @@ fun getCircleByBresenham(center: Coord, radius: Int) {
         println(TerminalColorStyle.HIDE_CURSOR + TerminalColorStyle.RIS)
         (0..5).forEach {
             screen.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
-                drawCircle(it * 7 + roll6() coord 32 + roll20() * rollSign(), 5)
+                drawCircle(it * 7 + roll6().value coord 32 + roll20().rollSign().value, 5)
             }
         }
         screen.addLayer(0xff0000) {
@@ -224,7 +224,7 @@ private fun previewCircle() {
 
     (0..5).forEach {
         also.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
-            drawCircle(it * 7 + roll6() coord 32 + roll20() * rollSign(), 5)
+            drawCircle(it * 7 + roll6().value coord 32 + roll20().rollSign().value, 5)
         }
     }
     also.also { printScreenColor(it) }
@@ -245,6 +245,7 @@ private fun printScreen(screen: Array<Array<Boolean>>) {
 private fun printScreenColor(screen: Array<Array<Int>>) {
     screen.traverseMap { t ->
         "  ".style(
-            colorBackground = TerminalColorStyle.Colors.Custom(TerminalColorStyle.colorIntToARGB(t)))
+            colorBackground = TerminalColorStyle.Colors.Custom(t.colorIntToARGB())
+        )
     }.printAll("")
 }

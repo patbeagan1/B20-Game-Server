@@ -1,14 +1,22 @@
 package com.pbeagan.util
 
+import com.pbeagan.data.ValueContainer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
-fun roll6() = Random.nextInt(1, 6)
-fun roll8() = Random.nextInt(1, 8)
-fun roll12() = Random.nextInt(1, 12)
-fun roll20() = Random.nextInt(1, 20)
-fun rollSign() = if (Random.nextBoolean()) 1 else -1
+inline class DiceRoll(val value: Int) : Comparable<ValueContainer<Int>> {
+    override fun compareTo(other: ValueContainer<Int>): Int = value - other.value
+    operator fun plus(a: Int) = value + a
+    fun rollSign() = DiceRoll(value * if (Random.nextBoolean()) 1 else -1)
+}
+
+infix fun DiceRoll.isIn(a: IntRange) = value in a
+
+fun roll6() = DiceRoll(Random.nextInt(1, 6))
+fun roll8() = DiceRoll(Random.nextInt(1, 8))
+fun roll12() = DiceRoll(Random.nextInt(1, 12))
+fun roll20() = DiceRoll(Random.nextInt(1, 20))
 
 val Any.exhaustive get() = this.let {}
 

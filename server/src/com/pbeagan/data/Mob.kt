@@ -34,8 +34,8 @@ class Mob constructor(
 
     var isPlayer: Boolean = false,
 
-    var armor: Int = 0,
-    var dodge: Int = 0,
+    var armor: DefenseValue = DefenseValue(0),
+    var dodge: DefenseValue = DefenseValue(0),
 
     var location: Int = 0,
     override var locationInRoom: Coord,
@@ -46,34 +46,38 @@ class Mob constructor(
     var effects: List<Effect> = listOf(Human()),
     var items: MutableList<ItemData> = mutableListOf()
 ) : Stats, HasLocation {
-    override val baseAtkMelee: Int get() = effects.sumBy { it.baseAtkMelee }
-    override val baseAtkRanged: Int get() = effects.sumBy { it.baseAtkRanged }
-    override val baseAtkThrow: Int get() = effects.sumBy { it.baseAtkThrow }
-    override val awareness: Int get() = effects.sumBy { it.awareness }
-    override val spirit: Int get() = effects.sumBy { it.spirit }
-    override val speed: Int get() = effects.sumBy { it.speed }
-    override val presence: Int get() = effects.sumBy { it.presence }
-    override val cunning: Int get() = effects.sumBy { it.cunning }
-    override val persuasion: Int get() = effects.sumBy { it.persuasion }
-    override val tenacity: Int get() = effects.sumBy { it.tenacity }
-    override val fortitude: Int get() = effects.sumBy { it.fortitude }
-    override val strength: Int get() = effects.sumBy { it.strength }
-    override val agility: Int get() = effects.sumBy { it.agility }
-    override val precision: Int get() = effects.sumBy { it.precision }
-    override val endurance: Int get() = effects.sumBy { it.endurance }
-    override val durability: Int get() = effects.sumBy { it.durability }
-    override val totalHearts: Int get() = effects.sumBy { it.totalHearts } + endurance.mod()
-    override val visionBright: Int get() = effects.sumBy { it.visionBright }
-    override val visionDim: Int get() = effects.sumBy { it.visionDim }
-    override val visionDark: Int get() = effects.sumBy { it.visionDark }
-    override val visionNone: Int get() = effects.sumBy { it.visionNone }
+    fun List<Effect>.sumBy(valueContainerTransform: (Effect) -> ValueContainer<Int>) =
+        this.sumBy(selector = { valueContainerTransform(it).value })
+
+
+    override val baseAtkMelee: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkMelee })
+    override val baseAtkRanged: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkRanged })
+    override val baseAtkThrow: AttackValue get() = AttackValue(effects.sumBy { it.baseAtkThrow })
+    override val awareness: MiscValue get() = MiscValue(effects.sumBy { it.awareness })
+    override val spirit: MiscValue get() = MiscValue(effects.sumBy { it.spirit })
+    override val speed: MiscValue get() = MiscValue(effects.sumBy { it.speed })
+    override val presence: MentalValue get() = MentalValue(effects.sumBy { it.presence })
+    override val cunning: MentalValue get() = MentalValue(effects.sumBy { it.cunning })
+    override val persuasion: MentalValue get() = MentalValue(effects.sumBy { it.persuasion })
+    override val tenacity: MentalValue get() = MentalValue(effects.sumBy { it.tenacity })
+    override val fortitude: MentalValue get() = MentalValue(effects.sumBy { it.fortitude })
+    override val strength: PhysicalValue get() = PhysicalValue(effects.sumBy { it.strength })
+    override val agility: PhysicalValue get() = PhysicalValue(effects.sumBy { it.agility })
+    override val precision: PhysicalValue get() = PhysicalValue(effects.sumBy { it.precision })
+    override val endurance: PhysicalValue get() = PhysicalValue(effects.sumBy { it.endurance })
+    override val durability: PhysicalValue get() = PhysicalValue(effects.sumBy { it.durability })
+    override val totalHearts: HealthValue get() = HealthValue(effects.sumBy { it.totalHearts }) + endurance.mod()
+    override val visionBright: VisionValue get() = VisionValue(effects.sumBy { it.visionBright })
+    override val visionDim: VisionValue get() = VisionValue(effects.sumBy { it.visionDim })
+    override val visionDark: VisionValue get() = VisionValue(effects.sumBy { it.visionDark })
+    override val visionNone: VisionValue get() = VisionValue(effects.sumBy { it.visionNone })
 
     var action: Action = Pass
     var actionMove: Move? = null
     val nameStyled = nameBase.style(colorForeground = TerminalColorStyle.Colors.Yellow)
     var preferredAttack: AttackType = MELEE
     val idForIO: Int = UniqueId.get()
-    var hearts by BoundedValue(totalHearts, 0..totalHearts)
+    var hearts by BoundedValue(totalHearts.value, 0..totalHearts.value)
     val ancestry by lazy { effects.firstOrNull { it is Ancestry } as? Ancestry }
     val party: MutableSet<Mob> = mutableSetOf()
 
@@ -87,7 +91,7 @@ class Mob constructor(
         DIM -> visionDim
         DARK -> visionDark
         NONE -> visionNone
-    }.let { Senses.checkLocalRange(this.locationInRoom.x, this.locationInRoom.y, it) }
+    }.let { Senses.checkLocalRange(this.locationInRoom.x, this.locationInRoom.y, it.value) }
 
     fun range(r: Int) = Senses.checkLocalRange(
         this.locationInRoom.x,

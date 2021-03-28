@@ -7,6 +7,7 @@ import com.pbeagan.actions.Retry
 import com.pbeagan.data.Effect
 import com.pbeagan.data.EffectBase
 import com.pbeagan.data.EffectImpl
+import com.pbeagan.data.HealthValue
 import com.pbeagan.data.Mob
 import com.pbeagan.data.target
 
@@ -40,7 +41,7 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
     class CurseEffect(nameTarget: String, nameCaster: String) : EffectImpl(
         EffectBase(
             roundsLeft = 1,
-            totalHearts = -10,
+            totalHearts = HealthValue(-10),
             descriptionActivation = "$nameTarget has been cursed by $nameCaster!",
             descriptionDeactivation = "The curse on $nameTarget has worn off.",
             name = "Curse",

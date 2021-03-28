@@ -19,7 +19,7 @@ class Game {
     private val playerHandler = PlayerHandler()
 
     fun gameLoop(writer: Writer, reader: Reader) {
-        mobs.sortedByDescending { roll20() + it.awareness }.forEach {
+        mobs.sortedByDescending { roll20() + it.awareness.value }.forEach {
             it.run {
                 degradeEffects(writer)
                 checkStartPlayerTurn(reader, writer)

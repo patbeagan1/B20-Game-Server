@@ -13,35 +13,35 @@ data class EffectBase(
     override val descriptionDeactivation: String,
 
     // Combat
-    override var baseAtkMelee: Int = 0,
-    override var baseAtkRanged: Int = 0,
-    override var baseAtkThrow: Int = 0,
+    override var baseAtkMelee: AttackValue = AttackValue(0),
+    override var baseAtkRanged: AttackValue = AttackValue(0),
+    override var baseAtkThrow: AttackValue = AttackValue(0),
 
     // Misc
-    override var awareness: Int = 0,
-    override var spirit: Int = 0,
-    override var speed: Int = 0,
+    override var awareness: MiscValue = MiscValue(0),
+    override var spirit: MiscValue = MiscValue(0),
+    override var speed: MiscValue = MiscValue(0),
 
     // Mental
-    override var presence: Int = 0,
-    override var cunning: Int = 0,
-    override var persuasion: Int = 0,
-    override var tenacity: Int = 0,
-    override var fortitude: Int = 0,
+    override var presence: MentalValue = MentalValue(0),
+    override var cunning: MentalValue = MentalValue(0),
+    override var persuasion: MentalValue = MentalValue(0),
+    override var tenacity: MentalValue = MentalValue(0),
+    override var fortitude: MentalValue = MentalValue(0),
 
     // Physical
-    override var strength: Int = 0,
-    override var agility: Int = 0,
-    override var precision: Int = 0,
-    override var endurance: Int = 0,
-    override var durability: Int = 0,
+    override var strength: PhysicalValue = PhysicalValue(0),
+    override var agility: PhysicalValue = PhysicalValue(0),
+    override var precision: PhysicalValue = PhysicalValue(0),
+    override var endurance: PhysicalValue = PhysicalValue(0),
+    override var durability: PhysicalValue = PhysicalValue(0),
 
     // Total hearts
-    override var totalHearts: Int = 0,
+    override var totalHearts: HealthValue = HealthValue(0),
 
     // vision
-    override var visionBright: Int = 0,
-    override var visionDim: Int = 0,
-    override var visionDark: Int = 0,
-    override var visionNone: Int = 0
+    override var visionBright: VisionValue = VisionValue(0),
+    override var visionDim: VisionValue = VisionValue(0),
+    override var visionDark: VisionValue = VisionValue(0),
+    override var visionNone: VisionValue = VisionValue(0)
 ) : Effect

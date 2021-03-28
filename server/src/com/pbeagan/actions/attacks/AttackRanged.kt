@@ -9,7 +9,7 @@ class AttackRanged(private val target: Mob) : Attack() {
     override val range: Int = 2
     override fun invoke(self: Mob) {
         writer.sayToRoomOf(target).combat("${self.formatHP()} has range attacked ${target.formatHP()}!")
-        if (roll6() + self.baseAtkRanged > target.armor) {
+        if (self.baseAtkRanged.adjustBy(roll6()) > target.armor) {
             damageResolution(target, self.baseAtkRanged)
         }
     }
