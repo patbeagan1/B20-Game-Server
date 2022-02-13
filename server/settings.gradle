@@ -1,5 +1,4 @@
 rootProject.name = "ktor-demo"
 include 'config'
 include 'hello'
-include 'models'
 
