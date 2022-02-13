@@ -1,8 +1,7 @@
 package com.pbeagan.writer
 
 import com.pbeagan.data.Mob
-import io.ktor.utils.io.ByteReadChannel
-import io.ktor.utils.io.readUTF8Line
+import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 
 class Reader(private val writer: Writer) {
@@ -16,6 +15,12 @@ class Reader(private val writer: Writer) {
     fun isActive(mob: Mob): Boolean = inputs[mob.idForIO] != null
 
     fun read(player: Mob): String? {
+        // todo this spins in practice if everyone disconnects
+        //  putting this in to slow it down - should find a better solution
+        if (inputs.isEmpty()) {
+            Thread.sleep(5000)
+        }
+
         val byteReadChannel = inputs[player.idForIO]
         if (byteReadChannel == null || byteReadChannel.isClosedForRead) {
             remove(player)
@@ -29,8 +34,10 @@ class Reader(private val writer: Writer) {
                 byteReadChannel.readUTF8Line()
             } catch (e: IllegalStateException) {
                 writer.debug(e.toString())
-                writer.sayTo(player).error("Something went wrong! We can't read your input anymore. Please log back in.")
-                writer.sayTo(player).error("If you are trying to close the client, type ^]. Then, ^C will work.")
+                writer.sayTo(player)
+                    .error("Something went wrong! We can't read your input anymore. Please log back in.")
+                writer.sayTo(player)
+                    .error("If you are trying to close the client, type ^]. Then, ^C will work.")
                 remove(player)
                 null
             }
