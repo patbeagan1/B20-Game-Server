@@ -2,9 +2,9 @@ buildscript {
     ext.config = { name -> "config/$name" }
 
     repositories {
-        jcenter()
-        maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
+//        maven { url "https://dl.bintray.com/arrow-kt/arrow-kt/" }
         maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
     }
 }
 
