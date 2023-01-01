@@ -18,12 +18,11 @@ import java.net.InetSocketAddress
 val rooms = SampleData.rooms
 val mobs = SampleData.mobs
 
-@KtorExperimentalAPI
 fun main(args: Array<String>) {
     runBlocking {
         val server = aSocket(ActorSelectorManager(Dispatchers.IO))
             .tcp()
-            .bind(InetSocketAddress("127.0.0.1", 2324))
+            .bind("127.0.0.1", 2324)
         println("Started echo telnet server at ${server.localAddress}")
 
         val writer: Writer = WriterImpl()

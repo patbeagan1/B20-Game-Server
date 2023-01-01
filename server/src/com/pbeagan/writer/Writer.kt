@@ -5,6 +5,7 @@ import com.pbeagan.data.currentRoomOtherMobsAndSelf
 import io.ktor.util.KtorExperimentalAPI
 import io.ktor.util.cio.write
 import io.ktor.utils.io.ByteWriteChannel
+import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.runBlocking
 import mobs
 import java.io.IOException
@@ -30,7 +31,6 @@ class WriterImpl : Writer, WriterInternal {
 
     override fun debug(s: String) = println(s)
 
-    @KtorExperimentalAPI
     override fun write(mob: Mob, stringGenerator: (Mob) -> String) {
         val byteWriteChannel = outputs[mob.idForIO]
         if (byteWriteChannel == null || byteWriteChannel.isClosedForWrite) {
@@ -38,7 +38,7 @@ class WriterImpl : Writer, WriterInternal {
         } else {
             debug("Writing: ${mob.nameStyled} // $byteWriteChannel")
             try {
-                runBlocking { byteWriteChannel.write("${stringGenerator(mob)}\n") }
+                runBlocking { byteWriteChannel.writeFully("${stringGenerator(mob)}\n".toByteArray()) }
             } catch (e: IOException) {
                 debug(e.toString())
                 outputs.remove(mob.idForIO)
