@@ -12,13 +12,17 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.util.Coord
+import com.pbeagan.util.List2D
 import com.pbeagan.util.coord
-import com.pbeagan.util.traverseMapIndexed
 import com.pbeagan.writer.TerminalColorStyle.Colors.Red
 import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright
 import com.pbeagan.writer.TerminalColorStyle.style
 
-typealias RoomMap = Array<Array<Triple<Terrain, List<Mob>, List<ItemData>>>>
+data class RoomTile(
+    val terrain: Terrain,
+    val mobs: List<Mob>,
+    val items: List<ItemData>,
+)
 
 class MapLocal : Action(), FreeAction {
     override fun invoke(self: Mob) {
@@ -29,28 +33,28 @@ class MapLocal : Action(), FreeAction {
     }
 
     private fun fillRoomMap(
-        roomMap: Array<Array<Terrain>>,
-        currentRoom: RoomData
-    ): RoomMap = roomMap.traverseMapIndexed { x, y, _ ->
+        roomMap: List2D<Terrain>,
+        currentRoom: RoomData,
+    ): List2D<RoomTile> = roomMap.traverseMapIndexed { x, y, _ ->
         currentRoom.getLocation(x coord y)
     }
 
     private fun printMap(
         vision: HashSet<Coord>,
-        roomMap: RoomMap,
+        roomMap: List2D<RoomTile>,
         self: Mob,
-        exits: Exits
+        exits: Exits,
     ) {
         val checkExit = provideCheckExit(exits)
         val horizontalLine = StringBuilder().also { stringBuilder ->
-            repeat((roomMap.map { it.size }.max() ?: 0)) { stringBuilder.append("═") }
+            repeat(roomMap.width) { stringBuilder.append("═") }
         }.toString()
 
         checkExit(NORTH, {}) { writer.sayTo(self).localMap("╔$horizontalLine╗") }
-        for (y in roomMap.size - 1 downTo 0) {
+        for (y in roomMap.height - 1 downTo 0) {
             val line = StringBuilder()
             checkExit(WEST, { line.append(' ') }) { line.append("║") }
-            for (x in roomMap[y].indices) {
+            for (x in 0 until roomMap.width) {
                 getCoordContent(vision, line, x coord y, roomMap)
             }
             checkExit(EAST, { line.append(' ') }) { line.append("║") }
@@ -68,10 +72,10 @@ class MapLocal : Action(), FreeAction {
         vision: HashSet<Coord>,
         line: StringBuilder,
         xy: Coord,
-        roomMap: RoomMap
+        roomMap: List2D<RoomTile>,
     ) {
         val (x, y) = xy
-        val (terrain, mobs, items) = roomMap[y][x]
+        val (terrain, mobs, items) = roomMap.at(x, y)
 
         line.append(
             if (xy in vision) {
@@ -84,6 +88,7 @@ class MapLocal : Action(), FreeAction {
                             ?.toString()
                             ?.style(YellowBright, terrain.style.colorBackground)
                     }
+
                     items.isNotEmpty() -> "*".style(Red, terrain.style.colorBackground)
                     else -> terrain.prettySymbols.random().style(terrain.style)
                 }
@@ -96,7 +101,7 @@ class MapLocal : Action(), FreeAction {
 
 fun Int?.toFormattedChar() = when (this) {
     null -> ' '
-    in 'a'.toInt()..'z'.toInt() -> toChar()
-    in 'A'.toInt()..'Z'.toInt() -> toChar()
+    in 'a'.code..'z'.code -> toChar()
+    in 'A'.code..'Z'.code -> toChar()
     else -> ' '
 }

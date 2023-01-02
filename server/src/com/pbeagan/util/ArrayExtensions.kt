@@ -1,71 +1,112 @@
 package com.pbeagan.util
 
-inline fun <reified T> List<List<T>>.toArray2D() = map { rows -> rows.toTypedArray() }.toTypedArray()
-inline fun <reified T> Array<Array<T>>.toList2D() = map { rows -> rows.toList() }
 
-//inline fun <reified T, reified R> Array<Array<T>>.cloneStructure(default: (T) -> R) =
-//    (0..this.size).forEach { y -> (0..this[y].size).forEach { this[y][it] = default(it) } }
+@JvmInline
+value class IntArray2D(override val value: Array<Array<Int>>) : Array2D<Int>
 
-//inline fun <T> List2D<T>.traverse(onRowEnd: () -> Unit = {}, onElement: (T) -> Unit) {
-//    forEach { innerArray ->
-//        innerArray.forEach { onElement(it) }
-//        onRowEnd()
-//    }
-//}
+@JvmInline
+value class BooleanArray2D(override val value: Array<Array<Boolean>>) : Array2D<Boolean>
 
-inline fun <T, reified R> Array<Array<T>>.traverseMapIndexed(
-    onElement: (x: Int, y: Int, T) -> R
-): Array<Array<R>> = mapIndexed { y, r -> r.mapIndexed { x, it -> onElement(x, y, it) } }.toArray2D()
+interface Array2D<T> {
+    val value: Array<Array<T>>
+}
 
-inline fun <T, reified R> Array<Array<T>>.traverseMap(
-    onElement: (T) -> R
-): Array<Array<R>> = traverseMapIndexed { _, _, t -> onElement(t) }
+inline fun <T> Array2D<T>.traverseMutate(
+    onElement: (x: Int, y: Int, each: T) -> T,
+): Unit = value.forEachIndexed { y, row ->
+    row.forEachIndexed { x, t -> value[y][x] = onElement(x, y, t) }
+}
 
+inline fun <reified T> Array2D<T>.toList2D(): List2D<T> = value.toList2D()
+inline fun <reified T> List2D<T>.toArray2D(): Array<Array<T>> =
+    value.map { it.toTypedArray() }.toTypedArray()
 
-inline fun <T> Array<Array<T>>.traverse(onRowEnd: () -> Unit = {}, onElement: (x: Int, y: Int, T) -> Unit) {
-    forEachIndexed { y, r ->
+inline fun <reified T> Array<Array<T>>.toList2D() = List2D(map { rows -> rows.toList() })
+
+@JvmInline
+value class List2D<T>(val value: List<List<T>>) : Iterable<T> {
+
+    val height get() = value.size
+    val width get() = value.firstOrNull()?.size ?: 0
+
+    fun at(x: Int, y: Int): T = value[y][x]
+
+    override fun iterator(): Iterator<T> = iterator {
+        this@List2D.traverse { _, _, t -> yield(t) }
+    }
+
+    inline fun <reified R> traverseMapIndexed(
+        crossinline onElement: (x: Int, y: Int, T) -> R,
+    ): List2D<R> =
+        List2D(value.mapIndexed { y, r -> r.mapIndexed { x, it -> onElement(x, y, it) } })
+
+    inline fun <reified R> traverseMap(
+        crossinline onElement: (T) -> R,
+    ): List2D<R> = traverseMapIndexed { _, _, t -> onElement(t) }
+
+    inline fun traverse(
+        onRowEnd: () -> Unit = {},
+        onElement: (x: Int, y: Int, T) -> Unit,
+    ): Unit = value.forEachIndexed { y, r ->
         r.forEachIndexed { x, t -> onElement(x, y, t) }
         onRowEnd()
     }
+
+    fun isValidCoordinate(c: Coord): Boolean =
+        value.isNotEmpty() &&
+                value.all { it.size == value[0].size } &&
+                c.y in 0..value.size &&
+                c.x in 0..value[0].size
+
+    fun printAll(delimiter: String = "\t") {
+        traverse({ println() }) { _, _, t -> print("$t$delimiter") }
+    }
+
+    fun flatten(): List<T> {
+        val ret = mutableListOf<T>()
+        iterator().forEach { ret.add(it) }
+        return ret
+    }
 }
 
-fun <T> Array<Array<T>>.containsCoord(c: Coord): Boolean =
-    this.isNotEmpty() &&
-            this.all { it.size == this[0].size } &&
-            c.y in 0..this.size &&
-            c.x in 0..this[0].size
-
-inline fun <reified T, reified S, reified R> Pair<Array<Array<T>>, Array<Array<S>>>.merge(
+inline fun <reified T, reified S, reified R> Pair<Array2D<T>, Array2D<S>>.merge(
     default: R,
-    onElement: (first: T, second: S) -> R
-) = first.mapIndexed { y, r ->
-    r.mapIndexed { x, t ->
-        if (second.containsCoord(x coord y)) onElement(first[y][x], second[y][x]) else default
-    }
-}.toArray2D()
+    crossinline onElement: (first: T, second: S) -> R,
+): List2D<R> = first.mergeWith(second, default, onElement)
 
-fun Array<Array<Int>>.addLayer(
-    color: Int,
-    config: Array<Array<Boolean>>.() -> Unit
-) {
-    val other = this.traverseMap { false }.also(config)
-    this.forEachIndexed { y, r ->
-        r.forEachIndexed { x, t ->
-            if (other.containsCoord(x coord y)) {
-                if (other[y][x]) this[y][x] = color
-            }
+inline fun <reified T, reified S, reified R> Array2D<T>.mergeWith(
+    other: Array2D<S>,
+    default: R,
+    crossinline onElement: (first: T, second: S) -> R,
+): List2D<R> {
+    val us = this.toList2D()
+    val them = other.toList2D()
+    return us.traverseMapIndexed { x, y, t ->
+        if (them.isValidCoordinate(x coord y)) {
+            onElement(us.at(x, y), them.at(x, y))
+        } else {
+            default
         }
     }
 }
 
-fun <T> Array<Array<T>>.traverseAdd(list: List<Coord>, t: T) {
+fun <T> Array2D<T>.traverseAdd(list: List<Coord>, t: T) {
     list.forEach {
-        if (it.y in this.indices && it.x in this[0].indices) {
-            this[it.y][it.x] = t
+        if (it.y in this.value.indices && it.x in this.value[0].indices) {
+            this.value[it.y][it.x] = t
         }
     }
 }
 
-inline fun <reified T> Array<Array<T>>.printAll(delimiter: String = "\t") {
-    traverse({ println() }) { _, _, t -> print("$t$delimiter") }
+fun IntArray2D.addLayer(
+    color: Int,
+    config: List2D<Boolean>.() -> Unit,
+) {
+    val other = this.toList2D().traverseMap { false }.also(config)
+    this.traverseMutate { x, y, each ->
+        if (other.isValidCoordinate(x coord y)) {
+            if (other.at(x, y)) return@traverseMutate color
+        }
+        return@traverseMutate each
+    }
 }

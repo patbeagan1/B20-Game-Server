@@ -18,6 +18,7 @@ import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
 import com.pbeagan.util.Coord
+import com.pbeagan.util.List2D
 import com.pbeagan.util.coord
 import com.pbeagan.util.exhaustive
 
@@ -87,13 +88,13 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         currentRoom: RoomData,
         y: Int
     ): Coord {
-        val boundX = (0..currentRoom.terrain.first().size).average().toInt()
-        val boundY = (0..currentRoom.terrain.size).average().toInt()
+        val boundX = (0..currentRoom.terrain.width).average().toInt()
+        val boundY = (0..currentRoom.terrain.height).average().toInt()
         return when (direction) {
             NORTH -> boundX coord 0
-            SOUTH -> boundX coord currentRoom.height - 1
+            SOUTH -> boundX coord currentRoom.terrain.height - 1
             EAST -> 0 coord boundY
-            WEST -> currentRoom.width - 1 coord boundY
+            WEST -> currentRoom.terrain.width - 1 coord boundY
             UP -> boundX coord boundY
             DOWN -> boundX coord boundY
         }
@@ -102,7 +103,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
     fun checkEdgeSpacesToLandInRoom(
         direction: Direction,
         xy: Coord,
-        terrain: Array<Array<Terrain>>
+        terrain: List2D<Terrain>
     ) = sequence {
         var isGoingUp = true
         val shouldScanHorizontal = when (direction) {
@@ -113,7 +114,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         var trial = xy.copy()
         var counter = 1
 
-        val failuresAllowed = if (!shouldScanHorizontal) terrain.size else terrain.first().size
+        val failuresAllowed = if (!shouldScanHorizontal) terrain.height else terrain.width
 
         // we can allow one direction to go out of bounds, because the other is still valid
         // but if both of them are out of bounds, exit.
@@ -163,7 +164,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             direction: Direction,
             x: Int,
             y: Int,
-            layout: Array<Array<Terrain>>,
+            layout: List2D<Terrain>,
             currentRoom: RoomData
         ): Result {
             val newSpace = getNewSpace(direction, x, y)
@@ -172,7 +173,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         }
 
         private fun checkNewSpace(
-            layout: Array<Array<Terrain>>,
+            layout: List2D<Terrain>,
             newSpace: Coord,
             currentRoom: RoomData
         ): Result {
@@ -194,12 +195,11 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         }
 
         private fun checkRoomBounds(
-            layout: Array<Array<Terrain>>,
+            layout: List2D<Terrain>,
             newSpace: Coord
         ): Boolean {
-            val yBound = layout.size - 1
-            val xBound = layout.first().size - 1
-            return newSpace.x in 0..xBound && newSpace.y in 0..yBound
+
+            return newSpace.x in 0 until layout.width && newSpace.y in 0 until layout.height
         }
 
         private fun getNewSpace(

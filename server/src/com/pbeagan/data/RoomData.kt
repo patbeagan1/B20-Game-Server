@@ -1,7 +1,9 @@
 package com.pbeagan.data
 
+import com.pbeagan.actions.RoomTile
 import com.pbeagan.util.Coord
 import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.List2D
 import com.pbeagan.util.createFlagSet
 import mobs
 
@@ -15,16 +17,13 @@ class RoomData constructor(
     var weather: Weather = Weather.CLEAR,
     var lighting: Lighting = Lighting.BRIGHT,
     var items: MutableCollection<ItemData> = mutableListOf(),
-    terrainString: String
+    terrainString: String,
 ) : Lookable {
-    val terrain: Array<Array<Terrain>> = TerrainParser.parse(terrainString)
+    val terrain: List2D<Terrain> = TerrainParser.parse(terrainString)
 
-    fun getLocation(xy: Coord) = Triple(
-        terrain[xy.y][xy.x],
+    fun getLocation(xy: Coord) = RoomTile(
+        terrain.at(xy.x, xy.y),
         mobs.filter { it.location == id && it.locationInRoom == xy },
         items.filter { it.locationInRoom == xy }
     )
-
-    val height get() = terrain.size
-    val width get() = terrain.firstOrNull()?.size ?: 0
 }

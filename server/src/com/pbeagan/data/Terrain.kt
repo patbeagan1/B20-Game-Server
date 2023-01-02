@@ -1,5 +1,6 @@
 package com.pbeagan.data
 
+import com.pbeagan.util.List2D
 import com.pbeagan.writer.TerminalColorStyle.Colors
 import com.pbeagan.writer.TerminalColorStyle.Colors.Green
 import com.pbeagan.writer.TerminalColorStyle.Colors.GreenBright
@@ -34,8 +35,8 @@ object TerrainParser {
                     Water.SYMBOL -> Water("⍨", TerminalStyle(Colors.BlueBright, Colors.Blue))
                     else -> Grass("\"", TerminalStyle(GreenBright, Green))
                 }
-            }.toTypedArray()
-        }.toTypedArray()
+            }
+        }.let { List2D(it) }
 }
 
 abstract class Terrain {
