@@ -4,8 +4,8 @@ import com.pbeagan.util.Coord
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.createFlagSet
 import com.pbeagan.util.startsWith
-import com.pbeagan.writer.TerminalColorStyle.Colors.Cyan
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Cyan
+import com.pbeagan.consolevision.TerminalColorStyle.style
 
 data class ItemData(
     val id: Int,

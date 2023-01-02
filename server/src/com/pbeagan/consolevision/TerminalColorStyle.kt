@@ -1,4 +1,4 @@
-package com.pbeagan.writer
+package com.pbeagan.consolevision
 
 import kotlin.random.Random
 

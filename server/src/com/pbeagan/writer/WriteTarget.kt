@@ -3,11 +3,11 @@ package com.pbeagan.writer
 import com.pbeagan.actions.Action
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Mob
-import com.pbeagan.writer.TerminalColorStyle.Colors
-import com.pbeagan.writer.TerminalColorStyle.Colors.Black1
-import com.pbeagan.writer.TerminalColorStyle.Colors.Black2
-import com.pbeagan.writer.TerminalColorStyle.Colors.Blue
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle.Colors
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black1
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black2
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Blue
+import com.pbeagan.consolevision.TerminalColorStyle.style
 
 class WriteTarget(
     private val writer: WriterInternal,

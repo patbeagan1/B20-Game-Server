@@ -1,4 +1,4 @@
-package com.pbeagan.actions.statuseffects
+package com.pbeagan.statuseffects
 
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.MultiRoundActionDelegate

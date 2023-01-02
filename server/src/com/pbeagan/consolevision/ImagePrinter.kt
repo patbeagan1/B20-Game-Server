@@ -1,11 +1,10 @@
-package com.pbeagan.writer
+package com.pbeagan.consolevision
 
-import com.pbeagan.writer.ImagePrinter.CompressionStyle.DOTS
-import com.pbeagan.writer.ImagePrinter.CompressionStyle.UP_DOWN
-import com.pbeagan.writer.TerminalColorStyle.Colors
-import com.pbeagan.writer.TerminalColorStyle.argbToColorInt
-import com.pbeagan.writer.TerminalColorStyle.colorIntToARGB
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.ImagePrinter.CompressionStyle.*
+import com.pbeagan.consolevision.TerminalColorStyle.Colors
+import com.pbeagan.consolevision.TerminalColorStyle.argbToColorInt
+import com.pbeagan.consolevision.TerminalColorStyle.colorIntToARGB
+import com.pbeagan.consolevision.TerminalColorStyle.style
 import java.awt.Image
 import java.awt.image.BufferedImage
 

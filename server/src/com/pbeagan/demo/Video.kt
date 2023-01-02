@@ -19,10 +19,9 @@ package com.pbeagan.demo
  * You should have received a copy of the GNU Affero General Public License
  * along with Humble-Video.  If not, see <http://www.gnu.org/licenses/>.
  *******************************************************************************/
-import com.pbeagan.writer.ImagePrinter
-import com.pbeagan.writer.TerminalColorStyle.CURSOR_TO_START
-import com.pbeagan.writer.TerminalColorStyle.RIS
-import com.pbeagan.writer.convertToBufferedImage
+import com.pbeagan.consolevision.ImagePrinter
+import com.pbeagan.consolevision.TerminalColorStyle.CURSOR_TO_START
+import com.pbeagan.consolevision.convertToBufferedImage
 import io.humble.video.Decoder
 import io.humble.video.Demuxer
 import io.humble.video.DemuxerStream

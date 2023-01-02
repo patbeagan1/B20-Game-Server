@@ -1,4 +1,4 @@
-package com.pbeagan.actions.attacks
+package com.pbeagan.attacks
 
 import com.pbeagan.data.AttackValue
 import com.pbeagan.data.Mob
@@ -6,9 +6,9 @@ import com.pbeagan.data.currentRoom
 import com.pbeagan.data.formatHP
 import com.pbeagan.util.roll20
 import com.pbeagan.util.roll6
-import com.pbeagan.writer.TerminalColorStyle.Colors.Magenta
-import com.pbeagan.writer.TerminalColorStyle.Colors.Red
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Magenta
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Red
+import com.pbeagan.consolevision.TerminalColorStyle.style
 
 class Punch(private val target: Mob) : Attack() {
     override val targetList: List<Mob> = listOf(target)

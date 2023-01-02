@@ -1,4 +1,4 @@
-package com.pbeagan.writer
+package com.pbeagan.consolevision
 
 import com.pbeagan.util.Util.distance
 import kotlin.math.abs

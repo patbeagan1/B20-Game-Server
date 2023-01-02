@@ -1,4 +1,4 @@
-package com.pbeagan
+package com.pbeagan.demo
 
 import com.pbeagan.util.BooleanArray2D
 import com.pbeagan.util.Coord
@@ -15,9 +15,9 @@ import com.pbeagan.util.toArray2D
 import com.pbeagan.util.toList2D
 import com.pbeagan.util.traverseAdd
 import com.pbeagan.util.traverseMutate
-import com.pbeagan.writer.TerminalColorStyle
-import com.pbeagan.writer.TerminalColorStyle.colorIntToARGB
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle
+import com.pbeagan.consolevision.TerminalColorStyle.colorIntToARGB
+import com.pbeagan.consolevision.TerminalColorStyle.style
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt

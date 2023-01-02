@@ -16,7 +16,7 @@ import mobs
 
 class Game {
 
-    private val playerHandler = PlayerHandler()
+    private val playerHandler = PlayerHandler(CommandParser())
 
     fun gameLoop(writer: Writer, reader: Reader) {
         mobs.sortedByDescending { roll20() + it.awareness.value }.forEach {

@@ -1,4 +1,4 @@
-package com.pbeagan.actions.statuseffects
+package com.pbeagan.statuseffects
 
 import com.pbeagan.actions.Action
 import com.pbeagan.actions.MultiRoundActionDelegate
@@ -8,8 +8,8 @@ import com.pbeagan.data.EffectBase
 import com.pbeagan.data.EffectImpl
 import com.pbeagan.data.Mob
 import com.pbeagan.data.VisionValue
-import com.pbeagan.writer.TerminalColorStyle.Colors.Magenta
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Magenta
+import com.pbeagan.consolevision.TerminalColorStyle.style
 
 class NightSight : Action(), MultiRoundAction {
 

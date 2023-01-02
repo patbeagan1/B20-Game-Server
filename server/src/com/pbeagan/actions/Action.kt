@@ -1,8 +1,8 @@
 package com.pbeagan.actions
 
-import com.pbeagan.actions.attacks.AttackRanged
-import com.pbeagan.actions.attacks.AttackThrow
-import com.pbeagan.actions.attacks.Punch
+import com.pbeagan.attacks.AttackRanged
+import com.pbeagan.attacks.AttackThrow
+import com.pbeagan.attacks.Punch
 import com.pbeagan.data.AttackType.MAGIC
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.AttackType.RANGED
@@ -66,4 +66,3 @@ class MultiRoundActionDelegate(
         fun onComplete(self: Mob)
     }
 }
-

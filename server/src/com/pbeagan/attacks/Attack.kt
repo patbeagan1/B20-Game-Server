@@ -1,4 +1,4 @@
-package com.pbeagan.actions.attacks
+package com.pbeagan.attacks
 
 import com.pbeagan.actions.Action
 import com.pbeagan.data.Mob

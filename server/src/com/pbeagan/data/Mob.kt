@@ -20,8 +20,8 @@ import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.Senses
 import com.pbeagan.util.coord
 import com.pbeagan.writer.Reader
-import com.pbeagan.writer.TerminalColorStyle
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle
+import com.pbeagan.consolevision.TerminalColorStyle.style
 import com.pbeagan.writer.UniqueId
 import com.pbeagan.writer.Writer
 

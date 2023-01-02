@@ -1,4 +1,4 @@
-package com.pbeagan.actions.attacks
+package com.pbeagan.attacks
 
 import com.pbeagan.data.Mob
 import com.pbeagan.data.formatHP

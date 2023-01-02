@@ -4,7 +4,7 @@ import com.pbeagan.actions.Drop
 import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.actions.Take
-import com.pbeagan.actions.attacks.Punch
+import com.pbeagan.attacks.Punch
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Mob
 import com.pbeagan.data.MobBehavior

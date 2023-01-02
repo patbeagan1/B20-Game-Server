@@ -14,9 +14,9 @@ import com.pbeagan.data.currentRoom
 import com.pbeagan.util.Coord
 import com.pbeagan.util.List2D
 import com.pbeagan.util.coord
-import com.pbeagan.writer.TerminalColorStyle.Colors.Red
-import com.pbeagan.writer.TerminalColorStyle.Colors.YellowBright
-import com.pbeagan.writer.TerminalColorStyle.style
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Red
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.YellowBright
+import com.pbeagan.consolevision.TerminalColorStyle.style
 
 data class RoomTile(
     val terrain: Terrain,

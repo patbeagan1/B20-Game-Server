@@ -1,12 +1,12 @@
 package com.pbeagan.data
 
 import com.pbeagan.util.List2D
-import com.pbeagan.writer.TerminalColorStyle.Colors
-import com.pbeagan.writer.TerminalColorStyle.Colors.Green
-import com.pbeagan.writer.TerminalColorStyle.Colors.GreenBright
-import com.pbeagan.writer.TerminalColorStyle.DOTS_HIGH
-import com.pbeagan.writer.TerminalColorStyle.SGR
-import com.pbeagan.writer.TerminalColorStyle.TerminalStyle
+import com.pbeagan.consolevision.TerminalColorStyle.Colors
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.Green
+import com.pbeagan.consolevision.TerminalColorStyle.Colors.GreenBright
+import com.pbeagan.consolevision.TerminalColorStyle.DOTS_HIGH
+import com.pbeagan.consolevision.TerminalColorStyle.SGR
+import com.pbeagan.consolevision.TerminalColorStyle.TerminalStyle
 
 object TerrainParser {
     fun parse(s: String) = s
