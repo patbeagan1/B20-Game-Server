@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package com.pbeagan.consolevision
 
 data class CoordRect(val lesser: Coord, val greater: Coord) {
     fun modifyBy(

@@ -1,7 +1,8 @@
 package com.pbeagan.data
 
-import com.pbeagan.util.Coord
-import com.pbeagan.util.Util
+
+import com.pbeagan.consolevision.Coord
+import com.pbeagan.consolevision.Util
 
 interface HasLocation {
     var locationInRoom: Coord

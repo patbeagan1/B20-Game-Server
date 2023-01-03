@@ -4,6 +4,7 @@ import com.pbeagan.actions.Move.Result.EndOfRoomFailure
 import com.pbeagan.actions.Move.Result.Failure
 import com.pbeagan.actions.Move.Result.Point
 import com.pbeagan.actions.Move.Result.RoomId
+import com.pbeagan.consolevision.Coord
 import com.pbeagan.data.Direction
 import com.pbeagan.data.Direction.DOWN
 import com.pbeagan.data.Direction.EAST
@@ -17,9 +18,10 @@ import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.Terrain
 import com.pbeagan.data.currentRoom
-import com.pbeagan.util.Coord
-import com.pbeagan.util.List2D
-import com.pbeagan.util.coord
+
+import com.pbeagan.consolevision.List2D
+import com.pbeagan.consolevision.coord
+
 import com.pbeagan.util.exhaustive
 
 class Move private constructor(private val directionList: List<Direction>) : Action() {

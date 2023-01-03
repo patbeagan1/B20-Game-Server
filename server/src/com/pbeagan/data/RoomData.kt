@@ -1,9 +1,10 @@
 package com.pbeagan.data
 
 import com.pbeagan.actions.RoomTile
-import com.pbeagan.util.Coord
+import com.pbeagan.consolevision.Coord
+
 import com.pbeagan.util.FlagCombined
-import com.pbeagan.util.List2D
+import com.pbeagan.consolevision.List2D
 import com.pbeagan.util.createFlagSet
 import mobs
 

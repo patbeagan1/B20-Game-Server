@@ -1,18 +1,19 @@
 package com.pbeagan.demo
 
-import com.pbeagan.util.Coord
-import com.pbeagan.util.CoordRect
-import com.pbeagan.util.List2D
+
+import com.pbeagan.consolevision.Coord
+import com.pbeagan.consolevision.CoordRect
+import com.pbeagan.consolevision.List2D
 import com.pbeagan.util.addLayer
-import com.pbeagan.util.coord
+
 import com.pbeagan.util.merge
-import com.pbeagan.util.mergeWith
 import com.pbeagan.util.roll20
 import com.pbeagan.util.roll6
 import com.pbeagan.util.toList2D
 import com.pbeagan.consolevision.TerminalColorStyle
 import com.pbeagan.consolevision.TerminalColorStyle.colorIntToARGB
 import com.pbeagan.consolevision.TerminalColorStyle.style
+import com.pbeagan.consolevision.coord
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt

@@ -1,11 +1,11 @@
 package com.pbeagan.actions
 
+import com.pbeagan.consolevision.Util
 import com.pbeagan.data.ItemData
 import com.pbeagan.data.ItemFlags
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.takeIfItIsInRangeOf
-import com.pbeagan.util.Util
 import com.pbeagan.util.startsWith
 
 class Take(private val item: ItemData) : Action() {

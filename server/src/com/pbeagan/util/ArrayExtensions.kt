@@ -1,23 +1,14 @@
 package com.pbeagan.util
 
+import com.pbeagan.consolevision.List2D
+import com.pbeagan.consolevision.coord
+
 inline fun <reified T> Array<Array<T>>.toList2D() = List2D.from(map { rows -> rows.toList() })
 
 inline fun <reified T, reified S, reified R> Pair<List2D<T>, List2D<S>>.merge(
     default: R,
     crossinline onElement: (first: T, second: S) -> R,
 ): List2D<R> = first.mergeWith(second, default, onElement)
-
-inline fun <reified T, reified S, reified R> List2D<T>.mergeWith(
-    other: List2D<S>,
-    default: R,
-    crossinline onElement: (first: T, second: S) -> R,
-): List2D<R> = this.traverseMapIndexed { x, y, t ->
-    if (other.isValidCoordinate(x coord y)) {
-        onElement(this.at(x, y), other.at(x, y))
-    } else {
-        default
-    }
-}
 
 fun List2D<Int>.addLayer(
     color: Int,

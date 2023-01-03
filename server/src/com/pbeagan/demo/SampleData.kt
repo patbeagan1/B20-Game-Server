@@ -3,6 +3,7 @@ package com.pbeagan.demo
 import com.pbeagan.ancestry.Goblin
 import com.pbeagan.ancestry.Hobgoblin
 import com.pbeagan.ancestry.Human
+import com.pbeagan.consolevision.coord
 import com.pbeagan.data.DefenseValue
 import com.pbeagan.data.Direction.DOWN
 import com.pbeagan.data.Direction.EAST
@@ -19,7 +20,7 @@ import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.RoomFlags
-import com.pbeagan.util.coord
+
 import com.pbeagan.util.createFlagSet
 
 

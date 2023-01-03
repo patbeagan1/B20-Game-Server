@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package com.pbeagan.consolevision
 
 @JvmInline
 value class List2D<T>(private val value: MutableList<MutableList<T>>) : Iterable<T> {
@@ -64,6 +64,18 @@ value class List2D<T>(private val value: MutableList<MutableList<T>>) : Iterable
         traverse({ println() }) { _, _, t -> print("$t$delimiter") }
     }
 
+    inline fun <reified S, reified R> mergeWith(
+        other: List2D<S>,
+        default: R,
+        crossinline onElement: (first: T, second: S) -> R,
+    ): List2D<R> = this.traverseMapIndexed { x, y, t ->
+        if (other.isValidCoordinate(x coord y)) {
+            onElement(this.at(x, y), other.at(x, y))
+        } else {
+            default
+        }
+    }
+
     fun flatten(): List<T> {
         val ret = mutableListOf<T>()
         iterator().forEach { ret.add(it) }
@@ -75,3 +87,4 @@ value class List2D<T>(private val value: MutableList<MutableList<T>>) : Iterable
             List2D(value.map { it.toMutableList() }.toMutableList())
     }
 }
+

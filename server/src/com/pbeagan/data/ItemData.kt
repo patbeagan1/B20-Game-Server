@@ -1,6 +1,7 @@
 package com.pbeagan.data
 
-import com.pbeagan.util.Coord
+
+import com.pbeagan.consolevision.Coord
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.createFlagSet
 import com.pbeagan.util.startsWith

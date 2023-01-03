@@ -1,9 +1,9 @@
 package com.pbeagan.actions
 
+import com.pbeagan.consolevision.Util
 import com.pbeagan.data.Mob
 import com.pbeagan.data.currentRoom
 import com.pbeagan.data.currentRoomOtherMobs
-import com.pbeagan.util.Util
 import mobs
 
 class Look : Action(), FreeAction {
@@ -15,7 +15,8 @@ class Look : Action(), FreeAction {
 
         // Mobs in the current room
         self.currentRoomOtherMobs(mobs).joinToString("\n") {
-            "${it.nameStyled} (${Util.distanceManhattan(
+            "${it.nameStyled} (${
+                Util.distanceManhattan(
                 self.locationInRoom,
                 it.locationInRoom
             )} paces): ${it.description.onLook(it.behavior)}"

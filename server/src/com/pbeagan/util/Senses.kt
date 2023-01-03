@@ -1,5 +1,8 @@
 package com.pbeagan.util
 
+import com.pbeagan.consolevision.Coord
+import com.pbeagan.consolevision.Util
+import com.pbeagan.consolevision.coord
 import kotlin.math.PI
 
 fun main() {

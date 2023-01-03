@@ -6,6 +6,7 @@ import com.pbeagan.actions.Move
 import com.pbeagan.actions.Pass
 import com.pbeagan.ancestry.Ancestry
 import com.pbeagan.ancestry.Human
+import com.pbeagan.consolevision.Coord
 import com.pbeagan.data.AttackType.MELEE
 import com.pbeagan.data.Effect.Type.ANCESTRY
 import com.pbeagan.data.Lighting.BRIGHT
@@ -15,13 +16,14 @@ import com.pbeagan.data.Lighting.NONE
 import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
-import com.pbeagan.util.Coord
+
 import com.pbeagan.util.FlagCombined
 import com.pbeagan.util.Senses
-import com.pbeagan.util.coord
+
 import com.pbeagan.writer.Reader
 import com.pbeagan.consolevision.TerminalColorStyle
 import com.pbeagan.consolevision.TerminalColorStyle.style
+import com.pbeagan.consolevision.coord
 import com.pbeagan.writer.UniqueId
 import com.pbeagan.writer.Writer
 

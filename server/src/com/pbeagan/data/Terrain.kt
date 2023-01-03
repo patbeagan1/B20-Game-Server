@@ -1,6 +1,6 @@
 package com.pbeagan.data
 
-import com.pbeagan.util.List2D
+import com.pbeagan.consolevision.List2D
 import com.pbeagan.consolevision.TerminalColorStyle.Colors
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Green
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.GreenBright
