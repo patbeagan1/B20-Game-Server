@@ -14,8 +14,3 @@ fun roll6() = DiceRoll(Random.nextInt(1, 6))
 fun roll8() = DiceRoll(Random.nextInt(1, 8))
 fun roll12() = DiceRoll(Random.nextInt(1, 12))
 fun roll20() = DiceRoll(Random.nextInt(1, 20))
-inline fun <T : Any> ifLet(vararg elements: T?, closure: (List<T>) -> Unit) {
-    if (elements.all { it != null }) {
-        closure(elements.filterNotNull())
-    }
-}

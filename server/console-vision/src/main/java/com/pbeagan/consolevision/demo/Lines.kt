@@ -1,15 +1,9 @@
-package com.pbeagan.demo
+package com.pbeagan.consolevision.demo
 
 
 import com.pbeagan.consolevision.Coord
 import com.pbeagan.consolevision.CoordRect
 import com.pbeagan.consolevision.List2D
-import com.pbeagan.util.addLayer
-
-import com.pbeagan.util.merge
-import com.pbeagan.util.roll20
-import com.pbeagan.util.roll6
-import com.pbeagan.util.toList2D
 import com.pbeagan.consolevision.TerminalColorStyle
 import com.pbeagan.consolevision.TerminalColorStyle.colorIntToARGB
 import com.pbeagan.consolevision.TerminalColorStyle.style
@@ -17,6 +11,7 @@ import com.pbeagan.consolevision.coord
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 fun Coord.lineByDDATo(end: Coord): List<Coord> {
     val dx = end.x - x
@@ -148,7 +143,7 @@ fun getCircleByBresenham(center: Coord, radius: Int) {
         println(TerminalColorStyle.HIDE_CURSOR + TerminalColorStyle.RIS)
         (0..5).forEach {
             screen.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
-                drawCircle(it * 7 + roll6().value coord 32 + roll20().rollSign().value, 5)
+                drawCircle(getRandomCircleCoordinate(it), 5)
             }
         }
         screen.addLayer(0xff0000) {
@@ -232,7 +227,10 @@ private fun previewCircle() {
 
     (0..5).forEach {
         also.addLayer((it * 192 % 256) shl 16 or 0x00AA88) {
-            drawCircle(it * 7 + roll6().value coord 32 + roll20().rollSign().value, 5)
+            drawCircle(
+                getRandomCircleCoordinate(it),
+                5
+            )
         }
     }
     also.also { it.printScreenColor() }
@@ -245,6 +243,9 @@ private fun previewCircle() {
 //
 //    printScreen(screen)
 }
+
+private fun getRandomCircleCoordinate(it: Int) =
+    it * 7 + (Random.nextInt() % 6) coord 32 + (Random.nextInt() % 20) * if (Random.nextBoolean()) 1 else -1
 
 private fun List2D<Boolean>.printScreen() {
     traverseMap { t -> if (t) "XX" else ".." }.printAll("")
@@ -264,4 +265,24 @@ private fun List2D<Int>.printScreenColor() {
             colorBackground = TerminalColorStyle.Colors.Custom(t.colorIntToARGB())
         )
     }.printAll("")
+}
+
+inline fun <reified T> Array<Array<T>>.toList2D() = List2D.from(map { rows -> rows.toList() })
+
+inline fun <reified T, reified S, reified R> Pair<List2D<T>, List2D<S>>.merge(
+    default: R,
+    crossinline onElement: (first: T, second: S) -> R,
+): List2D<R> = first.mergeWith(second, default, onElement)
+
+fun List2D<Int>.addLayer(
+    color: Int,
+    config: List2D<Boolean>.() -> Unit,
+) {
+    val other = traverseMap { false }.also(config)
+    this.traverseMutate { x, y, each ->
+        if (other.isValidCoordinate(x coord y)) {
+            if (other.at(x, y)) return@traverseMutate color
+        }
+        return@traverseMutate each
+    }
 }

@@ -55,7 +55,6 @@ dependencies {
     implementation "org.koin:koin-ktor:$koin_version"
     implementation 'org.slf4j:slf4j-api:2.0.5'
 
-    implementation "io.humble:humble-video-all:0.3.0"
     implementation 'org.mod4j.org.apache.commons:cli:1.0.0'
 
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.0'
