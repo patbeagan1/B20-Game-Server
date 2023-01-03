@@ -1,30 +1,55 @@
 package com.pbeagan.util
 
 @JvmInline
-value class List2D<T>(val value: List<List<T>>) : Iterable<T> {
+value class List2D<T>(private val value: MutableList<MutableList<T>>) : Iterable<T> {
 
     val height get() = value.size
     val width get() = value.firstOrNull()?.size ?: 0
 
     fun at(x: Int, y: Int): T = value[y][x]
-
-    override fun iterator(): Iterator<T> = iterator {
-        this@List2D.traverse { _, _, t -> yield(t) }
+    fun assign(x: Int, y: Int, item: T) {
+        value[y][x] = item
     }
 
-    inline fun <reified R> traverseMapIndexed(
-        crossinline onElement: (x: Int, y: Int, T) -> R,
-    ): List2D<R> =
-        List2D(value.mapIndexed { y, r -> r.mapIndexed { x, it -> onElement(x, y, it) } })
+    override fun iterator(): Iterator<T> = iterator {
+        this@List2D.traverseInternal(value, {}) { _, _, t -> yield(t) }
+    }
 
-    inline fun <reified R> traverseMap(
-        crossinline onElement: (T) -> R,
+    fun traverseMutate(
+        onElement: (x: Int, y: Int, each: T) -> T,
+    ): Unit = value.forEachIndexed { y, row ->
+        row.forEachIndexed { x, t -> value[y][x] = onElement(x, y, t) }
+    }
+
+    fun <R> traverseMapIndexed(
+        onElement: (x: Int, y: Int, T) -> R,
+    ): List2D<R> = from(
+        value.mapIndexed { y, r ->
+            r.mapIndexed { x, it -> onElement(x, y, it) }
+        })
+
+    fun traverseAssign(list: List<Coord>, t: T) {
+        list.forEach {
+            if (it.y in this.value.indices && it.x in this.value[0].indices) {
+                this.value[it.y][it.x] = t
+            }
+        }
+    }
+
+    fun <R> traverseMap(
+        onElement: (T) -> R,
     ): List2D<R> = traverseMapIndexed { _, _, t -> onElement(t) }
 
-    inline fun traverse(
+    fun traverse(
         onRowEnd: () -> Unit = {},
         onElement: (x: Int, y: Int, T) -> Unit,
-    ): Unit = value.forEachIndexed { y, r ->
+    ): Unit = traverseInternal(value, onRowEnd, onElement)
+
+    private inline fun traverseInternal(
+        list: MutableList<MutableList<T>>,
+        onRowEnd: () -> Unit = {},
+        onElement: (x: Int, y: Int, T) -> Unit,
+    ): Unit = list.forEachIndexed { y, r ->
         r.forEachIndexed { x, t -> onElement(x, y, t) }
         onRowEnd()
     }
@@ -43,5 +68,10 @@ value class List2D<T>(val value: List<List<T>>) : Iterable<T> {
         val ret = mutableListOf<T>()
         iterator().forEach { ret.add(it) }
         return ret
+    }
+
+    companion object {
+        fun <T> from(value: List<List<T>>) =
+            List2D(value.map { it.toMutableList() }.toMutableList())
     }
 }

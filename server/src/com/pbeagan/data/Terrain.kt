@@ -36,7 +36,7 @@ object TerrainParser {
                     else -> Grass("\"", TerminalStyle(GreenBright, Green))
                 }
             }
-        }.let { List2D(it) }
+        }.let { List2D.from(it) }
 }
 
 abstract class Terrain {

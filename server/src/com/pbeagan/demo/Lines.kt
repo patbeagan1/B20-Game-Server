@@ -1,9 +1,7 @@
 package com.pbeagan.demo
 
-import com.pbeagan.util.BooleanArray2D
 import com.pbeagan.util.Coord
 import com.pbeagan.util.CoordRect
-import com.pbeagan.util.IntArray2D
 import com.pbeagan.util.List2D
 import com.pbeagan.util.addLayer
 import com.pbeagan.util.coord
@@ -11,10 +9,7 @@ import com.pbeagan.util.merge
 import com.pbeagan.util.mergeWith
 import com.pbeagan.util.roll20
 import com.pbeagan.util.roll6
-import com.pbeagan.util.toArray2D
 import com.pbeagan.util.toList2D
-import com.pbeagan.util.traverseAdd
-import com.pbeagan.util.traverseMutate
 import com.pbeagan.consolevision.TerminalColorStyle
 import com.pbeagan.consolevision.TerminalColorStyle.colorIntToARGB
 import com.pbeagan.consolevision.TerminalColorStyle.style
@@ -83,27 +78,27 @@ fun circleBres(xc: Int, yc: Int, r: Int): Pair<List<Coord>, CoordRect> {
     return res.distinct() to (topLeft coord botRight)
 }
 
-fun Array<Array<Boolean>>.fillPolygon(
+fun List2D<Boolean>.fillPolygon(
     rect: CoordRect,
     fill: Boolean = true,
-): Array<Array<Boolean>> {
+): List2D<Boolean> {
     var last = false
     var isInShape = 0
     var entering = true
 
     for (y in (rect.lesser.y + 1)..rect.greater.y) {
         for (x in rect.lesser.x..rect.greater.x) {
-            if (y !in 1 until size - 1) continue
-            val b = this[y][x]
+            if (y !in 1 until height) continue
+            val b = this.at(x, y)
             when {
                 b != last -> {
                     if (isInShape == 2) entering = false
                     if (isInShape == 0) entering = true
                     if (entering) isInShape++ else isInShape--
-                    if (isInShape > 0) this[y][x] = fill
+                    if (isInShape > 0) assign(x, y, fill)
                 }
 
-                isInShape > 0 -> this[y][x] = fill
+                isInShape > 0 -> assign(x, y, fill)
             }
             last = b
         }
@@ -144,9 +139,9 @@ fun getCircleByBresenham(center: Coord, radius: Int) {
 
     previewCircle()
 
-    val height = 40
-    val width = 80
-    val screen = IntArray2D(Array(height) { Array(width) { 0 } })
+    val screen = (Array(40) {
+        Array(80) { 0 }
+    }).toList2D()
     var tick = 0
     forever(1000 / 20) {
         println(TerminalColorStyle.HIDE_CURSOR + TerminalColorStyle.RIS)
@@ -156,9 +151,9 @@ fun getCircleByBresenham(center: Coord, radius: Int) {
             }
         }
         screen.addLayer(0xff0000) {
-            drawCircle(((tick++) % width) coord 20, 10)
+            drawCircle(((tick++) % 80) coord 20, 10)
         }
-        screen.also { it.value.printScreenColor() }
+        screen.also { it.printScreenColor() }
         screen.traverseMutate { x, y, i -> 0 }
     }
 }
@@ -170,41 +165,33 @@ fun forever(limiter: Int? = 100, action: () -> Unit) {
     }
 }
 
-fun List2D<Boolean>.drawCircle(center: Coord, radius: Int) =
-    this.toArray2D().let { BooleanArray2D(it) }.drawCircle(center, radius)
 
-fun BooleanArray2D.drawCircle(center: Coord, radius: Int) {
+fun List2D<Boolean>.drawCircle(center: Coord, radius: Int) {
     circleBres(center.x, center.y, radius).also {
         val (list, _) = it
-        traverseAdd(list, true)
+        traverseAssign(list, true)
     }
 }
 
-fun List2D<Boolean>.drawLine(start: Coord, end: Coord) =
-    this.toArray2D().let { BooleanArray2D(it) }.drawLine(start, end)
-
-fun BooleanArray2D.drawLine(start: Coord, end: Coord) {
-    start.lineByDDATo(end).also { traverseAdd(it, true) }
+fun List2D<Boolean>.drawLine(start: Coord, end: Coord) {
+    start.lineByDDATo(end).also { traverseAssign(it, true) }
 }
 
-fun List2D<Boolean>.drawCircleFilled(center: Coord, radius: Int) =
-    this.toArray2D().let { BooleanArray2D(it) }.drawCircleFilled(center, radius)
-
-fun BooleanArray2D.drawCircleFilled(center: Coord, radius: Int) {
+fun List2D<Boolean>.drawCircleFilled(center: Coord, radius: Int) {
     circleBres(center.x, center.y, radius).also {
         val (list, rect) = it
-        traverseAdd(list, true)
-        this.value.fillPolygon(rect.modifyBy(gy = -1), true)
+        traverseAssign(list, true)
+        this.fillPolygon(rect.modifyBy(gy = -1), true)
     }
 }
 
 private fun previewCircle() {
-    val screen = BooleanArray2D(Array(43) {
+    val screen = (Array(43) {
         Array(80) { false }
-    })
+    }).toList2D()
 //    circleBres(20, 20, 10).also { pair ->
 //        val (list, rect) = pair
-//        screen.traverseAdd(list, true)
+//        screen.traverseAssign(list, true)
 //
 //        printScreen(screen)
 //
@@ -218,33 +205,25 @@ private fun previewCircle() {
     screen.drawCircle(20 coord 20, 10)
     screen.printScreen()
 
-    val screen2 = screen.toList2D().traverseMap { false }.toArray2D().let { BooleanArray2D(it) }
+    val screen2 = screen.traverseMap { false }
     screen2.drawCircleFilled(35 coord 35, 10)
 
-    val merge = screen
-        .mergeWith(screen2, false) { first: Boolean, second: Boolean -> first xor second }
-        .toArray2D()
-        .let { BooleanArray2D(it) }
+    val merge =
+        screen.mergeWith(screen2, false) { first: Boolean, second: Boolean -> first xor second }
     merge.printScreen()
 
     val screenColor = screen
-        .toList2D()
         .traverseMapIndexed { x, y, t -> x shl 16 or y shl 8 }
-        .toArray2D()
         .also { it.printScreenColor() }
-        .let { IntArray2D(it) }
 
     val screenColor2 = screen
-        .toList2D()
         .traverseMap { t -> if (t) 0xFF0000 else 0 }
-        .toArray2D()
-        .let { IntArray2D(it) }
 
     val also = screenColor.mergeWith(screenColor2, 0) { first: Int, second: Int ->
         if (second != 0) second else first
-    }.toArray2D().let { IntArray2D(it) }.also { it.value.printScreenColor() }
+    }.also { it.printScreenColor() }
 
-    val traverseMap = screen.toList2D().traverseMap { false }.toArray2D().let { BooleanArray2D(it) }
+    val traverseMap = screen.traverseMap { false }
     traverseMap.drawLine(23 coord 20, 40 coord 75)
     (also to traverseMap).merge(0) { first, second ->
         if (second) 0xffffff else first
@@ -255,19 +234,19 @@ private fun previewCircle() {
             drawCircle(it * 7 + roll6().value coord 32 + roll20().rollSign().value, 5)
         }
     }
-    also.also { it.value.printScreenColor() }
+    also.also { it.printScreenColor() }
 
 //    circleBres(40, 30, 20).also {
 //        val (list, rect) = it
-//        screen.traverseAdd(list, true)
+//        screen.traverseAssign(list, true)
 //        screen.fillPolygon(rect.modifyBy(gy = -1), true)
 //    }
 //
 //    printScreen(screen)
 }
 
-private fun BooleanArray2D.printScreen() {
-    toList2D().traverseMap { t -> if (t) "XX" else ".." }.printAll("")
+private fun List2D<Boolean>.printScreen() {
+    traverseMap { t -> if (t) "XX" else ".." }.printAll("")
 }
 
 private fun Array<Array<Int>>.printScreenColor() {
