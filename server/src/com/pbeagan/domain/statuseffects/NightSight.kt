@@ -1,4 +1,4 @@
-package com.pbeagan.statuseffects
+package com.pbeagan.domain.statuseffects
 
 import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.actions.type.MultiRoundActionDelegate
@@ -7,7 +7,7 @@ import com.pbeagan.domain.Effect
 import com.pbeagan.domain.EffectBase
 import com.pbeagan.domain.EffectImpl
 import com.pbeagan.domain.Mob
-import com.pbeagan.stats.VisionValue
+import com.pbeagan.domain.stats.VisionValue
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Magenta
 import com.pbeagan.consolevision.TerminalColorStyle.style
 

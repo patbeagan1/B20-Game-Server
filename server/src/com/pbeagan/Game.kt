@@ -6,8 +6,8 @@ import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.actions.type.FreeAction
 import com.pbeagan.domain.actions.type.MultiRoundActionDelegate.MultiRoundAction
 import com.pbeagan.util.roll20
-import com.pbeagan.writer.Reader
-import com.pbeagan.writer.Writer
+import com.pbeagan.data.reader.Reader
+import com.pbeagan.data.writer.Writer
 import mobs
 
 class Game {

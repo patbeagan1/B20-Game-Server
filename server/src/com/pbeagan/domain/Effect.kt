@@ -1,6 +1,6 @@
 package com.pbeagan.domain
 
-import com.pbeagan.stats.Stats
+import com.pbeagan.domain.stats.Stats
 
 interface Effect : Stats {
     var roundsLeft: Int

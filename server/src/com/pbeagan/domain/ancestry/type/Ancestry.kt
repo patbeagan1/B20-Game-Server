@@ -4,7 +4,7 @@ import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.Effect
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.Mob.MobBehavior
-import com.pbeagan.stats.Stats
+import com.pbeagan.domain.stats.Stats
 
 abstract class Ancestry(private val stats: Stats) : Effect, Stats by stats {
     override var roundsLeft: Int = Int.MAX_VALUE

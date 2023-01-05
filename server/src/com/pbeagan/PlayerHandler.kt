@@ -4,7 +4,7 @@ import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.actions.Inactive
 import com.pbeagan.domain.actions.Retry
 import com.pbeagan.domain.Mob
-import com.pbeagan.writer.Reader
+import com.pbeagan.data.reader.Reader
 import java.util.Locale
 
 class PlayerHandler(

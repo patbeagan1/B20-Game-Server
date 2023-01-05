@@ -8,11 +8,11 @@ import com.pbeagan.domain.types.AttackType.MAGIC
 import com.pbeagan.domain.types.AttackType.MELEE
 import com.pbeagan.domain.types.AttackType.RANGED
 import com.pbeagan.domain.types.AttackType.THROWN
-import com.pbeagan.stats.AttackValue
+import com.pbeagan.domain.stats.AttackValue
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.getFirstVisibleMob
 import com.pbeagan.domain.target
-import com.pbeagan.writer.Writer
+import com.pbeagan.data.writer.Writer
 
 abstract class Action {
     abstract operator fun invoke(self: Mob)

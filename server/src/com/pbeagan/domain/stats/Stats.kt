@@ -1,4 +1,4 @@
-package com.pbeagan.stats
+package com.pbeagan.domain.stats
 
 import com.pbeagan.util.DiceRoll
 

@@ -5,8 +5,8 @@ import com.pbeagan.domain.actions.*
 import com.pbeagan.domain.types.Direction
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.actions.type.Action
-import com.pbeagan.statuseffects.Curse
-import com.pbeagan.statuseffects.NightSight
+import com.pbeagan.domain.statuseffects.Curse
+import com.pbeagan.domain.statuseffects.NightSight
 import dev.patbeagan.base.safeLet
 
 class CommandParser {

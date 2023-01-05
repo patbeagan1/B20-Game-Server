@@ -2,9 +2,9 @@ import com.pbeagan.Account
 import dev.patbeagan.base.ApplyOnce
 import com.pbeagan.Game
 import com.pbeagan.demo.SampleData
-import com.pbeagan.writer.Reader
-import com.pbeagan.writer.Writer
-import com.pbeagan.writer.WriterImpl
+import com.pbeagan.data.reader.Reader
+import com.pbeagan.data.writer.Writer
+import com.pbeagan.data.writer.WriterImpl
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel

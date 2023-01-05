@@ -1,6 +1,6 @@
 package com.pbeagan.util
 
-import com.pbeagan.stats.ValueContainer
+import com.pbeagan.domain.stats.ValueContainer
 import kotlin.random.Random
 
 @JvmInline

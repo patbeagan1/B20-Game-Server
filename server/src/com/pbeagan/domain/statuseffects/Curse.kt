@@ -1,4 +1,4 @@
-package com.pbeagan.statuseffects
+package com.pbeagan.domain.statuseffects
 
 import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.actions.type.MultiRoundActionDelegate
@@ -7,7 +7,7 @@ import com.pbeagan.domain.actions.Retry
 import com.pbeagan.domain.Effect
 import com.pbeagan.domain.EffectBase
 import com.pbeagan.domain.EffectImpl
-import com.pbeagan.stats.HealthValue
+import com.pbeagan.domain.stats.HealthValue
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.target
 

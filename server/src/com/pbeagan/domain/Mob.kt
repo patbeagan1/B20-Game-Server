@@ -18,23 +18,23 @@ import dev.patbeagan.base.BoundedValue
 import dev.patbeagan.base.FlagSet
 import com.pbeagan.util.Senses
 
-import com.pbeagan.writer.Reader
+import com.pbeagan.data.reader.Reader
 import com.pbeagan.consolevision.TerminalColorStyle
 import com.pbeagan.consolevision.TerminalColorStyle.style
 import com.pbeagan.consolevision.coord
 import com.pbeagan.domain.flags.Lighting
 import com.pbeagan.domain.flags.VisibleBy
 import com.pbeagan.domain.types.AttackType
-import com.pbeagan.stats.AttackValue
-import com.pbeagan.stats.DefenseValue
-import com.pbeagan.stats.HealthValue
-import com.pbeagan.stats.MentalValue
-import com.pbeagan.stats.MiscValue
-import com.pbeagan.stats.PhysicalValue
-import com.pbeagan.stats.Stats
-import com.pbeagan.stats.VisionValue
+import com.pbeagan.domain.stats.AttackValue
+import com.pbeagan.domain.stats.DefenseValue
+import com.pbeagan.domain.stats.HealthValue
+import com.pbeagan.domain.stats.MentalValue
+import com.pbeagan.domain.stats.MiscValue
+import com.pbeagan.domain.stats.PhysicalValue
+import com.pbeagan.domain.stats.Stats
+import com.pbeagan.domain.stats.VisionValue
 import dev.patbeagan.base.UniqueId
-import com.pbeagan.writer.Writer
+import com.pbeagan.data.writer.Writer
 
 class Mob constructor(
     val nameBase: String,

@@ -8,8 +8,8 @@ import com.pbeagan.domain.actions.Take
 import com.pbeagan.domain.ancestry.type.Ancestry
 import com.pbeagan.domain.attacks.Punch
 import com.pbeagan.domain.types.Direction
-import com.pbeagan.stats.HealthValue
-import com.pbeagan.stats.MentalValue
+import com.pbeagan.domain.stats.HealthValue
+import com.pbeagan.domain.stats.MentalValue
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.Mob.MobBehavior
 import com.pbeagan.domain.getFirstVisibleMob

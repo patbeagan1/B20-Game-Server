@@ -1,15 +1,15 @@
 package com.pbeagan.domain.ancestry.type
 
 import com.pbeagan.domain.actions.Pass
-import com.pbeagan.stats.AttackValue
-import com.pbeagan.stats.HealthValue
-import com.pbeagan.stats.MentalValue
-import com.pbeagan.stats.MiscValue
+import com.pbeagan.domain.stats.AttackValue
+import com.pbeagan.domain.stats.HealthValue
+import com.pbeagan.domain.stats.MentalValue
+import com.pbeagan.domain.stats.MiscValue
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.Mob.*
-import com.pbeagan.stats.PhysicalValue
-import com.pbeagan.stats.Stats
-import com.pbeagan.stats.VisionValue
+import com.pbeagan.domain.stats.PhysicalValue
+import com.pbeagan.domain.stats.Stats
+import com.pbeagan.domain.stats.VisionValue
 
 class AncestryBase : Ancestry(
     object : Stats {

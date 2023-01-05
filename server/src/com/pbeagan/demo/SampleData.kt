@@ -4,7 +4,7 @@ import com.pbeagan.domain.ancestry.Goblin
 import com.pbeagan.domain.ancestry.Hobgoblin
 import com.pbeagan.domain.ancestry.Human
 import com.pbeagan.consolevision.coord
-import com.pbeagan.stats.DefenseValue
+import com.pbeagan.domain.stats.DefenseValue
 import com.pbeagan.domain.types.Direction.DOWN
 import com.pbeagan.domain.types.Direction.EAST
 import com.pbeagan.domain.types.Direction.NORTH

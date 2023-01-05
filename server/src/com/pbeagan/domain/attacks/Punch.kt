@@ -1,7 +1,7 @@
 package com.pbeagan.domain.attacks
 
 import com.pbeagan.domain.attacks.type.Attack
-import com.pbeagan.stats.AttackValue
+import com.pbeagan.domain.stats.AttackValue
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.currentRoom
 import com.pbeagan.domain.formatHP

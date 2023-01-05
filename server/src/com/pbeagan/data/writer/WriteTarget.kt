@@ -1,4 +1,4 @@
-package com.pbeagan.writer
+package com.pbeagan.data.writer
 
 import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.domain.types.Direction

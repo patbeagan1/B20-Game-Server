@@ -1,4 +1,4 @@
-package com.pbeagan.writer
+package com.pbeagan.data.writer
 
 import com.pbeagan.domain.Mob
 import com.pbeagan.domain.currentRoomOtherMobsAndSelf

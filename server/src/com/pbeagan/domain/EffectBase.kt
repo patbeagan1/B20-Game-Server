@@ -1,11 +1,11 @@
 package com.pbeagan.domain
 
-import com.pbeagan.stats.AttackValue
-import com.pbeagan.stats.HealthValue
-import com.pbeagan.stats.MentalValue
-import com.pbeagan.stats.MiscValue
-import com.pbeagan.stats.PhysicalValue
-import com.pbeagan.stats.VisionValue
+import com.pbeagan.domain.stats.AttackValue
+import com.pbeagan.domain.stats.HealthValue
+import com.pbeagan.domain.stats.MentalValue
+import com.pbeagan.domain.stats.MiscValue
+import com.pbeagan.domain.stats.PhysicalValue
+import com.pbeagan.domain.stats.VisionValue
 
 abstract class EffectImpl(effect: Effect) : Effect by effect
 
