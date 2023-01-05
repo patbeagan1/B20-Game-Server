@@ -1,7 +1,7 @@
 package com.pbeagan.data.writer
 
-import com.pbeagan.domain.Mob
-import com.pbeagan.domain.currentRoomOtherMobsAndSelf
+import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.currentRoomOtherMobsAndSelf
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.writeFully
 import kotlinx.coroutines.runBlocking

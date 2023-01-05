@@ -2,10 +2,10 @@ package com.pbeagan.actions
 
 import com.pbeagan.consolevision.coord
 import com.pbeagan.consolevision.demo.toList2D
-import com.pbeagan.domain.actions.Move
-import com.pbeagan.domain.types.Direction
-import com.pbeagan.domain.terrain.Grass
-import com.pbeagan.domain.terrain.type.Terrain
+import com.pbeagan.contextual.actions.Move
+import dev.patbeagan.b20.domain.types.Direction
+import dev.patbeagan.b20.domain.terrain.Grass
+import dev.patbeagan.b20.domain.terrain.type.Terrain
 
 import org.junit.Assert
 import org.junit.jupiter.api.Test

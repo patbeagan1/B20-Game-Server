@@ -1,25 +1,24 @@
 package com.pbeagan.demo
 
-import com.pbeagan.domain.ancestry.Goblin
-import com.pbeagan.domain.ancestry.Hobgoblin
-import com.pbeagan.domain.ancestry.Human
 import com.pbeagan.consolevision.coord
-import com.pbeagan.domain.stats.DefenseValue
-import com.pbeagan.domain.types.Direction.DOWN
-import com.pbeagan.domain.types.Direction.EAST
-import com.pbeagan.domain.types.Direction.NORTH
-import com.pbeagan.domain.types.Direction.SOUTH
-import com.pbeagan.domain.types.Direction.UP
-import com.pbeagan.domain.types.Direction.WEST
-import com.pbeagan.domain.Exits
-import com.pbeagan.domain.ItemData
-import com.pbeagan.domain.flags.ItemFlags
-import com.pbeagan.domain.flags.Lighting
-import com.pbeagan.domain.Mob
-import com.pbeagan.domain.Mob.MobBehavior
-import com.pbeagan.domain.RoomData
-import com.pbeagan.domain.RoomDirectionData
-import com.pbeagan.domain.flags.RoomFlags
+import com.pbeagan.contextual.*
+import com.pbeagan.contextual.Mob.*
+import com.pbeagan.contextual.ancestry.Goblin
+import com.pbeagan.contextual.ancestry.Hobgoblin
+import com.pbeagan.contextual.ancestry.Human
+import dev.patbeagan.b20.domain.Exits
+import com.pbeagan.contextual.ItemData
+import dev.patbeagan.b20.domain.RoomDirectionData
+import dev.patbeagan.b20.domain.flags.ItemFlags
+import dev.patbeagan.b20.domain.flags.Lighting
+import dev.patbeagan.b20.domain.flags.RoomFlags
+import dev.patbeagan.b20.domain.stats.DefenseValue
+import dev.patbeagan.b20.domain.types.Direction.DOWN
+import dev.patbeagan.b20.domain.types.Direction.EAST
+import dev.patbeagan.b20.domain.types.Direction.NORTH
+import dev.patbeagan.b20.domain.types.Direction.SOUTH
+import dev.patbeagan.b20.domain.types.Direction.UP
+import dev.patbeagan.b20.domain.types.Direction.WEST
 import dev.patbeagan.base.FlagSet
 
 object SampleData {
@@ -29,7 +28,7 @@ object SampleData {
 //            armor = 3,
             effects = listOf(Human()),
             isPlayer = true,
-            description = object : Mob.Description {},
+            description = object : Description {},
             locationInRoom = 2 coord 3
         ),
         Mob(
@@ -37,7 +36,7 @@ object SampleData {
             armor = DefenseValue(3),
             isPlayer = true,
             effects = listOf(Human()),
-            description = object : Mob.Description {},
+            description = object : Description {},
             locationInRoom = 2 coord 4
         ),
         Mob(
@@ -46,7 +45,7 @@ object SampleData {
             effects = listOf(Goblin()),
             behavior = MobBehavior.AGGRESSIVE,
             room = 2,
-            description = object : Mob.Description {},
+            description = object : Description {},
             locationInRoom = 5 coord 5
         ),
         Mob(
@@ -55,7 +54,7 @@ object SampleData {
             effects = listOf(Hobgoblin()),
             behavior = MobBehavior.LOOTER,
             room = 3,
-            description = object : Mob.Description {},
+            description = object : Description {},
             locationInRoom = 1 coord 1
         ),
         Mob(
@@ -64,7 +63,7 @@ object SampleData {
             effects = listOf(Goblin()),
             behavior = MobBehavior.WANDERER,
             room = 0,
-            description = object : Mob.Description {},
+            description = object : Description {},
             locationInRoom = 5 coord 5
         )
     )

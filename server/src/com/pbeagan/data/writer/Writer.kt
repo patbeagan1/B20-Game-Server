@@ -1,6 +1,6 @@
 package com.pbeagan.data.writer
 
-import com.pbeagan.domain.Mob
+import com.pbeagan.contextual.Mob
 import io.ktor.utils.io.ByteWriteChannel
 
 interface Writer {

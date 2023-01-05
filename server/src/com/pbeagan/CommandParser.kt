@@ -1,12 +1,12 @@
 package com.pbeagan
 
 
-import com.pbeagan.domain.actions.*
-import com.pbeagan.domain.types.Direction
-import com.pbeagan.domain.Mob
-import com.pbeagan.domain.actions.type.Action
-import com.pbeagan.domain.statuseffects.Curse
-import com.pbeagan.domain.statuseffects.NightSight
+import com.pbeagan.contextual.actions.*
+import dev.patbeagan.b20.domain.types.Direction
+import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.actions.type.Action
+import com.pbeagan.contextual.statuseffects.Curse
+import com.pbeagan.contextual.statuseffects.NightSight
 import dev.patbeagan.base.safeLet
 
 class CommandParser {

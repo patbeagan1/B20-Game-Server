@@ -11,3 +11,4 @@ include("hello")
 
 include(":console-vision")
 include(":base")
+include(":domain")

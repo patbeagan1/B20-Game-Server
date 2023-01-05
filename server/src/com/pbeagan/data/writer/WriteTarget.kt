@@ -1,8 +1,8 @@
 package com.pbeagan.data.writer
 
-import com.pbeagan.domain.actions.type.Action
-import com.pbeagan.domain.types.Direction
-import com.pbeagan.domain.Mob
+import com.pbeagan.contextual.actions.type.Action
+import dev.patbeagan.b20.domain.types.Direction
+import com.pbeagan.contextual.Mob
 import com.pbeagan.consolevision.TerminalColorStyle.Colors
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black1
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black2

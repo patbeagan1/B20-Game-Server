@@ -1,13 +1,13 @@
 package com.pbeagan
 
-import com.pbeagan.domain.Mob
-import com.pbeagan.domain.actions.*
-import com.pbeagan.domain.actions.type.Action
-import com.pbeagan.domain.actions.type.FreeAction
-import com.pbeagan.domain.actions.type.MultiRoundActionDelegate.MultiRoundAction
-import com.pbeagan.util.roll20
+import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.actions.*
+import com.pbeagan.contextual.actions.type.Action
+import com.pbeagan.contextual.actions.type.FreeAction
+import com.pbeagan.contextual.actions.type.MultiRoundActionDelegate.MultiRoundAction
 import com.pbeagan.data.reader.Reader
 import com.pbeagan.data.writer.Writer
+import dev.patbeagan.b20.domain.roll20
 import mobs
 
 class Game {
