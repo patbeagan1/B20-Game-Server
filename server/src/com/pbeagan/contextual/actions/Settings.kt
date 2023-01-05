@@ -1,10 +1,10 @@
 package com.pbeagan.contextual.actions
 
 import com.pbeagan.WorldState
-import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.actions.type.FreeAction
 import dev.patbeagan.b20.domain.types.AttackType
 import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.actions.type.Action
 
 class Settings(
     val worldState: WorldState,

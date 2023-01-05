@@ -4,6 +4,7 @@ package com.pbeagan.contextual
 import com.pbeagan.consolevision.Coord
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Cyan
 import com.pbeagan.consolevision.TerminalColorStyle.style
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 import dev.patbeagan.b20.domain.HasLocation
 import dev.patbeagan.b20.domain.flags.AffectedByMagic
 import dev.patbeagan.b20.domain.flags.ItemFlags
@@ -33,7 +34,7 @@ data class ItemData(
     }
 
     fun nameStartsWith(item: String) =
-        names.any { it.startsWith(item) }
+        names.any { it.commonPrefixWithIgnoreCase(item) }
 
     interface FlagHandler {
         fun invoke(self: Mob) = Unit

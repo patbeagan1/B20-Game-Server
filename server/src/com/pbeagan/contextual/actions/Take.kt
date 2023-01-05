@@ -5,7 +5,7 @@ import com.pbeagan.consolevision.Util
 import com.pbeagan.contextual.ItemData
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.type.Action
-import com.pbeagan.util.startsWith
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 import dev.patbeagan.b20.domain.flags.ItemFlags
 import dev.patbeagan.b20.domain.takeIfItIsInRangeOf
 
@@ -32,7 +32,7 @@ class Take(
             return with(worldState) { mob.currentRoom() }?.items
                 ?.firstOrNull { itemData ->
                     itemData.itemFlags.contains(ItemFlags.TAKEABLE) && itemData.names.any { name ->
-                        itemName.let { name.startsWith(it) }
+                        itemName.let { name.commonPrefixWithIgnoreCase(it) }
                     }
                 }
                 ?.takeIfItIsInRangeOf(mob, 1)

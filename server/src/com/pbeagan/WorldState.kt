@@ -3,6 +3,7 @@ package com.pbeagan
 import com.pbeagan.contextual.ItemData
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.RoomData
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 
 class WorldState(
     val mobs: List<Mob>,
@@ -32,6 +33,6 @@ class WorldState(
 
     fun Mob.target(targetName: String): Mob? = this
         .currentRoomOtherMobs(mobs)
-        .firstOrNull { it.nameBase.startsWith(targetName) }
+        .firstOrNull { it.nameBase.commonPrefixWithIgnoreCase(targetName) }
 
 }

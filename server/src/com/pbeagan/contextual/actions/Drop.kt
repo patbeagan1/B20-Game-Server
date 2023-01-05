@@ -4,6 +4,7 @@ import com.pbeagan.WorldState
 import com.pbeagan.contextual.ItemData
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.type.Action
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 import dev.patbeagan.b20.domain.flags.ItemFlags
 
 class Drop(private val worldState: WorldState, private val item: ItemData) : Action() {
@@ -22,7 +23,7 @@ class Drop(private val worldState: WorldState, private val item: ItemData) : Act
             .firstOrNull { itemData ->
                 itemData.itemFlags.contains(ItemFlags.UNDROPPABLE)
                     .not() && itemData.names.any { name ->
-                    itemName.let { name.startsWith(it) }
+                    itemName.let { name.commonPrefixWithIgnoreCase(it) }
                 }
             }
             ?.let { Drop(worldState , it) }

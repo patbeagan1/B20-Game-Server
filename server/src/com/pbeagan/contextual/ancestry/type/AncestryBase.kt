@@ -34,7 +34,7 @@ class AncestryBase : Ancestry(
         override var endurance: PhysicalValue = PhysicalValue(10)
         override var durability: PhysicalValue = PhysicalValue(10)
 
-        override var totalHearts: HealthValue = HealthValue(4)
+        override var totalHearts: HealthValue = HealthValue(50)
 
         override val visionBright: VisionValue = VisionValue(100)
         override val visionDim: VisionValue = VisionValue(7)

@@ -9,8 +9,8 @@ object WorldParser {
 //            val terrain = roomString.substringAfterLast("terrain=")
 //            roomString.substringBeforeLast("terrain=").split('\n').forEach {
 //                when {
-//                    it.startsWith("name=") -> builder.name = it.substringAfter("name=")
-//                    it.startsWith("exit=") -> builder.exits.add(
+//                    it.startsWithIgnoreCase("name=") -> builder.name = it.substringAfter("name=")
+//                    it.startsWithIgnoreCase("exit=") -> builder.exits.add(
 //                        RoomDirectionData.from(it)
 //                    )
 //                }

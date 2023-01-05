@@ -9,7 +9,7 @@ import com.pbeagan.contextual.actions.Pass
 import com.pbeagan.contextual.actions.Take
 import com.pbeagan.contextual.ancestry.type.Ancestry
 import com.pbeagan.contextual.ancestry.type.AncestryBase
-import com.pbeagan.contextual.attacks.Punch
+import com.pbeagan.contextual.actions.AttackUnarmed
 import dev.patbeagan.b20.domain.roll20
 import dev.patbeagan.b20.domain.types.Direction
 
@@ -27,7 +27,7 @@ class Human : Ancestry(AncestryBase()) {
             } ?: Pass
 
             MobBehavior.AGGRESSIVE -> when (roll20().value) {
-                in 0..18 -> mob.getFirstVisibleMob()?.let { Punch(it, worldState) }
+                in 0..18 -> mob.getFirstVisibleMob()?.let { AttackUnarmed(it, worldState) }
                 else -> Pass
             } ?: Pass
 

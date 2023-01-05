@@ -2,11 +2,12 @@ package com.pbeagan.util
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.util.Locale
 
 val Any.exhaustive get() = this.let {}
 
-fun String.startsWith(prefix: String) =
-    this.commonPrefixWith(prefix.toLowerCase(), ignoreCase = true).equals(prefix, ignoreCase = true)
+fun String.commonPrefixWithIgnoreCase(prefix: String) =
+    this.commonPrefixWith(prefix.lowercase(Locale.getDefault()), ignoreCase = true).equals(prefix, ignoreCase = true)
 
 fun Int.rangeBy(range: Int) = (this - range)..(this + range)
 

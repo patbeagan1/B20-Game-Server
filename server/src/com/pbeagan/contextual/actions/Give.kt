@@ -4,6 +4,7 @@ import com.pbeagan.WorldState
 import com.pbeagan.contextual.ItemData
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.type.Action
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 import dev.patbeagan.b20.domain.flags.ItemFlags
 
 class Give(
@@ -32,7 +33,7 @@ class Give(
                 val mob = self
                     .currentRoomOtherMobs(mobs)
                     .also { println(it) }
-                    .firstOrNull { target.startsWith(it.nameBase) }
+                    .firstOrNull { target.commonPrefixWithIgnoreCase(it.nameBase) }
                     ?: return Retry("$target isn't here")
                 return Give(mob, itemData)
             }

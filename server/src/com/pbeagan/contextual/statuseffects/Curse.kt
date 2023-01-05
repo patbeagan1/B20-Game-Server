@@ -35,7 +35,7 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
     }
 
     companion object {
-        fun getOrRetry(mob: Mob, targetName: String, worldState: WorldState): Action= with(worldState) {
+        fun getOrRetry(mob: Mob, targetName: String, worldState: WorldState): Action = with(worldState) {
             val target = mob.target(targetName) ?: return Retry("That mob isn't here")
             return Curse(target)
         }

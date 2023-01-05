@@ -11,7 +11,10 @@ import dev.patbeagan.base.safeLet
 
 class CommandParser {
 
-    operator fun invoke(mob: Mob, worldState: WorldState): List<Pair<String, (List<String>) -> Action>> = listOf(
+    operator fun invoke(
+        mob: Mob,
+        worldState: WorldState,
+    ): List<Pair<String, (List<String>) -> Action>> = listOf(
         // Util
         "(\\.|\n|again)" to { Repeat(mob.action) },
         "debug$ARG" to { i ->
@@ -86,7 +89,7 @@ class CommandParser {
         // Combat
         "(atk|attack)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->
-                Action.attackOrRetry(mob, mobName, worldState)
+                AttackDefault(mobName, worldState)
             } ?: Retry("You need to specify a target!")
         },
         "(curse)$ARG" to { i ->

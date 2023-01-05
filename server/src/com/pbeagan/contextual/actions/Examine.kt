@@ -4,6 +4,7 @@ import com.pbeagan.WorldState
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.actions.type.FreeAction
+import com.pbeagan.util.commonPrefixWithIgnoreCase
 
 class Examine(private val worldState: WorldState, private val targetName: String) : Action(), FreeAction {
     override fun invoke(self: Mob) {
@@ -15,7 +16,7 @@ class Examine(private val worldState: WorldState, private val targetName: String
     private fun examineMob(self: Mob, targetName: String): Unit? = with(worldState){
         val mob = self
             .currentRoomOtherMobs(mobs)
-            .firstOrNull { it.nameBase.startsWith(targetName) }
+            .firstOrNull { it.nameBase.commonPrefixWithIgnoreCase(targetName) }
             ?: return null
         return mob.ancestry?.let { ancestry ->
             writer.sayTo(self).info(mob.description.onExamine(ancestry))
