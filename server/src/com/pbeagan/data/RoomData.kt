@@ -3,9 +3,8 @@ package com.pbeagan.data
 import com.pbeagan.actions.RoomTile
 import com.pbeagan.consolevision.Coord
 
-import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.FlagSet
 import com.pbeagan.consolevision.List2D
-import com.pbeagan.util.createFlagSet
 import mobs
 
 class RoomData constructor(
@@ -14,7 +13,7 @@ class RoomData constructor(
     override val descriptionLook: String,
     override val descriptionPreview: (Direction) -> String,
     var exits: Exits,
-    var roomFlags: FlagCombined<RoomFlags> = createFlagSet(),
+    var roomFlags: FlagSet<RoomFlags> = FlagSet.of(),
     var weather: Weather = Weather.CLEAR,
     var lighting: Lighting = Lighting.BRIGHT,
     var items: MutableCollection<ItemData> = mutableListOf(),

@@ -1,7 +1,7 @@
 package com.pbeagan.data
 
 import com.pbeagan.util.Flag
-import com.pbeagan.util.createFlagSet
+import com.pbeagan.util.FlagSet
 
 enum class ItemFlags : Flag {
     GLOW,
@@ -19,7 +19,7 @@ enum class ItemFlags : Flag {
 
     companion object {
         val default
-            get() = createFlagSet(
+            get() = FlagSet.of(
                 TAKEABLE
             )
     }

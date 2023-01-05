@@ -1,8 +1,7 @@
 package com.pbeagan.data
 
 import com.pbeagan.util.Flag
-import com.pbeagan.util.FlagCombined
-import com.pbeagan.util.createFlagSet
+import com.pbeagan.util.FlagSet
 
 enum class VisibleBy : Flag {
     SIGHT,
@@ -13,17 +12,19 @@ enum class VisibleBy : Flag {
     DETECT_MAGIC;
 
     companion object {
-        val defaultMob: FlagCombined<VisibleBy>
-            get() = createFlagSet(
+        val defaultMob: FlagSet<VisibleBy>
+            get() = FlagSet.of(
                 SIGHT,
                 SOUND,
                 SENSE_LIFE
             )
-        val defaultItem: FlagCombined<VisibleBy>
-            get() = createFlagSet(SIGHT)
+        val defaultItem: FlagSet<VisibleBy>
+            get() = FlagSet.of(
+                SIGHT
+            )
     }
 }
 
-enum class Lighting{
+enum class Lighting {
     BRIGHT, DIM, DARK, NONE
 }

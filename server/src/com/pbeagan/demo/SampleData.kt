@@ -20,9 +20,7 @@ import com.pbeagan.data.MobBehavior
 import com.pbeagan.data.RoomData
 import com.pbeagan.data.RoomDirectionData
 import com.pbeagan.data.RoomFlags
-
-import com.pbeagan.util.createFlagSet
-
+import com.pbeagan.util.FlagSet
 
 object SampleData {
     val mobs = listOf(
@@ -95,7 +93,7 @@ object SampleData {
                 ****''''
                 ''''''''
             """.trimIndent(),
-            roomFlags = createFlagSet(RoomFlags.INDOORS),
+            roomFlags = FlagSet.of(RoomFlags.INDOORS),
             items = mutableListOf(
                 ItemData(
                     0,

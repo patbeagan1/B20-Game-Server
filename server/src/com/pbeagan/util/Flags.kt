@@ -5,13 +5,9 @@ interface Flag {
     val value get() = 1 shl (this.ordinal)
 }
 
-fun <T : Flag> createFlagSet(vararg a: T) = a.distinct().sumBy { it.value }.let {
-    FlagCombined<T>(
-        it
-    )
-}
-data class FlagCombined<T : Flag>(private var value: Int) {
+data class FlagSet<T : Flag>(private var value: Int) {
     fun contains(a: T) = (this.value and a.value) == a.value
+
     fun add(a: T) {
         if (!contains(a)) this.value += a.value
     }
@@ -27,6 +23,16 @@ data class FlagCombined<T : Flag>(private var value: Int) {
     fun remove(vararg a: T) {
         a.forEach { remove(it) }
     }
+
+    companion object {
+        fun <T : Flag> of(vararg a: T) = a
+            .distinct()
+            .sumOf {
+                it.value
+            }.let {
+                FlagSet<T>(it)
+            }
+    }
 }
 
 enum class FlagImpl : Flag {
@@ -34,16 +40,19 @@ enum class FlagImpl : Flag {
 }
 
 fun main() {
-    val g = createFlagSet(
+    val g = FlagSet.of(
         FlagImpl.A,
         FlagImpl.A,
         FlagImpl.C
     )
-    println("${g} ${g.contains(FlagImpl.B)}")
+    println("$g ${g.contains(FlagImpl.B)}")
     g.add(FlagImpl.B)
-    println("${g} ${g.contains(FlagImpl.B)}")
+    println("$g ${g.contains(FlagImpl.B)}")
     g.add(FlagImpl.B)
-    println("${g} ${g.contains(FlagImpl.B)}")
+    println("$g ${g.contains(FlagImpl.B)}")
     g.remove(FlagImpl.B)
-    println("${g} ${g.contains(FlagImpl.B)}")
+    println("$g ${g.contains(FlagImpl.B)}")
+    println("$g ${g.contains(FlagImpl.A)}")
+    g.remove(FlagImpl.A)
+    println("$g ${g.contains(FlagImpl.A)}")
 }

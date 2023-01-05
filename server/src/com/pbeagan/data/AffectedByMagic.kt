@@ -1,7 +1,7 @@
 package com.pbeagan.data
 
 import com.pbeagan.util.Flag
-import com.pbeagan.util.createFlagSet
+import com.pbeagan.util.FlagSet
 
 enum class AffectedByMagic : Flag {
     INVISIBLE,
@@ -14,7 +14,7 @@ enum class AffectedByMagic : Flag {
 
     companion object {
         val defaultItem
-            get() = createFlagSet(
+            get() = FlagSet.of(
                 INVISIBLE
             )
     }

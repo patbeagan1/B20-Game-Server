@@ -17,7 +17,7 @@ import com.pbeagan.data.MobBehavior.WAITING
 import com.pbeagan.data.MobMood.NEUTRAL
 import com.pbeagan.util.BoundedValue
 
-import com.pbeagan.util.FlagCombined
+import com.pbeagan.util.FlagSet
 import com.pbeagan.util.Senses
 
 import com.pbeagan.writer.Reader
@@ -43,7 +43,7 @@ class Mob constructor(
     override var locationInRoom: Coord,
 
     var visited: MutableSet<Int> = mutableSetOf(0),
-    var visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultMob,
+    var visibleBy: FlagSet<VisibleBy> = VisibleBy.defaultMob,
 
     var effects: List<Effect> = listOf(Human()),
     var items: MutableList<ItemData> = mutableListOf()

@@ -2,8 +2,7 @@ package com.pbeagan.data
 
 
 import com.pbeagan.consolevision.Coord
-import com.pbeagan.util.FlagCombined
-import com.pbeagan.util.createFlagSet
+import com.pbeagan.util.FlagSet
 import com.pbeagan.util.startsWith
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Cyan
 import com.pbeagan.consolevision.TerminalColorStyle.style
@@ -16,11 +15,11 @@ data class ItemData(
     override var locationInRoom: Coord
 ) : HasLocation {
     val nameStyled: String = names.first().style(colorForeground = Cyan)
-    val affectedByMagicPossible: FlagCombined<AffectedByMagic> = AffectedByMagic.defaultItem
-    val affectedByMagicCurrent: FlagCombined<AffectedByMagic> = createFlagSet()
+    val affectedByMagicPossible: FlagSet<AffectedByMagic> = AffectedByMagic.defaultItem
+    val affectedByMagicCurrent: FlagSet<AffectedByMagic> = FlagSet.of()
     val containsInnerItem: ItemData? = null
-    val itemFlags: FlagCombined<ItemFlags> = ItemFlags.default
-    val visibleBy: FlagCombined<VisibleBy> = VisibleBy.defaultItem
+    val itemFlags: FlagSet<ItemFlags> = ItemFlags.default
+    val visibleBy: FlagSet<VisibleBy> = VisibleBy.defaultItem
     val flagHandlers = mutableMapOf<ItemFlags, FlagHandler?>()
 
     fun setItemFlags(flags: ItemFlags, handler: FlagHandler? = null) {
