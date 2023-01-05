@@ -16,7 +16,7 @@ import dev.patbeagan.b20.domain.roll20
 class Game(private val worldState: WorldState) {
 
     val mobs get() = worldState.mobs
-    private val playerHandler = PlayerHandler(CommandParser())
+    private val playerHandler = PlayerHandler()
 
     fun gameLoop(writer: Writer, reader: Reader) {
         mobs.sortedByDescending { roll20() + it.awareness.value }.forEach {
