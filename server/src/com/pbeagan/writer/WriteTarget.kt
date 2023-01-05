@@ -1,8 +1,8 @@
 package com.pbeagan.writer
 
-import com.pbeagan.actions.Action
-import com.pbeagan.data.Direction
-import com.pbeagan.data.Mob
+import com.pbeagan.domain.actions.type.Action
+import com.pbeagan.domain.types.Direction
+import com.pbeagan.domain.Mob
 import com.pbeagan.consolevision.TerminalColorStyle.Colors
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black1
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Black2
@@ -11,7 +11,7 @@ import com.pbeagan.consolevision.TerminalColorStyle.style
 
 class WriteTarget(
     private val writer: WriterInternal,
-    private val target: Array<out Mob>
+    private val target: List<Mob>
 ) {
 
     private val horizontalRule = (0..20).joinToString("") { "-" }

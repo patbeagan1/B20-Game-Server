@@ -1,8 +1,8 @@
 package com.pbeagan.actions
 
-import com.pbeagan.data.Direction
-import com.pbeagan.data.Grass
-import com.pbeagan.data.Terrain
+import com.pbeagan.domain.types.Direction
+import com.pbeagan.domain.terrain.Grass
+import com.pbeagan.domain.terrain.type.Terrain
 
 import org.junit.Assert
 import org.junit.jupiter.api.Test

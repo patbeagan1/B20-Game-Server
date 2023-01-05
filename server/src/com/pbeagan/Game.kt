@@ -1,14 +1,10 @@
 package com.pbeagan
 
-import com.pbeagan.actions.Action
-import com.pbeagan.actions.Follow
-import com.pbeagan.actions.FreeAction
-import com.pbeagan.actions.Inactive
-import com.pbeagan.actions.Move
-import com.pbeagan.actions.MultiRoundActionDelegate.MultiRoundAction
-import com.pbeagan.actions.Pass
-import com.pbeagan.actions.Repeat
-import com.pbeagan.data.Mob
+import com.pbeagan.domain.Mob
+import com.pbeagan.domain.actions.*
+import com.pbeagan.domain.actions.type.Action
+import com.pbeagan.domain.actions.type.FreeAction
+import com.pbeagan.domain.actions.type.MultiRoundActionDelegate.MultiRoundAction
 import com.pbeagan.util.roll20
 import com.pbeagan.writer.Reader
 import com.pbeagan.writer.Writer

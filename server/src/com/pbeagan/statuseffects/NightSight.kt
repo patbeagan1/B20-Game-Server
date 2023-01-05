@@ -1,13 +1,13 @@
 package com.pbeagan.statuseffects
 
-import com.pbeagan.actions.Action
-import com.pbeagan.actions.MultiRoundActionDelegate
-import com.pbeagan.actions.MultiRoundActionDelegate.MultiRoundAction
-import com.pbeagan.data.Effect
-import com.pbeagan.data.EffectBase
-import com.pbeagan.data.EffectImpl
-import com.pbeagan.data.Mob
-import com.pbeagan.data.VisionValue
+import com.pbeagan.domain.actions.type.Action
+import com.pbeagan.domain.actions.type.MultiRoundActionDelegate
+import com.pbeagan.domain.actions.type.MultiRoundActionDelegate.MultiRoundAction
+import com.pbeagan.domain.Effect
+import com.pbeagan.domain.EffectBase
+import com.pbeagan.domain.EffectImpl
+import com.pbeagan.domain.Mob
+import com.pbeagan.stats.VisionValue
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Magenta
 import com.pbeagan.consolevision.TerminalColorStyle.style
 

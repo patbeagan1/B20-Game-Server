@@ -1,6 +1,6 @@
 package com.pbeagan.writer
 
-import com.pbeagan.data.Mob
+import com.pbeagan.domain.Mob
 import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 

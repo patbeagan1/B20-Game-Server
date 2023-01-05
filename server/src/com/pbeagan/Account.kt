@@ -1,7 +1,6 @@
 package com.pbeagan
 
-import com.pbeagan.data.Mob
-import io.ktor.util.cio.write
+import com.pbeagan.domain.Mob
 import io.ktor.utils.io.ByteReadChannel
 import io.ktor.utils.io.ByteWriteChannel
 import io.ktor.utils.io.readUTF8Line

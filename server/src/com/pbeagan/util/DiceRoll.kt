@@ -1,6 +1,6 @@
 package com.pbeagan.util
 
-import com.pbeagan.data.ValueContainer
+import com.pbeagan.stats.ValueContainer
 import kotlin.random.Random
 
 inline class DiceRoll(val value: Int) : Comparable<ValueContainer<Int>> {

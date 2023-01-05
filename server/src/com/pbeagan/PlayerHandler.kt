@@ -1,9 +1,9 @@
 package com.pbeagan
 
-import com.pbeagan.actions.Action
-import com.pbeagan.actions.Inactive
-import com.pbeagan.actions.Retry
-import com.pbeagan.data.Mob
+import com.pbeagan.domain.actions.type.Action
+import com.pbeagan.domain.actions.Inactive
+import com.pbeagan.domain.actions.Retry
+import com.pbeagan.domain.Mob
 import com.pbeagan.writer.Reader
 import java.util.Locale
 

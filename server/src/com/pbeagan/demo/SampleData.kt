@@ -1,25 +1,25 @@
 package com.pbeagan.demo
 
-import com.pbeagan.ancestry.Goblin
-import com.pbeagan.ancestry.Hobgoblin
-import com.pbeagan.ancestry.Human
+import com.pbeagan.domain.ancestry.Goblin
+import com.pbeagan.domain.ancestry.Hobgoblin
+import com.pbeagan.domain.ancestry.Human
 import com.pbeagan.consolevision.coord
-import com.pbeagan.data.DefenseValue
-import com.pbeagan.data.Direction.DOWN
-import com.pbeagan.data.Direction.EAST
-import com.pbeagan.data.Direction.NORTH
-import com.pbeagan.data.Direction.SOUTH
-import com.pbeagan.data.Direction.UP
-import com.pbeagan.data.Direction.WEST
-import com.pbeagan.data.Exits
-import com.pbeagan.data.ItemData
-import com.pbeagan.data.ItemFlags
-import com.pbeagan.data.Lighting
-import com.pbeagan.data.Mob
-import com.pbeagan.data.MobBehavior
-import com.pbeagan.data.RoomData
-import com.pbeagan.data.RoomDirectionData
-import com.pbeagan.data.RoomFlags
+import com.pbeagan.stats.DefenseValue
+import com.pbeagan.domain.types.Direction.DOWN
+import com.pbeagan.domain.types.Direction.EAST
+import com.pbeagan.domain.types.Direction.NORTH
+import com.pbeagan.domain.types.Direction.SOUTH
+import com.pbeagan.domain.types.Direction.UP
+import com.pbeagan.domain.types.Direction.WEST
+import com.pbeagan.domain.Exits
+import com.pbeagan.domain.ItemData
+import com.pbeagan.domain.flags.ItemFlags
+import com.pbeagan.domain.flags.Lighting
+import com.pbeagan.domain.Mob
+import com.pbeagan.domain.Mob.MobBehavior
+import com.pbeagan.domain.RoomData
+import com.pbeagan.domain.RoomDirectionData
+import com.pbeagan.domain.flags.RoomFlags
 import com.pbeagan.util.FlagSet
 
 object SampleData {
@@ -45,7 +45,7 @@ object SampleData {
             armor = DefenseValue(2),
             effects = listOf(Goblin()),
             behavior = MobBehavior.AGGRESSIVE,
-            location = 2,
+            room = 2,
             description = object : Mob.Description {},
             locationInRoom = 5 coord 5
         ),
@@ -54,7 +54,7 @@ object SampleData {
             armor = DefenseValue(2),
             effects = listOf(Hobgoblin()),
             behavior = MobBehavior.LOOTER,
-            location = 3,
+            room = 3,
             description = object : Mob.Description {},
             locationInRoom = 1 coord 1
         ),
@@ -63,7 +63,7 @@ object SampleData {
             armor = DefenseValue(2),
             effects = listOf(Goblin()),
             behavior = MobBehavior.WANDERER,
-            location = 0,
+            room = 0,
             description = object : Mob.Description {},
             locationInRoom = 5 coord 5
         )

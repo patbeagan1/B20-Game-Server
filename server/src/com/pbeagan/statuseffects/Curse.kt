@@ -1,15 +1,15 @@
 package com.pbeagan.statuseffects
 
-import com.pbeagan.actions.Action
-import com.pbeagan.actions.MultiRoundActionDelegate
-import com.pbeagan.actions.MultiRoundActionDelegate.MultiRoundAction
-import com.pbeagan.actions.Retry
-import com.pbeagan.data.Effect
-import com.pbeagan.data.EffectBase
-import com.pbeagan.data.EffectImpl
-import com.pbeagan.data.HealthValue
-import com.pbeagan.data.Mob
-import com.pbeagan.data.target
+import com.pbeagan.domain.actions.type.Action
+import com.pbeagan.domain.actions.type.MultiRoundActionDelegate
+import com.pbeagan.domain.actions.type.MultiRoundActionDelegate.MultiRoundAction
+import com.pbeagan.domain.actions.Retry
+import com.pbeagan.domain.Effect
+import com.pbeagan.domain.EffectBase
+import com.pbeagan.domain.EffectImpl
+import com.pbeagan.stats.HealthValue
+import com.pbeagan.domain.Mob
+import com.pbeagan.domain.target
 
 class Curse(private val target: Mob) : Action(), MultiRoundAction {
 

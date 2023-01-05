@@ -1,10 +1,5 @@
 package com.pbeagan.demo
 
-import com.pbeagan.data.Mob
-import com.pbeagan.data.RoomData
-import com.pbeagan.data.RoomDirectionData
-import com.pbeagan.util.startsWith
-
 object WorldParser {
 //    val mobs: MutableList<Mob> = mutableListOf()
 //    val rooms: MutableList<RoomData> = mutableListOf()

@@ -1,42 +1,30 @@
 package com.pbeagan
 
-import com.pbeagan.actions.Action
-import com.pbeagan.actions.Consume
-import com.pbeagan.actions.Debug
-import com.pbeagan.actions.Doors
-import com.pbeagan.actions.Drop
-import com.pbeagan.actions.Examine
-import com.pbeagan.actions.Give
-import com.pbeagan.actions.Inventory
-import com.pbeagan.actions.Look
-import com.pbeagan.actions.MapLocal
-import com.pbeagan.actions.Move
-import com.pbeagan.actions.Pass
-import com.pbeagan.actions.Repeat
-import com.pbeagan.actions.Retry
-import com.pbeagan.actions.Settings
-import com.pbeagan.actions.Take
-import com.pbeagan.data.Direction
-import com.pbeagan.data.Mob
+
+import com.pbeagan.domain.actions.*
+import com.pbeagan.domain.types.Direction
+import com.pbeagan.domain.Mob
+import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.statuseffects.Curse
 import com.pbeagan.statuseffects.NightSight
 import com.pbeagan.util.safeLet
 
-class CommandParser() {
+class CommandParser {
+
     operator fun invoke(mob: Mob): List<Pair<String, (List<String>) -> Action>> = listOf(
         // Util
-        "(\\.|\n|again)" to { _ -> Repeat(mob.action) },
+        "(\\.|\n|again)" to { Repeat(mob.action) },
         "debug$ARG" to { i ->
             safeLet(i.getOrNull(1)) { target ->
                 Debug(target)
             } ?: Retry("Debug what?")
         },
-        "(wait|pass|end| )" to { _ -> Pass },
+        "(wait|pass|end| )" to { Pass },
 
         // INFO
-        "l(s|l|ook)?" to { _ -> Look() },
-        "do(or(s)?)?" to { _ -> Doors() },
-        "exit(s)?" to { _ -> Doors() },
+        "l(s|l|ook)?" to { Look() },
+        "do(or(s)?)?" to { Doors() },
+        "exit(s)?" to { Doors() },
         "m(ap)?" to { _ -> MapLocal() },
         "ex(amine)?$ARG" to { i ->
             safeLet(i.getOrNull(2)) { target ->
@@ -66,7 +54,7 @@ class CommandParser() {
         },
         "(eat|consume|quaff)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { itemName ->
-                Consume.getOrRetry(mob, itemName)
+                com.pbeagan.domain.actions.Consume.getOrRetry(mob, itemName)
             } ?: Retry("What would you like to consume?")
         },
         "(give)$ARG$ARG" to { i ->
