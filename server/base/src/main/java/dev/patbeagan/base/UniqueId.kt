@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package dev.patbeagan.base
 
 import java.util.concurrent.atomic.AtomicInteger
 

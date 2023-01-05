@@ -13,9 +13,9 @@ import com.pbeagan.domain.flags.Lighting.BRIGHT
 import com.pbeagan.domain.flags.Lighting.DARK
 import com.pbeagan.domain.flags.Lighting.DIM
 import com.pbeagan.domain.flags.Lighting.NONE
-import com.pbeagan.util.BoundedValue
+import dev.patbeagan.base.BoundedValue
 
-import com.pbeagan.util.FlagSet
+import dev.patbeagan.base.FlagSet
 import com.pbeagan.util.Senses
 
 import com.pbeagan.writer.Reader
@@ -33,7 +33,7 @@ import com.pbeagan.stats.MiscValue
 import com.pbeagan.stats.PhysicalValue
 import com.pbeagan.stats.Stats
 import com.pbeagan.stats.VisionValue
-import com.pbeagan.util.UniqueId
+import dev.patbeagan.base.UniqueId
 import com.pbeagan.writer.Writer
 
 class Mob constructor(

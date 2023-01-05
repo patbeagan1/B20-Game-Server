@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package dev.patbeagan.base
 
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty

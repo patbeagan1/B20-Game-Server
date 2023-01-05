@@ -1,5 +1,8 @@
 package com.pbeagan.actions
 
+import com.pbeagan.consolevision.coord
+import com.pbeagan.consolevision.demo.toList2D
+import com.pbeagan.domain.actions.Move
 import com.pbeagan.domain.types.Direction
 import com.pbeagan.domain.terrain.Grass
 import com.pbeagan.domain.terrain.type.Terrain
@@ -10,7 +13,7 @@ import org.junit.jupiter.api.Test
 internal class MoveTest {
 
     val move = Move.forceMove(Direction.NORTH)
-    val terrain = Array(8) { Array<Terrain>(8) { Grass("\"") } }
+    val terrain = Array(8) { Array<Terrain>(8) { Grass("\"") } }.toList2D()
 
     @Test
     fun `check surroundings alternates between north and south`() {

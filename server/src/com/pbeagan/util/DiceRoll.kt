@@ -3,7 +3,8 @@ package com.pbeagan.util
 import com.pbeagan.stats.ValueContainer
 import kotlin.random.Random
 
-inline class DiceRoll(val value: Int) : Comparable<ValueContainer<Int>> {
+@JvmInline
+value class DiceRoll(val value: Int) : Comparable<ValueContainer<Int>> {
     override fun compareTo(other: ValueContainer<Int>): Int = value - other.value
     operator fun plus(a: Int) = value + a
     fun rollSign() = DiceRoll(value * if (Random.nextBoolean()) 1 else -1)

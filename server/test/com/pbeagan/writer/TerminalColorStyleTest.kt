@@ -1,7 +1,7 @@
 package com.pbeagan.writer
 
 import com.pbeagan.consolevision.TerminalColorStyle
-import com.pbeagan.util.safeLet
+import dev.patbeagan.base.safeLet
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Blue
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Custom
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.CustomPreset

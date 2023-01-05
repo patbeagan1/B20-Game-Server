@@ -1,5 +1,7 @@
 package com.pbeagan.writer
 
+import com.pbeagan.consolevision.ImagePrinter
+import com.pbeagan.consolevision.convertToBufferedImage
 import org.junit.Before
 import org.junit.Test
 import java.awt.Image

@@ -7,7 +7,7 @@ import com.pbeagan.domain.Mob
 import com.pbeagan.domain.actions.type.Action
 import com.pbeagan.statuseffects.Curse
 import com.pbeagan.statuseffects.NightSight
-import com.pbeagan.util.safeLet
+import dev.patbeagan.base.safeLet
 
 class CommandParser {
 
@@ -54,7 +54,7 @@ class CommandParser {
         },
         "(eat|consume|quaff)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { itemName ->
-                com.pbeagan.domain.actions.Consume.getOrRetry(mob, itemName)
+                Consume.getOrRetry(mob, itemName)
             } ?: Retry("What would you like to consume?")
         },
         "(give)$ARG$ARG" to { i ->

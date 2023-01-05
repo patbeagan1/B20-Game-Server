@@ -20,7 +20,7 @@ import com.pbeagan.domain.Mob.MobBehavior
 import com.pbeagan.domain.RoomData
 import com.pbeagan.domain.RoomDirectionData
 import com.pbeagan.domain.flags.RoomFlags
-import com.pbeagan.util.FlagSet
+import dev.patbeagan.base.FlagSet
 
 object SampleData {
     val mobs = listOf(

@@ -2,7 +2,7 @@ package com.pbeagan.domain
 
 
 import com.pbeagan.consolevision.Coord
-import com.pbeagan.util.FlagSet
+import dev.patbeagan.base.FlagSet
 import com.pbeagan.util.startsWith
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Cyan
 import com.pbeagan.consolevision.TerminalColorStyle.style

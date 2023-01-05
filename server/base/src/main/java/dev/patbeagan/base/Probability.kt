@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package dev.patbeagan.base
 
 import kotlin.random.Random
 

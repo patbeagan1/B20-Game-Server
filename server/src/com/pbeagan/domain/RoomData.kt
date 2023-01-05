@@ -3,7 +3,7 @@ package com.pbeagan.domain
 import com.pbeagan.domain.actions.RoomTile
 import com.pbeagan.consolevision.Coord
 
-import com.pbeagan.util.FlagSet
+import dev.patbeagan.base.FlagSet
 import com.pbeagan.consolevision.List2D
 import com.pbeagan.domain.flags.Lighting
 import com.pbeagan.domain.flags.RoomFlags

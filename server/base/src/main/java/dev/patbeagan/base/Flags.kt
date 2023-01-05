@@ -1,4 +1,4 @@
-package com.pbeagan.util
+package dev.patbeagan.base
 
 interface Flag {
     val ordinal: Int

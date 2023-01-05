@@ -1,7 +1,7 @@
 package com.pbeagan.domain.flags
 
-import com.pbeagan.util.Flag
-import com.pbeagan.util.FlagSet
+import dev.patbeagan.base.Flag
+import dev.patbeagan.base.FlagSet
 
 enum class ItemFlags : Flag {
     GLOW,

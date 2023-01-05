@@ -45,6 +45,7 @@ def kotlin_version = '1.7.22'
 def koin_version = "2.1.6"
 dependencies {
     implementation project(":console-vision")
+    implementation project(":base")
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 //    implementation "io.arrow-kt:arrow-syntax:$arrow_version"
 
