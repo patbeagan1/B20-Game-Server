@@ -12,7 +12,7 @@ class Doors(private val worldState: WorldState) : Action(), FreeAction {
         worldState.run {
             self.currentRoom()?.exits?.run {
                 Direction.values().mapNotNull { direction ->
-                    get(direction)
+                    check(direction)
                         ?.destinationID.let { rooms[it] }
                         ?.descriptionPreview?.invoke(direction)
                         ?.let { direction to it }

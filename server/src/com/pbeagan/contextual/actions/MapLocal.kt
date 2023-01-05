@@ -63,7 +63,7 @@ class MapLocal(val worldState: WorldState) : Action(), FreeAction {
 
     private fun provideCheckExit(exits: Exits) =
         { direction: Direction, successAction: () -> Unit, failAction: () -> Unit ->
-            if (exits.get(direction) != null) successAction() else failAction()
+            if (exits.check(direction) != null) successAction() else failAction()
         }
 
     private fun getCoordContent(

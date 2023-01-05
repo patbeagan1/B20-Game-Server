@@ -10,7 +10,7 @@ class Exits(
     private val up: RoomDirectionData? = null,
     private val down: RoomDirectionData? = null
 ) {
-    fun get(name: Direction) = when (name) {
+    fun check(name: Direction) = when (name) {
         Direction.NORTH -> north
         Direction.EAST -> east
         Direction.SOUTH -> south
@@ -19,5 +19,5 @@ class Exits(
         Direction.DOWN -> down
     }
 
-    val asList = Direction.values().mapNotNull { direction -> get(direction)?.let { direction to it } }
+    val asList = Direction.values().mapNotNull { direction -> check(direction)?.let { direction to it } }
 }

@@ -228,7 +228,7 @@ class Move private constructor(
         }
 
         private fun getNextRoom(direction: Direction, roomData: RoomData?) =
-            roomData?.exits?.get(direction)
+            roomData?.exits?.check(direction)
 
         private fun recordVisit(self: Mob) {
             val visited = self.visited
