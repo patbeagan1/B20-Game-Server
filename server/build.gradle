@@ -1,6 +1,4 @@
 buildscript {
-    ext.config = { name -> "config/$name" }
-
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
         mavenCentral()
@@ -16,7 +14,6 @@ plugins {
 
 group 'com.example'
 version '0.0.1-SNAPSHOT'
-mainClassName = "io.ktor.server.netty.EngineMain"
 
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']
@@ -25,36 +22,18 @@ sourceSets {
     test.resources.srcDirs = ['testresources']
 }
 
-repositories {
-    mavenLocal()
-    mavenCentral()
-    google()
-    jcenter()
-}
-
-kotlin {
-    sourceSets.all {
-        languageSettings.enableLanguageFeature('InlineClasses')
-    }
-}
-
 def arrow_version = '1.1.2'
-def logback_version = '1.4.5'
-def ktor_version = '2.2.1'
 def kotlin_version = '1.7.22'
-def koin_version = "2.1.6"
 dependencies {
     implementation project(":console-vision")
     implementation project(":base")
     implementation project(":domain")
+
     implementation "io.arrow-kt:arrow-core:$arrow_version"
 //    implementation "io.arrow-kt:arrow-syntax:$arrow_version"
 
-    implementation "ch.qos.logback:logback-classic:$logback_version"
-//    implementation "io.ktor:ktor-gson:$ktor_version"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-server-netty:2.2.1"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.koin:koin-ktor:$koin_version"
     implementation 'org.slf4j:slf4j-api:2.0.5'
 
     implementation 'org.mod4j.org.apache.commons:cli:1.0.0'
@@ -67,9 +46,8 @@ dependencies {
     // https://mvnrepository.com/artifact/org.mockito/mockito-core
 
     implementation group: 'org.yaml', name: 'snakeyaml', version: '1.26'
-    testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
-    testImplementation "io.ktor:ktor-server-tests:$ktor_version"
-    testImplementation "org.koin:koin-test:$koin_version"
+    testImplementation "io.ktor:ktor-server-test-host:2.2.1"
+    testImplementation "io.ktor:ktor-server-tests:2.2.1"
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.6.2'
 }
 

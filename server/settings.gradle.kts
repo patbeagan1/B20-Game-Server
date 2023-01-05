@@ -1,7 +1,10 @@
+@file:Suppress("UnstableApiUsage")
+
 rootProject.name = "ktor-demo"
 
 dependencyResolutionManagement {
     repositories {
+        google()
         mavenCentral()
     }
 }
