@@ -11,24 +11,24 @@ import dev.patbeagan.base.safeLet
 
 class CommandParser {
 
-    operator fun invoke(mob: Mob): List<Pair<String, (List<String>) -> Action>> = listOf(
+    operator fun invoke(mob: Mob, worldState: WorldState): List<Pair<String, (List<String>) -> Action>> = listOf(
         // Util
         "(\\.|\n|again)" to { Repeat(mob.action) },
         "debug$ARG" to { i ->
             safeLet(i.getOrNull(1)) { target ->
-                Debug(target)
+                Debug(worldState, target)
             } ?: Retry("Debug what?")
         },
         "(wait|pass|end| )" to { Pass },
 
         // INFO
-        "l(s|l|ook)?" to { Look() },
-        "do(or(s)?)?" to { Doors() },
-        "exit(s)?" to { Doors() },
-        "m(ap)?" to { _ -> MapLocal() },
+        "l(s|l|ook)?" to { Look(worldState) },
+        "do(or(s)?)?" to { Doors(worldState) },
+        "exit(s)?" to { Doors(worldState) },
+        "m(ap)?" to { _ -> MapLocal(worldState) },
         "ex(amine)?$ARG" to { i ->
             safeLet(i.getOrNull(2)) { target ->
-                Examine(target)
+                Examine(worldState, target)
             } ?: Retry("What should I examine?")
         },
 
@@ -39,7 +39,7 @@ class CommandParser {
                 if (itemName.isBlank()) {
                     Retry("What would you like to take?")
                 } else {
-                    Take.getOrRetry(mob, itemName)
+                    Take.getOrRetry(mob, itemName, worldState)
                 }
             } ?: Retry("What would you like to take?")
         },
@@ -48,7 +48,7 @@ class CommandParser {
                 if (itemName.isBlank()) {
                     Retry("What would you like to drop?")
                 } else {
-                    Drop.getOrRetry(mob, itemName)
+                    Drop.getOrRetry(mob, itemName, worldState)
                 }
             } ?: Retry("What would you like to drop?")
         },
@@ -59,17 +59,17 @@ class CommandParser {
         },
         "(give)$ARG$ARG" to { i ->
             safeLet(i.getOrNull(2), i.getOrNull(3)) { target, itemName ->
-                Give.getOrRetry(mob, target, itemName)
+                Give.getOrRetry(mob, target, itemName, worldState)
             } ?: Retry("What would you like to give?")
         },
 
         // Movement
-        "n(orth)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.NORTH)) },
-        "s(outh)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.SOUTH)) },
-        "e(ast)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.EAST)) },
-        "w(est)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.WEST)) },
-        "u(p)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.UP)) },
-        "d(own)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.DOWN)) },
+        "n(orth)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.NORTH), worldState) },
+        "s(outh)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.SOUTH), worldState) },
+        "e(ast)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.EAST), worldState) },
+        "w(est)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.WEST), worldState) },
+        "u(p)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.UP), worldState) },
+        "d(own)?" to { _ -> Move.getOrRetry(mob, listOf(Direction.DOWN), worldState) },
         // moving multiple paces at a time
         "([nsewud]+)" to { i ->
             val directionList = i.getOrNull(1)?.take(4)?.map { input ->
@@ -80,18 +80,18 @@ class CommandParser {
             if (directionList == null) {
                 Retry("Sorry, couldn't parse that.")
             } else {
-                Move.getOrRetry(mob, directionList)
+                Move.getOrRetry(mob, directionList, worldState)
             }
         },
         // Combat
         "(atk|attack)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->
-                Action.attackOrRetry(mob, mobName)
+                Action.attackOrRetry(mob, mobName, worldState)
             } ?: Retry("You need to specify a target!")
         },
         "(curse)$ARG" to { i ->
             safeLet(i.getOrNull(2)) { mobName ->
-                Curse.getOrRetry(mob, mobName)
+                Curse.getOrRetry(mob, mobName, worldState)
             } ?: Retry("You need to specify a target!")
         },
 
@@ -111,7 +111,7 @@ class CommandParser {
                 i.getOrNull(2)
             ) { settingKey, settingValue ->
                 when (settingKey) {
-                    "attack" -> Settings.getAttack(settingValue)
+                    "attack" -> Settings.getAttack(settingValue, worldState)
                     else -> Retry("I don't know about that setting.")
                 }
             } ?: Retry("What would you like to set?")

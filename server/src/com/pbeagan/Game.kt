@@ -1,17 +1,21 @@
 package com.pbeagan
 
 import com.pbeagan.contextual.Mob
-import com.pbeagan.contextual.actions.*
+import com.pbeagan.contextual.actions.Follow
+import com.pbeagan.contextual.actions.Inactive
+import com.pbeagan.contextual.actions.Move
+import com.pbeagan.contextual.actions.Pass
+import com.pbeagan.contextual.actions.Repeat
 import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.actions.type.FreeAction
 import com.pbeagan.contextual.actions.type.MultiRoundActionDelegate.MultiRoundAction
 import com.pbeagan.data.reader.Reader
 import com.pbeagan.data.writer.Writer
 import dev.patbeagan.b20.domain.roll20
-import mobs
 
-class Game {
+class Game(private val worldState: WorldState) {
 
+    val mobs get() = worldState.mobs
     private val playerHandler = PlayerHandler(CommandParser())
 
     fun gameLoop(writer: Writer, reader: Reader) {
@@ -39,9 +43,9 @@ class Game {
             }
 
             actionCurrent = if (isPlayer) {
-                playerHandler.interpretPlayerAction(reader, this)
+                playerHandler.interpretPlayerAction(reader, this, worldState)
             } else {
-                getAction(reader)
+                getAction(reader, worldState)
             }
 
             if (actionCurrent != null) {
@@ -87,7 +91,7 @@ class Game {
     private fun Mob.verifyMultiRoundActionShouldStop(
         writer: Writer,
         actionCurrent: Action,
-        reader: Reader
+        reader: Reader,
     ): Boolean {
         writer.sayTo(this).error(
             """You are currently performing ${this.action::class.java.simpleName}. 
@@ -100,7 +104,7 @@ Note, you can pass your turn to continue the action."""
 
     private fun Mob.checkStartPlayerTurn(
         reader: Reader,
-        writer: Writer
+        writer: Writer,
     ) {
         if (isPlayer && reader.isActive(this)) {
             if (action == Inactive) {

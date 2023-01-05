@@ -1,16 +1,19 @@
 package com.pbeagan.contextual.actions
 
+import com.pbeagan.WorldState
 import com.pbeagan.consolevision.Util
 import com.pbeagan.contextual.ItemData
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.type.Action
-import com.pbeagan.contextual.currentRoom
 import com.pbeagan.util.startsWith
 import dev.patbeagan.b20.domain.flags.ItemFlags
 import dev.patbeagan.b20.domain.takeIfItIsInRangeOf
 
-class Take(private val item: ItemData) : Action() {
-    override fun invoke(self: Mob) {
+class Take(
+    private val item: ItemData,
+    val worldState: WorldState,
+) : Action() {
+    override fun invoke(self: Mob): Unit = with(worldState) {
         self.currentRoom()
             ?.items
             ?.firstOrNull { it == item }
@@ -23,16 +26,17 @@ class Take(private val item: ItemData) : Action() {
     }
 
     companion object {
-        fun getOrRetry(mob: Mob, itemName: String): Action {
-            if (itemName == "all") return TakeAll()
-            return mob.currentRoom()?.items
+        fun getOrRetry(mob: Mob, itemName: String, worldState: WorldState): Action {
+            if (itemName == "all") return TakeAll(worldState)
+
+            return with(worldState) { mob.currentRoom() }?.items
                 ?.firstOrNull { itemData ->
                     itemData.itemFlags.contains(ItemFlags.TAKEABLE) && itemData.names.any { name ->
                         itemName.let { name.startsWith(it) }
                     }
                 }
                 ?.takeIfItIsInRangeOf(mob, 1)
-                ?.let { Take(it) }
+                ?.let { Take(it, worldState) }
                 ?: return Retry("That item isn't here...")
         }
     }

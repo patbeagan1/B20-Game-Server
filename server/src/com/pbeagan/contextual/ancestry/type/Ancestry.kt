@@ -1,5 +1,6 @@
 package com.pbeagan.contextual.ancestry.type
 
+import com.pbeagan.WorldState
 import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.Mob.MobBehavior
@@ -12,5 +13,5 @@ abstract class Ancestry(private val stats: Stats) : dev.patbeagan.b20.domain.Eff
     override var descriptionActivation: String = ""
     override var descriptionDeactivation: String = ""
 
-    abstract fun decide(mob: Mob, behavior: MobBehavior): Action
+    abstract fun decide(mob: Mob, behavior: MobBehavior, worldState: WorldState): Action
 }

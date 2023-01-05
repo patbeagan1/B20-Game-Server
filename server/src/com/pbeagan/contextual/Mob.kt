@@ -1,5 +1,6 @@
 package com.pbeagan.contextual
 
+import com.pbeagan.WorldState
 import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.actions.Drop
 import com.pbeagan.contextual.actions.Move
@@ -124,14 +125,15 @@ class Mob constructor(
         }
     }
 
-    fun getAction(reader: Reader): Action? = ancestry?.decide(this, this.behavior)
+    fun getAction(reader: Reader, worldState: WorldState): Action? = ancestry?.decide(this, this.behavior, worldState)
 
-    fun die(writer: Writer) {
+    fun die(writer: Writer, worldState: WorldState) {
         items.map { itemData ->
-            Drop(itemData).also { it.writer = writer }
+            Drop(worldState, itemData).also { it.writer = writer }
         }.forEach { it.invoke(this) }
 
         Drop(
+            worldState,
             ItemData(
                 this.idForIO,
                 listOf("Body", this.nameBase),

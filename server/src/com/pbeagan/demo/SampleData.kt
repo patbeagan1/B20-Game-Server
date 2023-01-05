@@ -22,7 +22,7 @@ import dev.patbeagan.b20.domain.types.Direction.WEST
 import dev.patbeagan.base.FlagSet
 
 object SampleData {
-    val mobs = listOf(
+    val sampleMobs = listOf(
         Mob(
             "Alice",
 //            armor = 3,
@@ -67,7 +67,7 @@ object SampleData {
             locationInRoom = 5 coord 5
         )
     )
-    val rooms = listOf(
+    val sampleRooms = listOf(
         RoomData(
             0,
             name = "The Front Porch",

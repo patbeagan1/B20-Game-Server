@@ -1,11 +1,20 @@
 package com.pbeagan.contextual.actions
 
+import com.pbeagan.WorldState
+import com.pbeagan.consolevision.Coord
+import com.pbeagan.consolevision.List2D
+import com.pbeagan.consolevision.coord
+import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.Mob.MobBehavior
+import com.pbeagan.contextual.RoomData
 import com.pbeagan.contextual.actions.Move.Result.EndOfRoomFailure
 import com.pbeagan.contextual.actions.Move.Result.Failure
 import com.pbeagan.contextual.actions.Move.Result.Point
 import com.pbeagan.contextual.actions.Move.Result.RoomId
 import com.pbeagan.contextual.actions.type.Action
-import com.pbeagan.consolevision.Coord
+import com.pbeagan.util.exhaustive
+import dev.patbeagan.b20.domain.RoomDirectionData
+import dev.patbeagan.b20.domain.terrain.type.Terrain
 import dev.patbeagan.b20.domain.types.Direction
 import dev.patbeagan.b20.domain.types.Direction.DOWN
 import dev.patbeagan.b20.domain.types.Direction.EAST
@@ -13,27 +22,20 @@ import dev.patbeagan.b20.domain.types.Direction.NORTH
 import dev.patbeagan.b20.domain.types.Direction.SOUTH
 import dev.patbeagan.b20.domain.types.Direction.UP
 import dev.patbeagan.b20.domain.types.Direction.WEST
-import com.pbeagan.contextual.Mob
-import com.pbeagan.contextual.RoomData
-import dev.patbeagan.b20.domain.RoomDirectionData
-import dev.patbeagan.b20.domain.terrain.type.Terrain
-import com.pbeagan.contextual.currentRoom
 
-import com.pbeagan.consolevision.List2D
-import com.pbeagan.consolevision.coord
-import com.pbeagan.contextual.Mob.MobBehavior
-
-import com.pbeagan.util.exhaustive
-
-class Move private constructor(private val directionList: List<Direction>) : Action() {
-    override fun invoke(self: Mob) {
+class Move private constructor(
+    private val directionList: List<Direction>,
+    val worldState: WorldState,
+) : Action() {
+    override fun invoke(self: Mob) = with(worldState) {
         directionList.forEach { direction ->
             when (val checkMove = checkSpace(
                 direction,
                 self.locationInRoom.x,
                 self.locationInRoom.y,
                 self.currentRoom()!!.terrain,
-                self.currentRoom()!!
+                self.currentRoom()!!,
+                worldState
             )) {
                 is Point -> self.locationInRoom = checkMove.data
                 is EndOfRoomFailure -> getNextRoom(direction, self.currentRoom())?.let {
@@ -44,6 +46,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
                     )
                 }
                     ?: Retry("There is no room to enter in that direction.")
+
                 is Failure -> Retry("Sorry, can't go that way. ${checkMove.reason}")
                 is RoomId -> self.room = checkMove.data
             }.exhaustive
@@ -53,8 +56,8 @@ class Move private constructor(private val directionList: List<Direction>) : Act
     private fun changeRooms(
         self: Mob,
         room: RoomDirectionData,
-        direction: Direction
-    ) {
+        direction: Direction,
+    ) = with(worldState) {
         writer.sayToRoomOf(self).move("${self.nameStyled} left ${direction.name}")
         self.room = room.destinationID
         val (x, y) = self.locationInRoom
@@ -70,7 +73,8 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             checkNewSpace(
                 currentRoom.terrain,
                 it,
-                currentRoom
+                currentRoom,
+                worldState
             ) !is Failure
         }.let {
             self.locationInRoom = it
@@ -81,7 +85,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         recordVisit(self)
 
         if (self.isPlayer) {
-            Look().also { it.writer = writer }(self)
+            Look(worldState).also { it.writer = writer }(self)
         }
     }
 
@@ -89,7 +93,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         direction: Direction,
         x: Int,
         currentRoom: RoomData,
-        y: Int
+        y: Int,
     ): Coord {
         val boundX = (0..currentRoom.terrain.width).average().toInt()
         val boundY = (0..currentRoom.terrain.height).average().toInt()
@@ -106,7 +110,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
     fun checkEdgeSpacesToLandInRoom(
         direction: Direction,
         xy: Coord,
-        terrain: List2D<Terrain>
+        terrain: List2D<Terrain>,
     ) = sequence {
         var isGoingUp = true
         val shouldScanHorizontal = when (direction) {
@@ -153,14 +157,15 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         fun checkMove(
             self: Mob,
             direction: Direction,
-            roomData: RoomData?
+            roomData: RoomData?,
+            worldState: WorldState,
         ): Result {
 
             if (self.behavior == MobBehavior.IMMOBILE) return Failure("You appear to be immobile.")
             val layout = roomData?.terrain ?: return EndOfRoomFailure
 
             val (x, y) = self.locationInRoom
-            return checkSpace(direction, x, y, layout, roomData)
+            return checkSpace(direction, x, y, layout, roomData, worldState)
         }
 
         private fun checkSpace(
@@ -168,22 +173,26 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             x: Int,
             y: Int,
             layout: List2D<Terrain>,
-            currentRoom: RoomData
+            currentRoom: RoomData,
+            worldState: WorldState,
         ): Result {
             val newSpace = getNewSpace(direction, x, y)
 
-            return checkNewSpace(layout, newSpace, currentRoom)
+            return checkNewSpace(layout, newSpace, currentRoom, worldState)
         }
 
         private fun checkNewSpace(
             layout: List2D<Terrain>,
             newSpace: Coord,
-            currentRoom: RoomData
+            currentRoom: RoomData,
+            worldState: WorldState,
         ): Result {
             val isInRoom = checkRoomBounds(layout, newSpace)
             if (!isInRoom) return EndOfRoomFailure
 
-            val (terrain, mobs, items) = currentRoom.getLocation(newSpace)
+            val (terrain, mobs, items) = currentRoom.run {
+                worldState.getLocation(newSpace)
+            }
 
             val notTraversableMessage = terrain.notTraversableMessage
             if (notTraversableMessage != null) return Failure(notTraversableMessage)
@@ -199,7 +208,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
 
         private fun checkRoomBounds(
             layout: List2D<Terrain>,
-            newSpace: Coord
+            newSpace: Coord,
         ): Boolean {
 
             return newSpace.x in 0 until layout.width && newSpace.y in 0 until layout.height
@@ -208,7 +217,7 @@ class Move private constructor(private val directionList: List<Direction>) : Act
         private fun getNewSpace(
             direction: Direction,
             x: Int,
-            y: Int
+            y: Int,
         ): Coord = when (direction) {
             NORTH -> x coord y + 1
             EAST -> x + 1 coord y
@@ -228,27 +237,32 @@ class Move private constructor(private val directionList: List<Direction>) : Act
             }
         }
 
-        fun getOrRetry(self: Mob, directionList: List<Direction>): Action {
+        fun getOrRetry(self: Mob, directionList: List<Direction>, worldState: WorldState): Action {
             var location = self.locationInRoom
             directionList.forEach { direction ->
-                when (val checkMove = checkSpace(
-                    direction,
-                    location.x,
-                    location.y,
-                    self.currentRoom()!!.terrain,
-                    self.currentRoom()!!
-                )) {
-                    is EndOfRoomFailure -> getNextRoom(direction, self.currentRoom())
-                        ?: return Retry("There is no room to enter in that direction.")
-                    is Failure -> return Retry("Sorry, can't go that way. ${checkMove.reason}")
-                    else -> {
-                        location = getNewSpace(direction, location.x, location.y)
+                with(worldState) {
+                    when (val checkMove = checkSpace(
+                        direction,
+                        location.x,
+                        location.y,
+                        self.currentRoom()!!.terrain,
+                        self.currentRoom()!!,
+                        worldState
+                    )) {
+                        is EndOfRoomFailure -> getNextRoom(direction, self.currentRoom())
+                            ?: return Retry("There is no room to enter in that direction.")
+
+                        is Failure -> return Retry("Sorry, can't go that way. ${checkMove.reason}")
+                        else -> {
+                            location = getNewSpace(direction, location.x, location.y)
+                        }
                     }
                 }
             }
-            return Move(directionList)
+            return Move(directionList, worldState)
         }
 
-        fun forceMove(vararg direction: Direction) = Move(direction.toList())
+        fun forceMove(worldState: WorldState, vararg direction: Direction) =
+            Move(direction.toList(), worldState)
     }
 }

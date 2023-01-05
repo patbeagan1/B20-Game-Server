@@ -1,10 +1,11 @@
-import com.pbeagan.Account
 import dev.patbeagan.base.ApplyOnce
 import com.pbeagan.Game
+import com.pbeagan.WorldState
 import com.pbeagan.demo.SampleData
 import com.pbeagan.data.reader.Reader
 import com.pbeagan.data.writer.Writer
 import com.pbeagan.data.writer.WriterImpl
+import com.pbeagan.signIn
 import io.ktor.network.selector.ActorSelectorManager
 import io.ktor.network.sockets.aSocket
 import io.ktor.network.sockets.openReadChannel
@@ -13,9 +14,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
-val rooms = SampleData.rooms
-val mobs = SampleData.mobs
-
 fun main(args: Array<String>) {
     runBlocking {
         val server = aSocket(ActorSelectorManager(Dispatchers.IO))
@@ -23,9 +21,13 @@ fun main(args: Array<String>) {
             .bind("127.0.0.1", 2324)
         println("Started echo telnet server at ${server.localAddress}")
 
-        val writer: Writer = WriterImpl()
+        val worldState = WorldState(
+            SampleData.sampleMobs,
+            SampleData.sampleRooms
+        )
+        val writer: Writer = WriterImpl(worldState)
         val reader = Reader(writer)
-        val game = Game()
+        val game = Game(worldState)
         val startGame = ApplyOnce {
             launch { startGameLoop(game, writer, reader) }
         }
@@ -36,11 +38,10 @@ fun main(args: Array<String>) {
             launch {
                 println("Socket accepted: ${socket.remoteAddress}")
 
-                val account = Account()
                 val writeChannel = socket.openWriteChannel(autoFlush = true)
                 val readChannel = socket.openReadChannel()
 
-                val player = account.signIn(readChannel, writeChannel)
+                val player = signIn(worldState, readChannel, writeChannel)
 
                 writer.register(player, writeChannel)
                 reader.register(player, readChannel)
@@ -60,7 +61,7 @@ fun main(args: Array<String>) {
 private fun startGameLoop(
     game: Game,
     writer: Writer,
-    reader: Reader
+    reader: Reader,
 ) {
     var turnCount = 0
     while (true) {

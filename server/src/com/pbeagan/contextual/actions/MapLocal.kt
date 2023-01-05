@@ -1,33 +1,27 @@
 package com.pbeagan.contextual.actions
 
-import com.pbeagan.contextual.actions.type.Action
-import com.pbeagan.contextual.actions.type.FreeAction
+import com.pbeagan.WorldState
 import com.pbeagan.consolevision.Coord
-import dev.patbeagan.b20.domain.types.Direction
-import dev.patbeagan.b20.domain.types.Direction.EAST
-import dev.patbeagan.b20.domain.types.Direction.NORTH
-import dev.patbeagan.b20.domain.types.Direction.SOUTH
-import dev.patbeagan.b20.domain.types.Direction.WEST
-import dev.patbeagan.b20.domain.Exits
-import com.pbeagan.contextual.ItemData
-import com.pbeagan.contextual.Mob
-import com.pbeagan.contextual.RoomData
-import dev.patbeagan.b20.domain.terrain.type.Terrain
-import com.pbeagan.contextual.currentRoom
 import com.pbeagan.consolevision.List2D
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.Red
 import com.pbeagan.consolevision.TerminalColorStyle.Colors.YellowBright
 import com.pbeagan.consolevision.TerminalColorStyle.style
 import com.pbeagan.consolevision.coord
+import com.pbeagan.contextual.Mob
+import com.pbeagan.contextual.RoomData
+import com.pbeagan.contextual.actions.type.Action
+import com.pbeagan.contextual.actions.type.FreeAction
+import dev.patbeagan.b20.domain.Exits
+import dev.patbeagan.b20.domain.RoomTile
+import dev.patbeagan.b20.domain.terrain.type.Terrain
+import dev.patbeagan.b20.domain.types.Direction
+import dev.patbeagan.b20.domain.types.Direction.EAST
+import dev.patbeagan.b20.domain.types.Direction.NORTH
+import dev.patbeagan.b20.domain.types.Direction.SOUTH
+import dev.patbeagan.b20.domain.types.Direction.WEST
 
-data class RoomTile(
-    val terrain: Terrain,
-    val mobs: List<Mob>,
-    val items: List<ItemData>,
-)
-
-class MapLocal : Action(), FreeAction {
-    override fun invoke(self: Mob) {
+class MapLocal(val worldState: WorldState) : Action(), FreeAction {
+    override fun invoke(self: Mob) = with(worldState) {
         val currentRoom = self.currentRoom()
         val terrain = currentRoom?.terrain ?: return
         val vision = self.vision(currentRoom.lighting)
@@ -38,7 +32,9 @@ class MapLocal : Action(), FreeAction {
         roomMap: List2D<Terrain>,
         currentRoom: RoomData,
     ): List2D<RoomTile> = roomMap.traverseMapIndexed { x, y, _ ->
-        currentRoom.getLocation(x coord y)
+        currentRoom.run {
+            worldState.getLocation(x coord y)
+        }
     }
 
     private fun printMap(

@@ -1,11 +1,11 @@
 package com.pbeagan.contextual.statuseffects
 
+import com.pbeagan.WorldState
 import com.pbeagan.contextual.Mob
 import com.pbeagan.contextual.actions.Retry
 import com.pbeagan.contextual.actions.type.Action
 import com.pbeagan.contextual.actions.type.MultiRoundActionDelegate
 import com.pbeagan.contextual.actions.type.MultiRoundActionDelegate.MultiRoundAction
-import com.pbeagan.contextual.target
 import dev.patbeagan.b20.domain.Effect
 import dev.patbeagan.b20.domain.EffectBase
 import dev.patbeagan.b20.domain.EffectImpl
@@ -35,7 +35,7 @@ class Curse(private val target: Mob) : Action(), MultiRoundAction {
     }
 
     companion object {
-        fun getOrRetry(mob: Mob, targetName: String): Action {
+        fun getOrRetry(mob: Mob, targetName: String, worldState: WorldState): Action= with(worldState) {
             val target = mob.target(targetName) ?: return Retry("That mob isn't here")
             return Curse(target)
         }

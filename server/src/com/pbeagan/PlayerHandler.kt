@@ -14,10 +14,12 @@ class PlayerHandler(
     fun interpretPlayerAction(
         reader: Reader,
         mob: Mob,
+        worldState: WorldState
     ): Action? {
         val read = reader.read(mob)
         val input = read?.lowercase(Locale.getDefault()) ?: return Inactive
-        return commandParser(mob).map { it.first.toRegex() to it.second }
+        return commandParser(mob, worldState)
+            .map { it.first.toRegex() to it.second }
             .firstOrNull { it.first.matches(input) }
             ?.let { pair ->
                 pair.first.find(input)

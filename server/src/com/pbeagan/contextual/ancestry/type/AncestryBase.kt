@@ -1,5 +1,6 @@
 package com.pbeagan.contextual.ancestry.type
 
+import com.pbeagan.WorldState
 import com.pbeagan.contextual.actions.Pass
 import dev.patbeagan.b20.domain.stats.AttackValue
 import dev.patbeagan.b20.domain.stats.HealthValue
@@ -41,5 +42,5 @@ class AncestryBase : Ancestry(
         override val visionNone: VisionValue = VisionValue(1)
     }
 ) {
-    override fun decide(mob: Mob, behavior: MobBehavior) = Pass
+    override fun decide(mob: Mob, behavior: MobBehavior, worldState: WorldState) = Pass
 }
