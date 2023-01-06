@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "ktor-demo"
+rootProject.name = "b20-demo"
 
 dependencyResolutionManagement {
     repositories {
@@ -9,9 +9,7 @@ dependencyResolutionManagement {
     }
 }
 
-include("config")
-include("hello")
-
 include(":console-vision")
 include(":base")
 include(":domain")
+include(":app")
