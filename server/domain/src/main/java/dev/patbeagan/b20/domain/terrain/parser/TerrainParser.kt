@@ -1,13 +1,29 @@
 package dev.patbeagan.b20.domain.terrain.parser
 
-import com.pbeagan.consolevision.List2D
-import com.pbeagan.consolevision.TerminalColorStyle
 import dev.patbeagan.b20.domain.terrain.Grass
 import dev.patbeagan.b20.domain.terrain.Pavement
 import dev.patbeagan.b20.domain.terrain.Wall
 import dev.patbeagan.b20.domain.terrain.Water
+import dev.patbeagan.consolevision.TerminalStyle
+import dev.patbeagan.consolevision.ansi.AnsiColor
+import dev.patbeagan.consolevision.ansi.AnsiSGR
+import dev.patbeagan.consolevision.types.ColorInt
+import dev.patbeagan.consolevision.types.CompressionStyle
+import dev.patbeagan.consolevision.types.List2D
+import kotlin.random.Random
 
 object TerrainParser {
+
+    private fun ColorInt.mutate(variance: Int): ColorInt {
+        fun Int.newColorVal() = this + (Random.nextInt() % variance).coerceIn(0..255)
+        return ColorInt.from(
+            0,
+            this.colorRed.newColorVal(),
+            this.colorGreen.newColorVal(),
+            this.colorBlue.newColorVal()
+        )
+    }
+
     fun parse(s: String) = s
         .split(';', '\n')
         .also { list ->
@@ -19,42 +35,49 @@ object TerrainParser {
         }
         .reversed() // we want north to be at the top
         .map { rows ->
-            rows.toCharArray().map {
-                when (it) {
+            rows.toCharArray().map { char ->
+                when (char) {
                     Grass.SYMBOL -> Grass(
                         arrayOf("\"", "\"", "\"", "\"", "'", "*"),
-                        TerminalColorStyle.TerminalStyle(
-                            TerminalColorStyle.Colors.Custom(34, 139, 34).mutate(50),
-                            TerminalColorStyle.Colors.Custom(34, 110, 34),
-                            TerminalColorStyle.SGR.Bold
+                        TerminalStyle(
+                            ColorInt.from(256, 34, 139, 34)
+                                .mutate(50)
+                                .let { AnsiColor.Custom(it) },
+                            ColorInt.from(256, 34, 110, 34)
+                                .let { AnsiColor.Custom(it) },
+                            AnsiSGR.Bold
                         )
                     )
+
                     Pavement.SYMBOL -> Pavement(
                         ".",
-                        TerminalColorStyle.TerminalStyle(
-                            TerminalColorStyle.Colors.Black1,
-                            TerminalColorStyle.Colors.Black2
+                        TerminalStyle(
+                            AnsiColor.Black1,
+                            AnsiColor.Black2
                         )
                     )
+
                     Wall.SYMBOL -> Wall(
-                        TerminalColorStyle.DOTS_HIGH.toString(),
-                        TerminalColorStyle.TerminalStyle(
-                            TerminalColorStyle.Colors.Black,
-                            TerminalColorStyle.Colors.Black1
+                        CompressionStyle.DOTS_HIGH.symbol,
+                        TerminalStyle(
+                            AnsiColor.Black,
+                            AnsiColor.Black1
                         )
                     )
+
                     Water.SYMBOL -> Water(
                         "⍨",
-                        TerminalColorStyle.TerminalStyle(
-                            TerminalColorStyle.Colors.BlueBright,
-                            TerminalColorStyle.Colors.Blue
+                        TerminalStyle(
+                            AnsiColor.BlueBright,
+                            AnsiColor.Blue
                         )
                     )
+
                     else -> Grass(
                         "\"",
-                        TerminalColorStyle.TerminalStyle(
-                            TerminalColorStyle.Colors.GreenBright,
-                            TerminalColorStyle.Colors.Green
+                        TerminalStyle(
+                            AnsiColor.GreenBright,
+                            AnsiColor.Green
                         )
                     )
                 }

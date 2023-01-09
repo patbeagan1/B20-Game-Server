@@ -10,3 +10,5 @@ server/build
 *.DS_Store
 .DS_Store
 server/local.properties
+*/local.properties
+local.properties

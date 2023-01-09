@@ -1,6 +1,6 @@
 package dev.patbeagan.b20.domain.terrain.type
 
-import com.pbeagan.consolevision.TerminalColorStyle.TerminalStyle
+import dev.patbeagan.consolevision.TerminalStyle
 
 abstract class Terrain {
     abstract val symbol: Char
